@@ -15,6 +15,7 @@ import { AnualComponent } from './anual/anual.component';
 import { HistoricoComponent } from './historico/historico.component';
 import { ConceptosComponent } from './conceptos/conceptos.component';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 /*import {CdkTableModule} from '@angular/cdk/table';
 import {HttpClientModule} from '@angular/common/http';
@@ -70,6 +71,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     BrowserModule,
     FormsModule,
     ButtonsModule.forRoot(),
+    BsDatepickerModule.forRoot(),
     RouterModule.forRoot([
       { path: 'diario', component: DiarioComponent },
       { path: 'mensual', component: MensualComponent },

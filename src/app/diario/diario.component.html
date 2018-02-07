@@ -1,6 +1,141 @@
-<pre class="card card-block card-header">{{singleModel}}</pre>
-<button type="button" class="btn btn-primary"
-        [(ngModel)]="singleModel" btnCheckbox
-        btnCheckboxTrue="1" btnCheckboxFalse="0">
-  Single Toggle
-</button>
+<link rel="stylesheet" href="https://unpkg.com/ngx-bootstrap/datepicker/bs-datepicker.css">
+
+<div class="right">
+  <table class="table rad">
+    <thead>
+      <tr>
+        <th class="warning" colspan="2" style="text-align: center;">02/08/2018</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="success">
+        <td>Ingresos</td>
+        <td class="importe">$ 582.02</td>
+      </tr>
+      <tr class="danger">
+        <td>Egresos</td>
+        <td class="importe">$ 15.00</td>
+      </tr>
+      <tr class="info">
+        <td>Saldo</td>
+        <td class="importe saldo">$ 569.99</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table rad">
+    <thead>
+      <tr>
+        <th class="warning" colspan="2" style="text-align: center;">Febero 2018</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="success">
+        <td>Ingresos</td>
+        <td class="importe">$ 582.02</td>
+      </tr>
+      <tr class="danger">
+        <td>Egresos</td>
+        <td class="importe">$ 15.00</td>
+      </tr>
+      <tr class="info">
+        <td>Saldo</td>
+        <td class="importe saldo">$ 569.99</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div class="left">
+  <div class="fechaHolder">
+    <input type="text"
+            class="form-control fecha"
+            #dp="bsDatepicker"
+            bsDatepicker [(bsValue)]="bsValue">
+  </div>
+  
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="success">
+        <td>Auto</td>
+        <td class="importe">$ 1000.00</td>
+      </tr>
+      <tr class="success">
+        <td>Cable</td>
+        <td class="importe">$ 54.23</td>
+      </tr>
+      <tr class="success">
+        <td>Luz</td>
+        <td class="importe">$ 741.00</td>
+      </tr>
+      <tr class="success">
+        <td>Salidas</td>
+        <td class="importe">$ 589.33</td>
+      </tr>
+      <tr class="success">
+        <td>Gym</td>
+        <td class="importe">$ 0.00</td>
+      </tr>
+      <tr class="success">
+        <td>Viajes</td>
+        <td class="importe">$ 0.00</td>
+      </tr>
+      <tr class="success">
+        <td>Comida Work</td>
+        <td class="importe">$ 45.00</td>
+      </tr>
+      <tr class="success">
+        <td>Supermercado</td>
+        <td class="importe">$ 0.00</td>
+      </tr>
+      <tr class="success">
+        <td>Casa</td>
+        <td class="importe">$ 96.00</td>
+      </tr>
+      <tr class="success">
+        <td>Plazo Fijo</td>
+        <td class="importe">$ 86.00</td>
+      </tr>
+      <tr class="success">
+        <td>Luz</td>
+        <td class="importe">$ 741.00</td>
+      </tr>
+      <tr class="success">
+        <td>Luz</td>
+        <td class="importe">$ 741.00</td>
+      </tr>
+      <tr class="success">
+        <td>Luz</td>
+        <td class="importe">$ 741.00</td>
+      </tr>
+      <tr class="success">
+        <td>Luz</td>
+        <td class="importe">$ 741.00</td>
+      </tr>
+      <tr class="success">
+        <td>Luz</td>
+        <td class="importe">$ 741.00</td>
+      </tr>
+      <tr class="success">
+        <td>Luz</td>
+        <td class="importe">$ 741.00</td>
+      </tr>
+      <tr class="success">
+        <td>Luz</td>
+        <td class="importe">$ 741.00</td>
+      </tr>
+      <tr class="success">
+        <td>Luz</td>
+        <td class="importe">$ 741.00</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+ 
