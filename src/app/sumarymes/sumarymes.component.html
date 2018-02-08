@@ -1,0 +1,24 @@
+<table *ngIf="sumaryMonth!==undefined" class="table rad">
+  <thead>
+    <tr>
+      <th class="warning" colspan="2" style="text-align: center;">{{fecha | date:'LLLL yyyy'}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="success">
+      <td>Ingresos</td>
+      <td class="importe">{{sumaryMonth.totalIngresos | currency}}</td>
+    </tr>
+    <tr class="danger">
+      <td>Egresos</td>
+      <td class="importe">{{sumaryMonth.totalEgresos | currency}}</td>
+    </tr>
+    <tr class="info">
+      <td>Saldo</td>
+      <td class="importe saldo"
+          [class.saldoNegativo]="(sumaryMonth.totalIngresos - sumaryMonth.totalEgresos) < 0">
+          {{(sumaryMonth.totalIngresos - sumaryMonth.totalEgresos) | currency}}
+      </td>
+    </tr>
+  </tbody>
+</table>

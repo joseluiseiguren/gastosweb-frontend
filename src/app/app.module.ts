@@ -16,6 +16,11 @@ import { HistoricoComponent } from './historico/historico.component';
 import { ConceptosComponent } from './conceptos/conceptos.component';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { SumarydiaComponent } from './sumarydia/sumarydia.component';
+import { SumarymesComponent } from './sumarymes/sumarymes.component';
+import { SumaryDayService } from './services/sumary-day.service';
+import { HttpClientModule } from '@angular/common/http';
+import { SumaryMonthService } from './services/sumary-month.service';
 
 /*import {CdkTableModule} from '@angular/cdk/table';
 import {HttpClientModule} from '@angular/common/http';
@@ -65,11 +70,14 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MensualComponent,
     AnualComponent,
     HistoricoComponent,
-    ConceptosComponent
+    ConceptosComponent,
+    SumarydiaComponent,
+    SumarymesComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     ButtonsModule.forRoot(),
     BsDatepickerModule.forRoot(),
     RouterModule.forRoot([
@@ -82,7 +90,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
       { path: '**', redirectTo: 'diario', pathMatch: 'full'}
   ]),
   ],
-  providers: [],
+  providers: [SumaryDayService, SumaryMonthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

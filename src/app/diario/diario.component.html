@@ -1,48 +1,8 @@
 <link rel="stylesheet" href="https://unpkg.com/ngx-bootstrap/datepicker/bs-datepicker.css">
 
 <div class="right">
-  <table class="table rad">
-    <thead>
-      <tr>
-        <th class="warning" colspan="2" style="text-align: center;">02/08/2018</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="success">
-        <td>Ingresos</td>
-        <td class="importe">$ 582.02</td>
-      </tr>
-      <tr class="danger">
-        <td>Egresos</td>
-        <td class="importe">$ 15.00</td>
-      </tr>
-      <tr class="info">
-        <td>Saldo</td>
-        <td class="importe saldo">$ 569.99</td>
-      </tr>
-    </tbody>
-  </table>
-  <table class="table rad">
-    <thead>
-      <tr>
-        <th class="warning" colspan="2" style="text-align: center;">Febero 2018</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="success">
-        <td>Ingresos</td>
-        <td class="importe">$ 582.02</td>
-      </tr>
-      <tr class="danger">
-        <td>Egresos</td>
-        <td class="importe">$ 15.00</td>
-      </tr>
-      <tr class="info">
-        <td>Saldo</td>
-        <td class="importe saldo">$ 569.99</td>
-      </tr>
-    </tbody>
-  </table>
+  <app-sumarydia [fecha]="bsValue"></app-sumarydia>
+  <app-sumarymes [fecha]="bsValue"></app-sumarymes>
 </div>
 
 
@@ -51,7 +11,8 @@
     <input type="text"
             class="form-control fecha"
             #dp="bsDatepicker"
-            bsDatepicker [(bsValue)]="bsValue">
+            bsDatepicker 
+            [(bsValue)]="bsValue">
   </div>
   
   <table class="table">
