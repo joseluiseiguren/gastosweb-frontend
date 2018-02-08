@@ -2,32 +2,35 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { SumaryDayService } from '../services/sumary-day.service';
 import { ISumaryDay } from '../models/sumaryday';
 import { OnChanges } from '@angular/core';
+import { IConceptoDiario } from '../models/concepto.diario';
 
 @Component({
   selector: 'app-sumarydia',
   templateUrl: './sumarydia.component.html',
   styleUrls: ['../shared/styles/sumary.css']
 })
-export class SumarydiaComponent implements OnInit, OnChanges {
+export class SumarydiaComponent implements OnInit {
   @Input() fecha: Date;
-  sumaryDay: ISumaryDay;
-  errorMessage: string;
+  @Input() conceptosDiarios: IConceptoDiario[];
 
-  constructor(private _sumaryDayService: SumaryDayService) { 
+  constructor() { 
   }
 
   ngOnInit() {
     
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.getData();
+  getIngresos() {
+    var ingresos: number = this.conceptosDiarios.filter(x => x.importe > 0)
+                              .map(c => c.importe)
+                              .reduce((sum, current) => sum + current);
+    return Math.abs(ingresos);                              
   }
 
-  getData() {
-    this._sumaryDayService.getSumary(this.fecha).subscribe(
-      data => this.sumaryDay = data,
-      error => this.errorMessage = <any>error);
+  getEgresos() {
+    var egresos: number = this.conceptosDiarios.filter(x => x.importe < 0)
+                              .map(c => c.importe)
+                              .reduce((sum, current) => sum + current);
+    return Math.abs(egresos);
   }
-
 }
