@@ -15,7 +15,7 @@
             [(bsValue)]="bsValue">
   </div>
   
-  <table class="table">
+  <table *ngIf="conceptos!==undefined" class="table">
     <thead>
       <tr>
         <th></th>
@@ -23,80 +23,32 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="success">
-        <td>Auto</td>
-        <td class="importe">$ 1000.00</td>
-      </tr>
-      <tr class="success">
-        <td>Cable</td>
-        <td class="importe">$ 54.23</td>
-      </tr>
-      <tr class="success">
-        <td>Luz</td>
-        <td class="importe">$ 741.00</td>
-      </tr>
-      <tr class="success">
-        <td>Salidas</td>
-        <td class="importe">$ 589.33</td>
-      </tr>
-      <tr class="success">
-        <td>Gym</td>
-        <td class="importe">$ 0.00</td>
-      </tr>
-      <tr class="success">
-        <td>Viajes</td>
-        <td class="importe">$ 0.00</td>
-      </tr>
-      <tr class="success">
-        <td>Comida Work</td>
-        <td class="importe">$ 45.00</td>
-      </tr>
-      <tr class="success">
-        <td>Supermercado</td>
-        <td class="importe">$ 0.00</td>
-      </tr>
-      <tr class="success">
-        <td>Casa</td>
-        <td class="importe">$ 96.00</td>
-      </tr>
-      <tr class="success">
-        <td>Plazo Fijo</td>
-        <td class="importe">$ 86.00</td>
-      </tr>
-      <tr class="success">
-        <td>Luz</td>
-        <td class="importe">$ 741.00</td>
-      </tr>
-      <tr class="success">
-        <td>Luz</td>
-        <td class="importe">$ 741.00</td>
-      </tr>
-      <tr class="success">
-        <td>Luz</td>
-        <td class="importe">$ 741.00</td>
-      </tr>
-      <tr class="success">
-        <td>Luz</td>
-        <td class="importe">$ 741.00</td>
-      </tr>
-      <tr class="success">
-        <td>Luz</td>
-        <td class="importe">$ 741.00</td>
-      </tr>
-      <tr class="success">
-        <td>Luz</td>
-        <td class="importe">$ 741.00</td>
-      </tr>
-      <tr class="success">
-        <td>Luz</td>
-        <td class="importe">$ 741.00</td>
-      </tr>
-      <tr class="success">
-        <td>Luz</td>
-        <td class="importe">$ 741.00</td>
+      <tr id="tr{{item.conceptoId}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
+          (click)="openModal(template, item)"
+          [class.info]="odd"
+          [class.success]="even">
+        <td>{{item.descripcionConcepto}}</td>
+        <td class="importe"
+            [class.importeNegativo]="item.importe < 0">
+            {{item.importe | currency}}
+        </td>
       </tr>
     </tbody>
   </table>
 </div>
 
- 
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>{{conceptoSel.descripcionConcepto}}</p>
+    <input #importe2 
+           autofocus
+           name="importe" 
+           class="form-control" 
+           currencyMask 
+           [(ngModel)]="nuevoImporte" 
+           (keyup.enter)="confirm()"
+           (click)="importe2.select()" />
+    <br/>
+    <button type="button" class="btn btn-success" (click)="confirm()" >Aceptar</button>
+  </div>
+</ng-template>

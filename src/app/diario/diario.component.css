@@ -11,7 +11,9 @@
     width: 79%;
 }
 
-
+.importe {
+    text-align:right;
+  }
 
 .fechaHolder{ text-align: center; }
 
@@ -20,5 +22,9 @@
     font-weight: bold;
     font-size: large;
 }
+
+.importeNegativo {
+    color: red;
+  }
 
   

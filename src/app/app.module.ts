@@ -21,6 +21,9 @@ import { SumarymesComponent } from './sumarymes/sumarymes.component';
 import { SumaryDayService } from './services/sumary-day.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SumaryMonthService } from './services/sumary-month.service';
+import { DiarioService } from './services/diario.service';
+import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
+import { CurrencyMaskModule } from "ng2-currency-mask";
 
 /*import {CdkTableModule} from '@angular/cdk/table';
 import {HttpClientModule} from '@angular/common/http';
@@ -77,7 +80,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
   imports: [
     BrowserModule,
     FormsModule,
+    ModalModule,
     HttpClientModule,
+    CurrencyMaskModule,
     ButtonsModule.forRoot(),
     BsDatepickerModule.forRoot(),
     RouterModule.forRoot([
@@ -90,7 +95,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
       { path: '**', redirectTo: 'diario', pathMatch: 'full'}
   ]),
   ],
-  providers: [SumaryDayService, SumaryMonthService],
+  providers: [SumaryDayService, SumaryMonthService, DiarioService, BsModalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
