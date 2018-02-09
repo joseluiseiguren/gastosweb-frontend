@@ -1,4 +1,4 @@
-export interface ISumaryMonth {
+export class SumaryMonth {
     fecha: Date;
     totalIngresos: number;
     totalEgresos: number;

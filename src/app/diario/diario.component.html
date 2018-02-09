@@ -2,7 +2,7 @@
 
 <div class="right">
   <app-sumarydia [fecha]="bsValue" [conceptosDiarios]="conceptos"></app-sumarydia>
-  <app-sumarymes [fecha]="bsValue"></app-sumarymes>
+  <app-sumarymes [fecha]="bsValue" [sumaryMonth]="sumMonth"> </app-sumarymes>
 </div>
 
 
@@ -12,7 +12,8 @@
             class="form-control fecha"
             #dp="bsDatepicker"
             bsDatepicker 
-            [(bsValue)]="bsValue">
+            (ngModelChange)="changeDay($event)"
+            [ngModel]="bsValue">
   </div>
   
   <table *ngIf="conceptos!==undefined" class="table">
@@ -23,13 +24,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr id="tr{{item.conceptoId}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
+      <tr id="tr{{item.concepto.id}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
           (click)="openModal(template, item)"
           [class.info]="odd"
           [class.success]="even">
-        <td>{{item.descripcionConcepto}}</td>
+        <td>{{item.concepto.descripcion}}</td>
         <td class="importe"
-            [class.importeNegativo]="item.importe < 0">
+            [class.importeNegativo]="item.importe < 0 || item.concepto.suma === false">
             {{item.importe | currency}}
         </td>
       </tr>
@@ -39,16 +40,41 @@
 
 <ng-template #template>
   <div class="modal-body text-center">
-    <p>{{conceptoSel.descripcionConcepto}}</p>
+    <p>{{conceptoSel.concepto.descripcion}}</p>
+
     <input #importe2 
-           autofocus
-           name="importe" 
-           class="form-control" 
-           currencyMask 
-           [(ngModel)]="nuevoImporte" 
-           (keyup.enter)="confirm()"
-           (click)="importe2.select()" />
-    <br/>
-    <button type="button" class="btn btn-success" (click)="confirm()" >Aceptar</button>
+            autofocus
+            name="importe" 
+            class="form-control"
+            [class.importeNegativo]="!nuevoDebCred" 
+            currencyMask
+            [(ngModel)]="nuevoImporte" 
+            (keyup.enter)="confirm()"
+            (click)="importe2.select()" />
+      <br/>
+      <table width="100%">
+          <thead>
+            <tr>
+              <th class="debito">
+                <label for="creditoopt">Credito</label>
+                <input type="radio" 
+                       id="creditoopt" 
+                       name="debcred" 
+                       (click)="changeNuevoDebCred(true)"
+                       [checked]="nuevoDebCred === true">
+              </th>
+              <th class="debito importeNegativo">
+                <label for="debitoopt">Debito</label>
+                <input type="radio" 
+                       id="debitoopt" 
+                       name="debcred"
+                       (click)="changeNuevoDebCred(false)"
+                       [checked]="nuevoDebCred === false">
+              </th>
+            </tr>
+          </thead>
+        </table>
+      <br/>
+      <button type="submit" class="btn btn-success" (click)="confirm()" >Aceptar</button>
   </div>
 </ng-template>

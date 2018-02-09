@@ -1,6 +1,7 @@
+import { IConcepto } from "./concepto";
+
 export interface IConceptoDiario {
-    conceptoId: number;
-    descripcionConcepto: string;
+    concepto: IConcepto;
     importe: number;
 }
 

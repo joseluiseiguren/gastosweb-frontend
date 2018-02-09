@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { SumaryMonthService } from '../services/sumary-month.service';
-import { ISumaryMonth } from '../models/sumarymonth';
+import { SumaryMonth } from '../models/sumarymonth';
 import { OnChanges } from '@angular/core';
 
 @Component({
@@ -10,7 +10,8 @@ import { OnChanges } from '@angular/core';
 })
 export class SumarymesComponent implements OnInit {
   @Input() fecha: Date;
-  sumaryMonth: ISumaryMonth;
+  @Input() sumaryMonth: SumaryMonth;
+  private sumaryMonthTemp: SumaryMonth;
   errorMessage: string;
 
   constructor(private _sumaryMonthService: SumaryMonthService) { 
@@ -20,13 +21,24 @@ export class SumarymesComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.getData();
+    if (changes.fecha.previousValue === undefined ||
+        (changes.fecha.currentValue.getFullYear() != changes.fecha.previousValue.getFullYear() ||
+         changes.fecha.currentValue.getMonth() != changes.fecha.previousValue.getMonth())){
+      this.getData();
+    }
   }
 
   getData() {
     this._sumaryMonthService.getSumary(this.fecha).subscribe(
-      data => this.sumaryMonth = data,
-      error => this.errorMessage = <any>error);
+      data => this.sumaryMonthTemp = data,
+      error => this.errorMessage = <any>error,
+      () => (this.copyData()));
+  }
+
+  copyData() {
+    this.sumaryMonth.totalEgresos = this.sumaryMonthTemp.totalEgresos;
+    this.sumaryMonth.totalIngresos = this.sumaryMonthTemp.totalIngresos;
+    this.sumaryMonth.fecha = this.sumaryMonthTemp.fecha;
   }
 
 }

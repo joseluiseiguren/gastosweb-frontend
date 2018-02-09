@@ -18,7 +18,6 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { SumarydiaComponent } from './sumarydia/sumarydia.component';
 import { SumarymesComponent } from './sumarymes/sumarymes.component';
-import { SumaryDayService } from './services/sumary-day.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SumaryMonthService } from './services/sumary-month.service';
 import { DiarioService } from './services/diario.service';
@@ -95,7 +94,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
       { path: '**', redirectTo: 'diario', pathMatch: 'full'}
   ]),
   ],
-  providers: [SumaryDayService, SumaryMonthService, DiarioService, BsModalService],
+  providers: [SumaryMonthService, DiarioService, BsModalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

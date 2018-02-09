@@ -25,6 +25,8 @@
 
 .importeNegativo {
     color: red;
-  }
+}
 
-  
+.debito {
+    text-align: center;
+} 
