@@ -9,7 +9,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { DiarioComponent } from './diario/diario.component';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { MensualComponent } from './mensual/mensual.component';
 import { AnualComponent } from './anual/anual.component';
 import { HistoricoComponent } from './historico/historico.component';
@@ -23,6 +23,10 @@ import { SumaryMonthService } from './services/sumary-month.service';
 import { DiarioService } from './services/diario.service';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { CurrencyMaskModule } from "ng2-currency-mask";
+import { LoginModule } from './login/login.module';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './guards/auth.guard';
 
 /*import {CdkTableModule} from '@angular/cdk/table';
 import {HttpClientModule} from '@angular/common/http';
@@ -65,6 +69,20 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
   MatTooltipModule,
 } from '@angular/material';*/
 
+const routes: Routes = [    
+  { path: '', component: LoginComponent},
+  { path: 'dashboard', component: DashboardComponent, canActivateChild: [AuthGuard],
+                          children: [
+                            { path: 'diario', component: DiarioComponent},
+                            { path: 'mensual', component: MensualComponent },
+                            { path: 'anual', component: AnualComponent },
+                            { path: 'historico', component: HistoricoComponent },
+                            { path: 'conceptos', component: ConceptosComponent },
+                            { path: '', component: DiarioComponent },
+                          ]},
+  { path: '**', redirectTo: '/dashboard/diario', pathMatch: 'full'}
+];  
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -74,27 +92,21 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     HistoricoComponent,
     ConceptosComponent,
     SumarydiaComponent,
-    SumarymesComponent
+    SumarymesComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    LoginModule,
     ModalModule,
     HttpClientModule,
     CurrencyMaskModule,
     ButtonsModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    RouterModule.forRoot([
-      { path: 'diario', component: DiarioComponent },
-      { path: 'mensual', component: MensualComponent },
-      { path: 'anual', component: AnualComponent },
-      { path: 'historico', component: HistoricoComponent },
-      { path: 'conceptos', component: ConceptosComponent },
-      { path: '', redirectTo: 'diario', pathMatch: 'full'},
-      { path: '**', redirectTo: 'diario', pathMatch: 'full'}
-  ]),
+    RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
   ],
-  providers: [SumaryMonthService, DiarioService, BsModalService],
+  providers: [SumaryMonthService, DiarioService, BsModalService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

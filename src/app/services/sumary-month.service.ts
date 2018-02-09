@@ -6,7 +6,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/delay';
-import { ISumaryMonth } from '../models/sumarymonth';
+import { SumaryMonth } from '../models/sumarymonth';
 
 @Injectable()
 export class SumaryMonthService {
@@ -14,8 +14,8 @@ export class SumaryMonthService {
 
   constructor(private _http: HttpClient) { }
 
-  getSumary(fecha: Date): Observable<ISumaryMonth> {
-    return this._http.get<ISumaryMonth>(this._sumaryMonthUrl)
+  getSumary(fecha: Date): Observable<SumaryMonth> {
+    return this._http.get<SumaryMonth>(this._sumaryMonthUrl)
                     //.delay(3000)
                     .do(data => JSON.stringify(data))
                     .catch(this.handleError);

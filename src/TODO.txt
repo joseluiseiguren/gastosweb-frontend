@@ -1,0 +1,12 @@
+- log out
+- mostrar nombre de usuario logueado
+- poder cambiar contraseña
+- olvido de contraseña
+- poder cambiaar email
+- registracion
+- reporte mensual
+- reporte anual
+- reporte historico
+- web api
+- exportacion a excel
+- gestion de conceptos

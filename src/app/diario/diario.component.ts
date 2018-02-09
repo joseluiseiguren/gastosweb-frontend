@@ -33,7 +33,7 @@ export class DiarioComponent implements OnInit {
   changeDay(newValue: Date) {
     if (newValue.getFullYear() != this.bsValue.getFullYear() ||
         newValue.getMonth() != this.bsValue.getMonth() ||
-        newValue.getDay() != this.bsValue.getDay()){
+        newValue.getDate() != this.bsValue.getDate()){
         this.bsValue = newValue;
         this.getData();
     }
