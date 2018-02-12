@@ -20,36 +20,22 @@ export class LoginComponent implements OnInit {
   login() {
     this.loading = true;
 
-    this.usersService.permiteAccesoLogin(this.model.username, this.model.password)
-        .subscribe(
-          data => {
-            console.log(data);
-            this.error = 'Username or password is incorrect';
-            this.loading = false;
-          },
-          error => {});
-
-        /*.subscribe(
-          data => {
-            console.log(data);
-            if (data === false) {
-              this.error = 'Username or password is incorrect';
-              this.loading = false;
-            } else {
-              localStorage.setItem('currentUser', this.model.username);
-              this.router.navigate(['/dashboard/diario']);
-            };
-          },
-          error => {});*/
-          
-    /*if (this.model.username === "test" && this.model.password === "test"){
-      localStorage.setItem('currentUser', this.model.username);
-      this.router.navigate(['/dashboard/diario']);
-    }
-    else {
-      this.error = 'Username or password is incorrect';
-      this.loading = false;
-    }*/
+    this.usersService.login(this.model.username, this.model.password)
+            .subscribe(
+                data => {
+                  console.log(data);
+                  if (data === true) {
+                    this.router.navigate(['/dashboard/diario']);
+                  }
+                  else {
+                    this.error = 'Username or password is incorrect';
+                    this.loading = false;      
+                  }
+                },
+                error => {
+                  console.log("error");  
+                  this.loading = false;
+                });
 
     /*this.authenticationService.login(this.model.username, this.model.password)
         .subscribe(result => {

@@ -6,21 +6,31 @@ import { AuthInterceptor } from '../interceptors/AuthInterceptor';
 
 @Injectable()
 export class UsersService {
-  private _usersUrl = 'http://localhost:3000/api/usuarios';
-
+  
   constructor(private _http: HttpClient) { }
 
-  permiteAccesoLogin(email: string, password: string): Observable<User[]> {
-    let url = this._usersUrl + '?email=' + email;
-    
-    return this._http.get<User[]>(url, { 
-                        headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*'),
-                    })
-                    //.delay(3000)
-                    .do(data => JSON.stringify(data))
-                    .catch(this.handleError);
+  login(email:string, password:string ) {
+    return this._http.post<any>('http://localhost:3000/api/usuarios/login', 
+                {email, password})
+                .map(user => {
+                    console.log(user);
+                    // login successful if there's a jwt token in the response
+                    if (user && user.token) {
+                        // store user details and jwt token in local storage to keep user logged in between page refreshes
+                        localStorage.setItem('currentUser', JSON.stringify(user));
+                        return true;
+                    }
+
+                    return false;
+                }
+              );
   }
 
+  logout() {
+      // remove user from local storage to log user out
+      localStorage.removeItem('currentUser');
+  }
+  
   private handleError(err: HttpErrorResponse) {
     // in a real world app, we may send the server to some remote logging infrastructure
     // instead of just logging it to the console
