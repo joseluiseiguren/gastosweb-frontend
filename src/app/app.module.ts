@@ -27,6 +27,9 @@ import { LoginModule } from './login/login.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './guards/auth.guard';
+import { UsersService } from './services/users.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/AuthInterceptor';
 
 /*import {CdkTableModule} from '@angular/cdk/table';
 import {HttpClientModule} from '@angular/common/http';
@@ -106,7 +109,16 @@ const routes: Routes = [
     BsDatepickerModule.forRoot(),
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
   ],
-  providers: [SumaryMonthService, DiarioService, BsModalService, AuthGuard],
+  providers: [SumaryMonthService, 
+              DiarioService, 
+              BsModalService, 
+              UsersService, 
+              AuthGuard ,
+              {
+                provide: HTTP_INTERCEPTORS,
+                useClass: AuthInterceptor,
+                multi: true,
+              }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

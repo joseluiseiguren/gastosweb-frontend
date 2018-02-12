@@ -1,4 +1,5 @@
 - log out
+- hacer bien el login por back y validar lo que hay en el localstorage (ver si el la mejor forma de hacer el login)
 - mostrar nombre de usuario logueado
 - poder cambiar contraseña
 - olvido de contraseña
@@ -10,3 +11,7 @@
 - web api
 - exportacion a excel
 - gestion de conceptos
+- poder personalizar la moneda> unirlos
+- no harcodear urls en los services
+- la funcion de manejo de errores en los services se repite (optimizar)
+- hay modelos que se comparten entre webapi y frontend, por ejemplo el de usuarios -> unirlos
