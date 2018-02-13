@@ -3,48 +3,71 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable } from 'rxjs/Observable';
 import { User } from '../models/user';
 import { AuthInterceptor } from '../interceptors/AuthInterceptor';
+import { JwtHelper } from 'angular2-jwt';
 
 @Injectable()
 export class UsersService {
-  
-  constructor(private _http: HttpClient) { }
+    jwtHelper: JwtHelper = new JwtHelper();
 
-  login(email:string, password:string ) {
-    return this._http.post<any>('http://localhost:3000/api/usuarios/login', 
+    constructor(private _http: HttpClient) { }
+
+    login(email:string, password:string ) : Observable<boolean> {
+        return this._http.post<any>('http://localhost:3000/api/usuarios/login', 
                 {email, password})
                 .map(user => {
-                    console.log(user);
                     // login successful if there's a jwt token in the response
                     if (user && user.token) {
                         // store user details and jwt token in local storage to keep user logged in between page refreshes
-                        localStorage.setItem('currentUser', JSON.stringify(user));
+                        localStorage.setItem('alow', user.token);
+                        console.log(this.jwtHelper.decodeToken(user.token));
                         return true;
                     }
 
                     return false;
-                }
+                }               
               );
-  }
-
-  logout() {
-      // remove user from local storage to log user out
-      localStorage.removeItem('currentUser');
-  }
-  
-  private handleError(err: HttpErrorResponse) {
-    // in a real world app, we may send the server to some remote logging infrastructure
-    // instead of just logging it to the console
-    let errorMessage = '';
-    if (err.error instanceof Error) {
-        // A client-side or network error occurred. Handle it accordingly.
-        errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-        // The backend returned an unsuccessful response code.
-        // The response body may contain clues as to what went wrong,
-        errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
     }
-    console.error(errorMessage);
-    return Observable.throw(errorMessage);
-  }
+
+    logout() {
+        // remove user from local storage to log user out
+        localStorage.removeItem('alow');
+    }
+
+    isSessionExpired(): boolean {
+        let token = localStorage.getItem('alow');
+        if (token === null || 
+            this.jwtHelper.isTokenExpired(token) === true) {
+            return true;
+        }
+
+        return false;
+    }
+
+    getUserName() : string {
+        let token = localStorage.getItem('alow');
+        let userName = "";
+
+        if (token !== null) {
+            userName = this.jwtHelper.decodeToken(token).user;
+        }
+
+        return userName;
+    }
+  
+    private handleError(err: HttpErrorResponse) {
+        // in a real world app, we may send the server to some remote logging infrastructure
+        // instead of just logging it to the console
+        let errorMessage = '';
+        if (err.error instanceof Error) {
+            // A client-side or network error occurred. Handle it accordingly.
+            errorMessage = `An error occurred: ${err.error.message}`;
+        } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
+        }
+        console.error(errorMessage);
+        return Observable.throw(errorMessage);
+    }
 
 }

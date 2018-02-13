@@ -8,7 +8,7 @@
     z-index: 10;
 }
 
-nav {
+/*nav {
     width: 100%;
     background: #f0f0f0;
     border: 1px solid #ccc;
@@ -36,7 +36,7 @@ nav ul li {
     text-align: center;
     border-left: 1px solid #fff;
     border-right: 1px solid #ccc;
-    width: 16.6667%; /* fallback for non-calc() browsers */
+    width: 16.6667%; 
     width: calc(100% / 6);
     box-sizing: border-box;
     color: white;
@@ -56,10 +56,106 @@ nav ul li a {
 }
 
 nav ul li a:hover:not(.active) {
-    background-color: #111;
+    background-color: darkcyan;
 }
 
 .active {
     background-color: #4CAF50;
 }
+*/
 
+
+
+
+
+.nav ul {
+    list-style: none;
+    background-color: #444;
+    /*text-align: center;*/
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav li {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    line-height: 40px;
+    text-align: left;
+  }
+  
+  .nav a {
+    text-decoration: none;
+    color: #fff;
+    display: block;
+    padding-left: 15px;
+    border-bottom: 1px solid #888;
+    transition: .3s background-color;
+  }
+  
+  .nav a:hover {
+    background-color: #005f5f;
+    cursor: pointer;
+  }
+  
+  .nav a.active {
+    background-color: teal;
+    color: #444;
+    cursor: default;
+  }
+  
+  /* Sub Menus */
+  .nav li li {
+    font-size: .7em;
+  }
+
+  /*******************************************
+     Style menu for larger screens
+  
+     Using 650px (130px each * 5 items), but ems
+     or other values could be used depending on other factors
+  ********************************************/
+  
+  @media screen and (min-width: 650px) {
+    .nav li {
+      width: 130px;
+      /*width: calc(100% / 6);*/
+      border-bottom: none;
+      height: 40px;
+      line-height: 40px;
+      font-size: 1.0em;
+      display: inline-block;
+      margin-right: -4px;
+    }
+  
+    .nav a {
+      border-bottom: none;
+    }
+  
+    .nav > ul > li {
+      text-align: center;
+    }
+  
+    .nav > ul > li > a {
+      padding-left: 0;
+    }
+  
+    /* Sub Menus */
+    .nav li ul {
+      position: absolute;
+      display: none;
+      width: inherit;
+    }
+  
+    .nav li:hover ul {
+      display: block;
+    }
+  
+    .nav li ul li {
+      display: block;
+    }
+  }
+
+  .nav > ul > li:last-child
+  {
+      float:right;
+  }

@@ -8,44 +8,46 @@ import { UsersService } from '../services/users.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  model: any = {};
-  loading = false;
-  error = '';
+    model: any = {};
+    loading = false;
+    error = '';
+  
+    constructor(private router: Router, private usersService: UsersService) { 
+      if (this.usersService.isSessionExpired() === false) {
+        this.ingresarApp();
+      }
+    }
 
-  constructor(private router: Router, private usersService: UsersService) { }
+    ngOnInit() {
+    }
 
-  ngOnInit() {
-  }
+    login() {
+      this.loading = true;
 
-  login() {
-    this.loading = true;
+      this.usersService.login(this.model.username, this.model.password)
+              .subscribe(
+                  data => {
+                    if (data === true) {
+                      this.ingresarApp();          
+                    }
+                    else {
+                      this.error = 'Acceso Denegado';
+                      this.loading = false;
+                    }
+                  },
+                  error => {
+                    if (error.status === 401) {
+                      this.error = 'Acceso Denegado';
+                    }
+                    else {
+                      this.error = 'Error inesperado';
+                    }
+                    
+                    this.loading = false;
+                  });
+    }
 
-    this.usersService.login(this.model.username, this.model.password)
-            .subscribe(
-                data => {
-                  console.log(data);
-                  if (data === true) {
-                    this.router.navigate(['/dashboard/diario']);
-                  }
-                  else {
-                    this.error = 'Username or password is incorrect';
-                    this.loading = false;      
-                  }
-                },
-                error => {
-                  console.log("error");  
-                  this.loading = false;
-                });
-
-    /*this.authenticationService.login(this.model.username, this.model.password)
-        .subscribe(result => {
-            if (result === true) {
-                this.router.navigate(['/']);
-            } else {
-                this.error = 'Username or password is incorrect';
-                this.loading = false;
-            }
-        });*/
-  }
-
+    private ingresarApp () {
+      this.router.navigate(['/dashboard/diario']);
+    }
 }

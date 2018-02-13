@@ -1,4 +1,6 @@
 <div class="main">
+  <!--
+      
   <nav>
     <ul>
       <li><a routerLink="/dashboard/diario" routerLinkActive="active">Diario</a></li>
@@ -6,10 +8,36 @@
       <li><a routerLink="/dashboard/anual" routerLinkActive="active">Anual</a></li>
       <li><a routerLink="/dashboard/historico" routerLinkActive="active">Historico</a></li>
       <li><a routerLink="/dashboard/conceptos" routerLinkActive="active">Conceptos</a></li>
-      <li><a routerLink="/dashboard/usuario" routerLinkActive="active">Usuario</a></li>
+      <li class="user">
+        <i class="glyphicon glyphicon-user"></i>
+        {{userName}}
+      </li>
     </ul>
   </nav>
-  <div style="margin-top:42px;">
+-->
+
+<div class="nav">
+    <ul>
+      <li><a [class.active]="menuActivo == 'D'" (click)="route('D')">Diario</a></li>
+      <li><a [class.active]="menuActivo == 'M'" (click)="route('M')">Mensual</a></li>
+      <li><a [class.active]="menuActivo == 'A'" (click)="route('A')">Anual</a></li>
+      <li><a [class.active]="menuActivo == 'H'" (click)="route('H')">Historico</a></li>
+      <li><a [class.active]="menuActivo == 'C'" (click)="route('C')">Conceptos</a></li>
+      <li class="user"><a>
+                          <i class="glyphicon glyphicon-user"></i>
+                          {{userName}}
+                        </a>
+        <ul>
+          <li><a href="#">Perfil</a></li>
+          <li><a (click)="logout()">Log Out</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div style="margin-top:5px;">
     <router-outlet></router-outlet>
   </div>
+
 </div>
+

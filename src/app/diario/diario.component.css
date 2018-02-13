@@ -5,6 +5,7 @@
     background-color: darkgrey;
     right: 5px;
     position: fixed;
+    z-index: -1;
 }
 
 .left {
