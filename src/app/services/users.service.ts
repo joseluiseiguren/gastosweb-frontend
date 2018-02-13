@@ -53,6 +53,17 @@ export class UsersService {
 
         return userName;
     }
+
+    getUserId() : number {
+        let token = localStorage.getItem('alow');
+        let userId = 0;
+
+        if (token !== null) {
+            userId = this.jwtHelper.decodeToken(token).id;
+        }
+
+        return userId;
+    }
   
     private handleError(err: HttpErrorResponse) {
         // in a real world app, we may send the server to some remote logging infrastructure

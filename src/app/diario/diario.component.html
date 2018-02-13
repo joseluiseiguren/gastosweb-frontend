@@ -24,13 +24,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr id="tr{{item.concepto.id}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
+      <tr id="tr{{item.idconcepto}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
           (click)="openModal(template, item)"
           [class.info]="odd"
           [class.success]="even">
-        <td>{{item.concepto.descripcion}}</td>
+        <td>{{item.descripcion}}</td>
         <td class="importe"
-            [class.importeNegativo]="item.importe < 0 || item.concepto.suma === false">
+            [class.importeNegativo]="item.importe < 0 || item.credito === false">
             {{item.importe | currency}}
         </td>
       </tr>
@@ -40,7 +40,7 @@
 
 <ng-template #template>
   <div class="modal-body text-center">
-    <p>{{conceptoSel.concepto.descripcion}}</p>
+    <p>{{conceptoSel.descripcion}}</p>
 
     <input #importe2 
             autofocus

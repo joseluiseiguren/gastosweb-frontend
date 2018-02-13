@@ -4,6 +4,7 @@ import { IConceptoDiario } from '../models/concepto.diario';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { SumaryMonth } from '../models/sumarymonth';
+import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'app-diario',
@@ -21,7 +22,8 @@ export class DiarioComponent implements OnInit {
   sumMonth: SumaryMonth = new SumaryMonth();
   
   constructor(private _conceptosDiarioService: DiarioService,
-              private modalService: BsModalService) { 
+              private _modalService: BsModalService,
+              private _userService: UsersService) { 
     this.sumMonth.totalEgresos = 0;
     this.sumMonth.totalIngresos = 0;          
   }
@@ -40,20 +42,23 @@ export class DiarioComponent implements OnInit {
   }
 
   getData() {
-    this._conceptosDiarioService.getConceptosImportes(this.bsValue).subscribe(
-      data => this.conceptos = data,
-      error => this.errorMessage = <any>error);
+    this._conceptosDiarioService.getConceptosImportes(
+                                  this.bsValue, 
+                                  this._userService.getUserId())
+        .subscribe(
+            data => this.conceptos = data,
+            error => this.errorMessage = <any>error);
   }
 
   openModal(template: TemplateRef<any>, concepto: IConceptoDiario) {
     this.conceptoSel = concepto;
     this.nuevoImporte = Math.abs(this.conceptoSel.importe);
-    this.nuevoDebCred = this.conceptoSel.concepto.suma;
-    this.modalRef = this.modalService.show(template, {class: 'modal-sm', ignoreBackdropClick: false, animated: true, keyboard: true}  );
+    this.nuevoDebCred = this.conceptoSel.credito;
+    this.modalRef = this._modalService.show(template, {class: 'modal-sm', ignoreBackdropClick: false, animated: true, keyboard: true}  );
   }
  
   confirm(): void {
-    if (this.conceptoSel.concepto.suma){
+    if (this.conceptoSel.credito){
       this.sumMonth.totalIngresos -= this.conceptoSel.importe;
     }
     else{
@@ -61,9 +66,9 @@ export class DiarioComponent implements OnInit {
     }
     
     this.conceptoSel.importe = (this.nuevoDebCred) ? this.nuevoImporte : this.nuevoImporte*(-1);
-    this.conceptoSel.concepto.suma = this.nuevoDebCred;
+    this.conceptoSel.credito = this.nuevoDebCred;
 
-    if (this.conceptoSel.concepto.suma){
+    if (this.conceptoSel.credito){
       this.sumMonth.totalIngresos += this.conceptoSel.importe;
     }
     else{

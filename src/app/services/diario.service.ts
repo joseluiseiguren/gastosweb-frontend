@@ -10,12 +10,15 @@ import { IConceptoDiario } from '../models/concepto.diario';
 
 @Injectable()
 export class DiarioService {
-  private _conceptosDiarioUrl = 'http://localhost:3004/diario';
+  private _conceptosDiarioUrl = 'http://localhost:3000/api/usuarios/:userId/diario/:fecha';
 
   constructor(private _http: HttpClient) { }
 
-  getConceptosImportes(fecha: Date): Observable<IConceptoDiario[]> {
-    return this._http.get<IConceptoDiario[]>(this._conceptosDiarioUrl)
+  getConceptosImportes(fecha: Date, userId: number): Observable<IConceptoDiario[]> {
+    let url = this._conceptosDiarioUrl.replace(":userId", userId.toString());
+    url = url.replace(":fecha", fecha.getFullYear().toString() + "-" + (fecha.getMonth()+1).toString() + "-" +  fecha.getDate().toString());
+
+    return this._http.get<IConceptoDiario[]>(url)
                     //.delay(3000)
                     .do(data => JSON.stringify(data))
                     .catch(this.handleError);
