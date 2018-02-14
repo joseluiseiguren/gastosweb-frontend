@@ -30,7 +30,7 @@
           [class.success]="even">
         <td>{{item.descripcion}}</td>
         <td class="importe"
-            [class.importeNegativo]="item.importe < 0 || item.credito === false">
+            [class.importeNegativo]="item.importe < 0 || item.credito === 0">
             {{item.importe | currency}}
         </td>
       </tr>
@@ -60,16 +60,16 @@
                 <input type="radio" 
                        id="creditoopt" 
                        name="debcred" 
-                       (click)="changeNuevoDebCred(true)"
-                       [checked]="nuevoDebCred === true">
+                       (click)="changeNuevoDebCred(1)"
+                       [checked]="nuevoDebCred === 1">
               </th>
               <th class="debito importeNegativo">
                 <label for="debitoopt">Debito</label>
                 <input type="radio" 
                        id="debitoopt" 
                        name="debcred"
-                       (click)="changeNuevoDebCred(false)"
-                       [checked]="nuevoDebCred === false">
+                       (click)="changeNuevoDebCred(0)"
+                       [checked]="nuevoDebCred === 0">
               </th>
             </tr>
           </thead>

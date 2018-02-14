@@ -16,3 +16,6 @@
 - la funcion de manejo de errores en los services se repite (optimizar)
 - hay modelos que se comparten entre webapi y frontend, por ejemplo el de usuarios -> unirlos
 - grilla de gastos agregar hover en row
+- loguear login de usuarios
+- web api manejo de errores
+- poner loading en todas las comunicacion con el server

@@ -3,7 +3,7 @@ import { IConcepto } from "./concepto";
 export interface IConceptoDiario {
     idconcepto: number;
     descripcion: string;
-    credito: boolean;
+    credito: number;
     fecha: Date;
     importe: number;
 }

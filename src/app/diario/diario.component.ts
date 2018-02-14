@@ -16,7 +16,7 @@ export class DiarioComponent implements OnInit {
   conceptos: IConceptoDiario[];
   conceptoSel: IConceptoDiario;
   nuevoImporte: number;
-  nuevoDebCred: boolean;
+  nuevoDebCred: number;
   errorMessage: string;
   modalRef: BsModalRef;
   sumMonth: SumaryMonth = new SumaryMonth();
@@ -58,17 +58,30 @@ export class DiarioComponent implements OnInit {
   }
  
   confirm(): void {
-    if (this.conceptoSel.credito){
+
+    this._conceptosDiarioService.setConceptoImporte(
+                                    this.bsValue, 
+                                    (this.nuevoDebCred == 1) ? this.nuevoImporte : this.nuevoImporte*(-1), 
+                                    this.conceptoSel.idconcepto)
+                .subscribe(
+                  data => {
+                    console.log("entro");
+                  },
+                  error => {
+                    console.log("error");               
+                  });
+
+    if (this.conceptoSel.credito == 1){
       this.sumMonth.totalIngresos -= this.conceptoSel.importe;
     }
     else{
       this.sumMonth.totalEgresos -= Math.abs(this.conceptoSel.importe);
     }
     
-    this.conceptoSel.importe = (this.nuevoDebCred) ? this.nuevoImporte : this.nuevoImporte*(-1);
+    this.conceptoSel.importe = (this.nuevoDebCred == 1) ? this.nuevoImporte : this.nuevoImporte*(-1);
     this.conceptoSel.credito = this.nuevoDebCred;
 
-    if (this.conceptoSel.credito){
+    if (this.conceptoSel.credito == 1){
       this.sumMonth.totalIngresos += this.conceptoSel.importe;
     }
     else{
@@ -82,8 +95,8 @@ export class DiarioComponent implements OnInit {
     this.modalRef.hide();
   }
 
-  changeNuevoDebCred(suma: boolean): void {
-    this.nuevoDebCred = suma;
+  changeNuevoDebCred(credito: number): void {
+    this.nuevoDebCred = credito;
   }
 
 }

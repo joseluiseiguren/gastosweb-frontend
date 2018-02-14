@@ -10,12 +10,12 @@ import { IConceptoDiario } from '../models/concepto.diario';
 
 @Injectable()
 export class DiarioService {
-  private _conceptosDiarioUrl = 'http://localhost:3000/api/usuarios/:userId/diario/:fecha';
-
+  
   constructor(private _http: HttpClient) { }
 
   getConceptosImportes(fecha: Date, userId: number): Observable<IConceptoDiario[]> {
-    let url = this._conceptosDiarioUrl.replace(":userId", userId.toString());
+    let url = 'http://localhost:3000/api/usuarios/:userId/diario/:fecha';
+    url = url.replace(":userId", userId.toString());
     url = url.replace(":fecha", fecha.getFullYear().toString() + "-" + (fecha.getMonth()+1).toString() + "-" +  fecha.getDate().toString());
 
     return this._http.get<IConceptoDiario[]>(url)
@@ -23,6 +23,13 @@ export class DiarioService {
                     .do(data => JSON.stringify(data))
                     .catch(this.handleError);
   }
+
+  setConceptoImporte(fecha:Date, importe:number, idConcepto:number) : Observable<void> {
+    
+    return this._http.post<any>('http://localhost:3000/api/diario', 
+            {fecha: fecha, importe: importe, idConcepto: idConcepto});
+}
+
 
   private handleError(err: HttpErrorResponse) {
     // in a real world app, we may send the server to some remote logging infrastructure
