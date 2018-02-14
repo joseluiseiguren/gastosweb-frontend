@@ -24,8 +24,8 @@ export class DiarioComponent implements OnInit {
   constructor(private _conceptosDiarioService: DiarioService,
               private _modalService: BsModalService,
               private _userService: UsersService) { 
-    this.sumMonth.totalEgresos = 0;
-    this.sumMonth.totalIngresos = 0;          
+    this.sumMonth.egresos = 0;
+    this.sumMonth.ingresos = 0;          
   }
 
   ngOnInit() {
@@ -42,9 +42,7 @@ export class DiarioComponent implements OnInit {
   }
 
   getData() {
-    this._conceptosDiarioService.getConceptosImportes(
-                                  this.bsValue, 
-                                  this._userService.getUserId())
+    this._conceptosDiarioService.getConceptosImportes(this.bsValue)
         .subscribe(
             data => this.conceptos = data,
             error => this.errorMessage = <any>error);
@@ -72,20 +70,20 @@ export class DiarioComponent implements OnInit {
                   });
 
     if (this.conceptoSel.credito == 1){
-      this.sumMonth.totalIngresos -= this.conceptoSel.importe;
+      this.sumMonth.ingresos -= this.conceptoSel.importe;
     }
     else{
-      this.sumMonth.totalEgresos -= Math.abs(this.conceptoSel.importe);
+      this.sumMonth.egresos -= Math.abs(this.conceptoSel.importe);
     }
     
     this.conceptoSel.importe = (this.nuevoDebCred == 1) ? this.nuevoImporte : this.nuevoImporte*(-1);
     this.conceptoSel.credito = this.nuevoDebCred;
 
     if (this.conceptoSel.credito == 1){
-      this.sumMonth.totalIngresos += this.conceptoSel.importe;
+      this.sumMonth.ingresos += this.conceptoSel.importe;
     }
     else{
-      this.sumMonth.totalEgresos += Math.abs(this.conceptoSel.importe);
+      this.sumMonth.egresos += Math.abs(this.conceptoSel.importe);
     }
 
     this.modalRef.hide();

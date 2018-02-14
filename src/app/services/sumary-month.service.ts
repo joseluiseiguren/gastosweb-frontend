@@ -7,15 +7,19 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/delay';
 import { SumaryMonth } from '../models/sumarymonth';
+import { UsersService } from './users.service';
 
 @Injectable()
 export class SumaryMonthService {
-  private _sumaryMonthUrl = 'http://localhost:3004/sumarymonth';
-
-  constructor(private _http: HttpClient) { }
+  
+  constructor(private _http: HttpClient, private _userService: UsersService) { }
 
   getSumary(fecha: Date): Observable<SumaryMonth> {
-    return this._http.get<SumaryMonth>(this._sumaryMonthUrl)
+    let url = 'http://localhost:3000/api/usuarios/:userId/mensual/:fecha/sumary';
+    url = url.replace(":userId", this._userService.getUserId().toString());
+    url = url.replace(":fecha", fecha.getFullYear().toString() + (fecha.getMonth()+1).toString());
+
+    return this._http.get<SumaryMonth>(url)
                     //.delay(3000)
                     .do(data => JSON.stringify(data))
                     .catch(this.handleError);

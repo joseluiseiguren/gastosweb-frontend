@@ -7,17 +7,17 @@
   <tbody>
     <tr class="success">
       <td>Ingresos</td>
-      <td class="importe">{{sumaryMonth.totalIngresos | currency}}</td>
+      <td class="importe">{{sumaryMonth.ingresos | currency}}</td>
     </tr>
     <tr class="danger">
       <td>Egresos</td>
-      <td class="importe">{{sumaryMonth.totalEgresos | currency}}</td>
+      <td class="importe">{{sumaryMonth.egresos | currency}}</td>
     </tr>
     <tr class="info">
       <td>Saldo</td>
       <td class="importe saldo"
-          [class.saldoNegativo]="(sumaryMonth.totalIngresos - sumaryMonth.totalEgresos) < 0">
-          {{(sumaryMonth.totalIngresos - sumaryMonth.totalEgresos) | currency}}
+          [class.saldoNegativo]="(sumaryMonth.ingresos - sumaryMonth.egresos) < 0">
+          {{(sumaryMonth.ingresos - sumaryMonth.egresos) | currency}}
       </td>
     </tr>
   </tbody>

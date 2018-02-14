@@ -36,9 +36,8 @@ export class SumarymesComponent implements OnInit {
   }
 
   copyData() {
-    this.sumaryMonth.totalEgresos = this.sumaryMonthTemp.totalEgresos;
-    this.sumaryMonth.totalIngresos = this.sumaryMonthTemp.totalIngresos;
-    this.sumaryMonth.fecha = this.sumaryMonthTemp.fecha;
+    this.sumaryMonth.egresos = this.sumaryMonthTemp.egresos;
+    this.sumaryMonth.ingresos = this.sumaryMonthTemp.ingresos;
   }
 
 }

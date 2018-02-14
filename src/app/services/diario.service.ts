@@ -7,16 +7,19 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/delay';
 import { IConceptoDiario } from '../models/concepto.diario';
+import { UsersService } from './users.service';
 
 @Injectable()
 export class DiarioService {
   
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient, private _userService: UsersService) { }
 
-  getConceptosImportes(fecha: Date, userId: number): Observable<IConceptoDiario[]> {
+  getConceptosImportes(fecha: Date): Observable<IConceptoDiario[]> {
     let url = 'http://localhost:3000/api/usuarios/:userId/diario/:fecha';
-    url = url.replace(":userId", userId.toString());
-    url = url.replace(":fecha", fecha.getFullYear().toString() + "-" + (fecha.getMonth()+1).toString() + "-" +  fecha.getDate().toString());
+    url = url.replace(":userId", this._userService.getUserId().toString());
+    url = url.replace(":fecha", fecha.getFullYear().toString() + 
+                                (fecha.getMonth()+1).toString().padStart(2, '0') + 
+                                fecha.getDate().toString().padStart(2, '0'));
 
     return this._http.get<IConceptoDiario[]>(url)
                     //.delay(3000)
@@ -27,7 +30,11 @@ export class DiarioService {
   setConceptoImporte(fecha:Date, importe:number, idConcepto:number) : Observable<void> {
     
     return this._http.post<any>('http://localhost:3000/api/diario', 
-            {fecha: fecha, importe: importe, idConcepto: idConcepto});
+            {fecha: fecha.getFullYear().toString() + 
+                    (fecha.getMonth()+1).toString().padStart(2, '0') + 
+                    fecha.getDate().toString().padStart(2, '0'), 
+              importe: importe, 
+              idConcepto: idConcepto});
 }
 
 

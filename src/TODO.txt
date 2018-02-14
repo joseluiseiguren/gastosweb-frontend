@@ -19,3 +19,4 @@
 - loguear login de usuarios
 - web api manejo de errores
 - poner loading en todas las comunicacion con el server
+- probar decimales con punto y con coma
