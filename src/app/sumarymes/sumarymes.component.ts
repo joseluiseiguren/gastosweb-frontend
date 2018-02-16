@@ -24,7 +24,6 @@ export class SumarymesComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log("cambio fecha");
     if (changes.fecha.previousValue === undefined ||
         (changes.fecha.currentValue.getFullYear() != changes.fecha.previousValue.getFullYear() ||
          changes.fecha.currentValue.getMonth() != changes.fecha.previousValue.getMonth())){

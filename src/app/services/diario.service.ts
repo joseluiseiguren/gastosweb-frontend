@@ -56,6 +56,17 @@ getConceptosTotalMes(fecha: string /*YYYYMM*/): Observable<any[]> {
                   .catch(this.handleError);
 }
 
+getConceptosMovimMes(idConcepto: number, fecha: string /*YYYYMM*/): Observable<any[]> {
+  let url = 'http://localhost:3000/api/conceptos/:id/movimientos/:fecha';
+  url = url.replace(":fecha", fecha);
+  url = url.replace(":id", idConcepto.toString());
+  
+  return this._http.get<any[]>(url)
+                  //.delay(3000)
+                  .do(data => JSON.stringify(data))
+                  .catch(this.handleError);
+}
+
 private handleError(err: HttpErrorResponse) {
     // in a real world app, we may send the server to some remote logging infrastructure
     // instead of just logging it to the console

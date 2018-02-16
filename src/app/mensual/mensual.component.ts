@@ -40,11 +40,13 @@ export class MensualComponent implements OnInit {
   changeMes(value: number) {
     let x = new Date(this.bsValue.getFullYear(), value-1, 1);
     this.bsValue = x;
+    this.getData();
   }
 
   changeAnio(value: number) {
     let x = new Date(value, this.bsValue.getMonth(), 1);
     this.bsValue = x;
+    this.getData();
   }
 
   private getMonthName(value: number) : string {
@@ -70,11 +72,30 @@ export class MensualComponent implements OnInit {
   }
 
   getData() {
-    let fecha = this.anioActual.toString() + this.mesActual.numero.toString().padStart(2, '0');
+    let fecha = this.bsValue.getFullYear().toString() + (this.bsValue.getMonth()+1).toString().padStart(2, '0');
     this._diarioService.getConceptosTotalMes(fecha)
         .subscribe(
             data => this.conceptosTotales = data,
             error => this.errorMessage = <any>error);
+  }
+
+  loadDetail(event: boolean, ct: any) {
+    if (event == true) {
+      let fecha = this.bsValue.getFullYear().toString() + (this.bsValue.getMonth()+1).toString().padStart(2, '0');
+      console.log(fecha);
+      this._diarioService.getConceptosMovimMes(ct.idconcepto, fecha)
+        .subscribe(
+            data => {
+              console.log(data);
+              ct.dataAdic = new Array<any>();
+              ct.dataAdic = data;
+            },
+            error => this.errorMessage = <any>error);
+
+      /*console.log(ct);
+      ct.pepe = new Array<any>();
+      ct.pepe[0] = "nafa";*/
+    }
   }
 
 }

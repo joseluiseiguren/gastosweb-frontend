@@ -17,14 +17,19 @@
 
 <div class="conceptos">
     <accordion>
-        <accordion-group *ngFor="let ct of conceptosTotales" #group>
+        <accordion-group *ngFor="let ct of conceptosTotales" #group (isOpenChange)="loadDetail($event, ct)">
           <div accordion-heading class="clearfix">
+              <i class="glyphicon glyphicon-chevron-down"></i>
             {{ct.descripcion}}
             <span class="float-right pull-right" [class.importeNegativo]="ct.saldo < 0">
               {{ct.saldo | currency:this._userService.getMoneda()}}
             </span>
           </div>
-            This is just some content to illustrate fancy headings.
+          <div *ngIf="ct.dataAdic !== undefined">
+            <div *ngFor="let data of ct.dataAdic">
+              {{data.importe}}
+            </div>
+          </div>
         </accordion-group>
       </accordion>
 </div>
