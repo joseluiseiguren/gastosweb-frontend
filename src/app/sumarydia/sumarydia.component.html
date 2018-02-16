@@ -7,17 +7,17 @@
   <tbody>
     <tr class="success">
       <td>Ingresos</td>
-      <td class="importe">{{getIngresos() | currency}}</td>
+      <td class="importe">{{getIngresos() | currency:this._userService.getMoneda()}}</td>
     </tr>
     <tr class="danger">
       <td>Egresos</td>
-      <td class="importe">{{getEgresos() | currency}}</td>
+      <td class="importe">{{getEgresos() | currency:this._userService.getMoneda()}}</td>
     </tr>
     <tr class="info">
       <td>Saldo</td>
       <td class="importe saldo"
           [class.saldoNegativo]="(getIngresos() - getEgresos()) < 0">
-        {{(getIngresos() - getEgresos()) | currency}}
+        {{(getIngresos() - getEgresos()) | currency:this._userService.getMoneda()}}
       </td>
     </tr>
   </tbody>

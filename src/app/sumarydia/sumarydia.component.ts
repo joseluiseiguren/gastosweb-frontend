@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { ISumaryDay } from '../models/sumaryday';
 import { OnChanges } from '@angular/core';
 import { IConceptoDiario } from '../models/concepto.diario';
+import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'app-sumarydia',
@@ -12,7 +13,7 @@ export class SumarydiaComponent implements OnInit {
   @Input() fecha: Date;
   @Input() conceptosDiarios: IConceptoDiario[];
 
-  constructor() { 
+  constructor(private _userService: UsersService) { 
   }
 
   ngOnInit() {

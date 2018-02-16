@@ -32,7 +32,7 @@
         <td >{{item.descripcion}}</td>
         <td class="importe"
             [class.importeNegativo]="item.importe < 0 || item.credito === 0">
-            {{item.importe | currency}}
+            {{item.importe | currency:this._userService.getMoneda()}}
         </td>
       </tr>
     </tbody>
@@ -49,6 +49,7 @@
             class="form-control"
             [class.importeNegativo]="!nuevoDebCred" 
             currencyMask
+            [options]="currencyMaskOptions"
             [(ngModel)]="nuevoImporte" 
             (keyup.enter)="confirm()"
             (click)="importe2.select()" />

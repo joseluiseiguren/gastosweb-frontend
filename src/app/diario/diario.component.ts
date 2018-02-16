@@ -6,6 +6,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { SumaryMonth } from '../models/sumarymonth';
 import { UsersService } from '../services/users.service';
 import { LocalizacionService } from '../services/localizacion.service';
+import { APP_CONFIG } from '../app.config/app-config.constants';
+import { IAppConfig } from '../app.config/app-config.interface';
 
 @Component({
   selector: 'app-diario',
@@ -21,11 +23,18 @@ export class DiarioComponent implements OnInit {
   errorMessage: string;
   modalRef: BsModalRef;
   sumMonth: SumaryMonth = new SumaryMonth();
+  currencyMaskOptions = {
+    prefix: this._userService.getMoneda() + ' ',
+    thousands: this._appConfig.SEPARADOR_MILES,
+    decimal: this._appConfig.SEPARADOR_DECIMALES,
+    allowNegative: false
+  };
   
   constructor(private _conceptosDiarioService: DiarioService,
               private _modalService: BsModalService,
               private _userService: UsersService,
-              private _localizacionService: LocalizacionService) { 
+              private _localizacionService: LocalizacionService,
+              @Inject( APP_CONFIG ) private _appConfig: IAppConfig) { 
     this.sumMonth.egresos = 0;
     this.sumMonth.ingresos = 0;
   }

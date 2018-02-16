@@ -37,8 +37,26 @@ export class DiarioService {
               idConcepto: idConcepto});
 }
 
+getPrimerConsumo(): Observable<any> {
+  let url = 'http://localhost:3000/api/diario/first';
+  
+  return this._http.get<Date>(url)
+                  //.delay(3000)
+                  .do(data => JSON.stringify(data))
+                  .catch(this.handleError);
+}
 
-  private handleError(err: HttpErrorResponse) {
+getConceptosTotalMes(fecha: string /*YYYYMM*/): Observable<any[]> {
+  let url = 'http://localhost:3000/api/conceptos/sumary/:fecha';
+  url = url.replace(":fecha", fecha);
+  
+  return this._http.get<any[]>(url)
+                  //.delay(3000)
+                  .do(data => JSON.stringify(data))
+                  .catch(this.handleError);
+}
+
+private handleError(err: HttpErrorResponse) {
     // in a real world app, we may send the server to some remote logging infrastructure
     // instead of just logging it to the console
     let errorMessage = '';

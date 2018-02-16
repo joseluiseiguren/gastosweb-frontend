@@ -1,0 +1,48 @@
+select {
+    margin-left: 5px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    border: 2px solid #111;
+    background: transparent;
+    width: auto;
+    padding: 5px 30px 5px 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    height: 34px;
+    background: aliceblue;
+    float: left;
+  }
+  
+  select::-ms-expand { 
+      display: none; /* remove default arrow in IE 10 and 11 */
+  }
+  
+  @media screen and (min-width:0\0) {
+      select {
+          background:none\9;
+          padding: 5px\9;
+      }
+  }
+
+.sumaryGral {
+    margin-left: 5px;
+    padding-top: 5px;
+    width: 252px;
+    float: left;
+    /*border: black;
+    border-style: solid;*/
+}
+
+.conceptos {
+    float: left;
+    margin-left: 15px;
+    width: 78%;
+    /*border: black;
+    border-style: solid;*/
+}
+
+.concepto {
+    border: black;
+    border-style: solid;
+}
+

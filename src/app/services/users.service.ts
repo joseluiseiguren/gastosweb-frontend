@@ -64,6 +64,17 @@ export class UsersService {
 
         return userId;
     }
+
+    getMoneda() : string {
+        let token = localStorage.getItem('alow');
+        let moneda = "";
+
+        if (token !== null) {
+            moneda = this.jwtHelper.decodeToken(token).moneda;
+        }
+
+        return moneda;
+    }
   
     private handleError(err: HttpErrorResponse) {
         // in a real world app, we may send the server to some remote logging infrastructure

@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { SumaryMonthService } from '../services/sumary-month.service';
 import { SumaryMonth } from '../models/sumarymonth';
 import { OnChanges } from '@angular/core';
+import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'app-sumarymes',
@@ -11,16 +12,19 @@ import { OnChanges } from '@angular/core';
 export class SumarymesComponent implements OnInit {
   @Input() fecha: Date;
   @Input() sumaryMonth: SumaryMonth;
+  @Input() displayTitle: Boolean = true;
   private sumaryMonthTemp: SumaryMonth;
   errorMessage: string;
 
-  constructor(private _sumaryMonthService: SumaryMonthService) { 
+  constructor(private _sumaryMonthService: SumaryMonthService,
+              private _userService: UsersService) { 
   }
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log("cambio fecha");
     if (changes.fecha.previousValue === undefined ||
         (changes.fecha.currentValue.getFullYear() != changes.fecha.previousValue.getFullYear() ||
          changes.fecha.currentValue.getMonth() != changes.fecha.previousValue.getMonth())){

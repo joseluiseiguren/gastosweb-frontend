@@ -1,10 +1,30 @@
-<div class="btn-group" dropdown>
-    <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
-      {{mesActual.nombre}} <span class="caret"></span>
-    </button>
-    <ul *dropdownMenu class="dropdown-menu" role="menu">
-        <li *ngFor="let mes of meses" role="menuitem">
-          <a class="dropdown-item" (click)="changeMes(mes)">{{mes.nombre}}</a>
-        </li>
-      </ul>
+<div class="sumaryGral">
+  <div class="combos">
+    <select #selectMes (change)="changeMes(selectMes.value)">
+      <option *ngFor="let mes of meses" [value]="mes.numero" [selected]="mes.numero == mesActual.numero">
+          {{mes.nombre}}
+      </option>
+    </select>
+
+    <select #selectAnio (change)="changeAnio(selectAnio.value)">
+      <option *ngFor="let anio of anios" [value]="anio" [selected]="anio == anioActual">
+          {{anio}}
+      </option>
+    </select>
   </div>
+  <app-sumarymes [fecha]="bsValue" [sumaryMonth]="sumMonth" [displayTitle]="true"> </app-sumarymes>
+</div>
+
+<div class="conceptos">
+    <accordion>
+        <accordion-group *ngFor="let ct of conceptosTotales" #group>
+          <div accordion-heading class="clearfix">
+            {{ct.descripcion}}
+            <span class="float-right pull-right" [class.importeNegativo]="ct.saldo < 0">
+              {{ct.saldo | currency:this._userService.getMoneda()}}
+            </span>
+          </div>
+            This is just some content to illustrate fancy headings.
+        </accordion-group>
+      </accordion>
+</div>

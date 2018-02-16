@@ -11,7 +11,7 @@
     - web api
 - exportacion a excel
 - gestion de conceptos
-- poder personalizar la moneda
+    - poder personalizar la moneda
 - no harcodear urls en los services
 - la funcion de manejo de errores en los services se repite (optimizar)
 - hay modelos que se comparten entre webapi y frontend, por ejemplo el de usuarios -> unirlos
@@ -21,3 +21,4 @@
 - poner loading en todas las comunicacion con el server
     - probar decimales con punto y con coma
 - revisar web api, para que el id de usuario lo tome del token
+- si de edita la url en el browser, no resalta el item en el nav bar
