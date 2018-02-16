@@ -46,3 +46,11 @@ select {
     border-style: solid;
 }
 
+.detalleConcepto {
+    font-size: 13px;
+    font-family: Helvetica, sans-serif;
+}
+
+.cellDetalleConcepto {
+    padding: 1px;
+}

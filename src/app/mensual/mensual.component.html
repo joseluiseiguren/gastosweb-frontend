@@ -26,9 +26,30 @@
             </span>
           </div>
           <div *ngIf="ct.dataAdic !== undefined">
+            <table class="table">
+                <tbody>
+                  <tr *ngFor="let data of ct.dataAdic" class="detalleConcepto">
+                    <td class="cellDetalleConcepto">{{data.fecha | date:'mediumDate'}}</td>
+                    <td class="importe cellDetalleConcepto"
+                        [class.importeNegativo]="data.importe < 0">
+                        {{data.importe | currency:this._userService.getMoneda()}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            
+            
+            
+            
+            
+            
+            
+            <!--
             <div *ngFor="let data of ct.dataAdic">
-              {{data.importe}}
-            </div>
+              <span class="float-right pull-right" [class.importeNegativo]="data.importe < 0">
+                  {{data.importe | currency:this._userService.getMoneda()}}
+                </span>
+            </div>-->
           </div>
         </accordion-group>
       </accordion>
