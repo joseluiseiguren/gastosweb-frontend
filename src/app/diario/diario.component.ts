@@ -1,10 +1,11 @@
-import { Component, OnInit, TemplateRef, ElementRef, ViewRef, ComponentRef, ViewContainerRef, ViewChild, ContentChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, TemplateRef, ElementRef, ViewRef, ComponentRef, ViewContainerRef, ViewChild, ContentChild, SimpleChanges, Inject } from '@angular/core';
 import { DiarioService } from '../services/diario.service';
 import { IConceptoDiario } from '../models/concepto.diario';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { SumaryMonth } from '../models/sumarymonth';
 import { UsersService } from '../services/users.service';
+import { LocalizacionService } from '../services/localizacion.service';
 
 @Component({
   selector: 'app-diario',
@@ -23,9 +24,10 @@ export class DiarioComponent implements OnInit {
   
   constructor(private _conceptosDiarioService: DiarioService,
               private _modalService: BsModalService,
-              private _userService: UsersService) { 
+              private _userService: UsersService,
+              private _localizacionService: LocalizacionService) { 
     this.sumMonth.egresos = 0;
-    this.sumMonth.ingresos = 0;          
+    this.sumMonth.ingresos = 0;
   }
 
   ngOnInit() {

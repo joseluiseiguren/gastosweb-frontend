@@ -13,7 +13,8 @@
             #dp="bsDatepicker"
             bsDatepicker 
             (ngModelChange)="changeDay($event)"
-            [ngModel]="bsValue">
+            [ngModel]="bsValue"
+            [bsConfig]="{dateInputFormat: 'LL'}">
   </div>
   
   <table *ngIf="conceptos!==undefined" class="table">
@@ -24,11 +25,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr id="tr{{item.idconcepto}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
+      <tr class="selected" id="tr{{item.idconcepto}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
           (click)="openModal(template, item)"
           [class.info]="odd"
           [class.success]="even">
-        <td>{{item.descripcion}}</td>
+        <td >{{item.descripcion}}</td>
         <td class="importe"
             [class.importeNegativo]="item.importe < 0 || item.credito === 0">
             {{item.importe | currency}}

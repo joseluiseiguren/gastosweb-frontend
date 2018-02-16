@@ -1,9 +1,3 @@
-/*import 'core-js/es6/reflect';
-import 'core-js/es7/reflect';
-import 'zone.js/dist/zone';
-import 'hammerjs';
-import 'web-animations-js';
-*/
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -15,11 +9,13 @@ import { AnualComponent } from './anual/anual.component';
 import { HistoricoComponent } from './historico/historico.component';
 import { ConceptosComponent } from './conceptos/conceptos.component';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { SumarydiaComponent } from './sumarydia/sumarydia.component';
 import { SumarymesComponent } from './sumarymes/sumarymes.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SumaryMonthService } from './services/sumary-month.service';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { DiarioService } from './services/diario.service';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { CurrencyMaskModule } from "ng2-currency-mask";
@@ -30,47 +26,9 @@ import { AuthGuard } from './guards/auth.guard';
 import { UsersService } from './services/users.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/AuthInterceptor';
-
-/*import {CdkTableModule} from '@angular/cdk/table';
-import {HttpClientModule} from '@angular/common/http';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
-/*import {
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatButtonToggleModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatExpansionModule,
-  MatGridListModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatSortModule,
-  MatStepperModule,
-  MatTableModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule,
-} from '@angular/material';*/
+import { APP_CONFIG, APP_DI_CONFIG } from "./app.config/app-config.constants";
+import { LocalizacionService } from './services/localizacion.service';
+import { LOCALE_ID } from '@angular/core';
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
@@ -107,18 +65,27 @@ const routes: Routes = [
     CurrencyMaskModule,
     ButtonsModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    BsDropdownModule.forRoot(),
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
   ],
   providers: [SumaryMonthService, 
               DiarioService, 
-              BsModalService, 
+              BsModalService,
               UsersService, 
               AuthGuard ,
               {
                 provide: HTTP_INTERCEPTORS,
                 useClass: AuthInterceptor,
                 multi: true,
-              }],
+              },
+              {
+                provide: APP_CONFIG,
+                useValue: APP_DI_CONFIG
+              },
+              LocalizacionService,
+              { provide: LOCALE_ID,
+                useValue: window.navigator.language }
+            ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

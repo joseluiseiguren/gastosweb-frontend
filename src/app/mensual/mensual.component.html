@@ -1,3 +1,10 @@
-<p>
-  mensual works!
-</p>
+<div class="btn-group" dropdown>
+    <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
+      {{mesActual.nombre}} <span class="caret"></span>
+    </button>
+    <ul *dropdownMenu class="dropdown-menu" role="menu">
+        <li *ngFor="let mes of meses" role="menuitem">
+          <a class="dropdown-item" (click)="changeMes(mes)">{{mes.nombre}}</a>
+        </li>
+      </ul>
+  </div>

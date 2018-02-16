@@ -30,4 +30,9 @@
 
 .debito {
     text-align: center;
-} 
+}
+
+.selected:hover {
+    cursor: pointer;
+    border-style: solid;
+}
