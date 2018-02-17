@@ -9,39 +9,24 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
   userName: string;
-  menuActivo: string = 'D';
+  private urlActual = '';
+  private urlDiario: string = '/dashboard/diario';
+  private urlMensual: string = '/dashboard/mensual';
+  private urlAnual: string = '/dashboard/anual';
+  private urlHistoricoDiario: string = '/dashboard/historico';
+  private urlConceptos: string = '/dashboard/conceptos';
 
   constructor(private _userService: UsersService, private router: Router) {
     this.userName = this._userService.getUserName();
+    this.urlActual = this.router.url;
   }
 
   ngOnInit() {
   }
 
   route(dest: string) {
-    switch (dest) {
-      case 'D':
-        this.router.navigate(['/dashboard/diario']);
-        break;
-
-      case 'M':
-        this.router.navigate(['/dashboard/mensual']);
-        break;
-
-      case 'A':
-        this.router.navigate(['/dashboard/anual']);
-        break;
-
-      case 'H':
-        this.router.navigate(['/dashboard/historico']);
-        break;
-
-      case 'C':
-        this.router.navigate(['/dashboard/conceptos']);
-        break;
-    }
-
-    this.menuActivo = dest;
+    this.urlActual = dest;
+    this.router.navigate([dest]);
   }
 
   logout () {

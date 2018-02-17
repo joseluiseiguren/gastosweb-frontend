@@ -12,11 +12,10 @@ import { UsersService } from './users.service';
 @Injectable()
 export class DiarioService {
   
-  constructor(private _http: HttpClient, private _userService: UsersService) { }
+  constructor(private _http: HttpClient) { }
 
   getConceptosImportes(fecha: Date): Observable<IConceptoDiario[]> {
-    let url = 'http://localhost:3000/api/usuarios/:userId/diario/:fecha';
-    url = url.replace(":userId", this._userService.getUserId().toString());
+    let url = 'http://localhost:3000/api/diario/:fecha';
     url = url.replace(":fecha", fecha.getFullYear().toString() + 
                                 (fecha.getMonth()+1).toString().padStart(2, '0') + 
                                 fecha.getDate().toString().padStart(2, '0'));

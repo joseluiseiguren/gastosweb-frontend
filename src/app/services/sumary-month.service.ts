@@ -15,7 +15,7 @@ export class SumaryMonthService {
   constructor(private _http: HttpClient, private _userService: UsersService) { }
 
   getSumary(fecha: Date): Observable<SumaryMonth> {
-    let url = 'http://localhost:3000/api/usuarios/:userId/mensual/:fecha/sumary';
+    let url = 'http://localhost:3000/api/mensual/:fecha/sumary';
     url = url.replace(":userId", this._userService.getUserId().toString());
     url = url.replace(":fecha", fecha.getFullYear().toString() + (fecha.getMonth()+1).toString());
 

@@ -1,11 +1,11 @@
 <div class="main">
   <div class="nav">
       <ul>
-        <li><a [class.active]="menuActivo == 'D'" (click)="route('D')">Diario</a></li>
-        <li><a [class.active]="menuActivo == 'M'" (click)="route('M')">Mensual</a></li>
-        <li><a [class.active]="menuActivo == 'A'" (click)="route('A')">Anual</a></li>
-        <li><a [class.active]="menuActivo == 'H'" (click)="route('H')">Historico</a></li>
-        <li><a [class.active]="menuActivo == 'C'" (click)="route('C')">Conceptos</a></li>
+        <li><a [class.active]="urlActual == urlDiario" (click)="route(urlDiario)">Diario</a></li>
+        <li><a [class.active]="urlActual == urlMensual" (click)="route(urlMensual)">Mensual</a></li>
+        <li><a [class.active]="urlActual == urlAnual" (click)="route(urlAnual)">Anual</a></li>
+        <li><a [class.active]="urlActual == urlHistorico" (click)="route(urlHistorico)">Historico</a></li>
+        <li><a [class.active]="urlActual == urlConceptos" (click)="route(urlConceptos)">Conceptos</a></li>
         <li class="user"><a>
                             <i class="glyphicon glyphicon-user"></i>
                             {{userName}}

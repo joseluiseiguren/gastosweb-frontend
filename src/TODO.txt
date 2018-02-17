@@ -5,7 +5,7 @@
 - olvido de contraseña
 - poder cambiar email
 - registracion
-- reporte mensual
+    - reporte mensual
 - reporte anual
 - reporte historico
     - web api
@@ -20,5 +20,6 @@
 - web api manejo de errores
 - poner loading en todas las comunicacion con el server
     - probar decimales con punto y con coma
-- revisar web api, para que el id de usuario lo tome del token
-- si de edita la url en el browser, no resalta el item en el nav bar
+    - revisar web api, para que el id de usuario lo tome del token
+    - si de edita la url en el browser, no resalta el item en el nav bar
+- revisar scrolls en diario y mensual cuando esta todo expandido
