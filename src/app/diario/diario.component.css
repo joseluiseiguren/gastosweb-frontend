@@ -6,10 +6,11 @@
     right: 5px;
     position: fixed;
     z-index: -1;
+    margin-right: 17px;
 }
 
 .left {
-    width: 79%;
+    width: 78%;
 }
 
 
@@ -25,7 +26,3 @@
     text-align: center;
 }
 
-.selected:hover {
-    cursor: pointer;
-    border-style: solid;
-}

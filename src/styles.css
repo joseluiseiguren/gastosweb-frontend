@@ -20,4 +20,9 @@
 
 .importe {
     text-align:right;
-  }
+}
+
+.selected:hover {
+    cursor: pointer;
+    border-style: solid;
+}

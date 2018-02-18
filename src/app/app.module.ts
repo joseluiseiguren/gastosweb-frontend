@@ -30,6 +30,7 @@ import { AuthInterceptor } from './interceptors/AuthInterceptor';
 import { APP_CONFIG, APP_DI_CONFIG } from "./app.config/app-config.constants";
 import { LocalizacionService } from './services/localizacion.service';
 import { LOCALE_ID } from '@angular/core';
+import { ConceptoService } from './services/concepto.service';
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
@@ -73,7 +74,8 @@ const routes: Routes = [
   providers: [SumaryMonthService, 
               DiarioService, 
               BsModalService,
-              UsersService, 
+              UsersService,
+              ConceptoService, 
               AuthGuard ,
               {
                 provide: HTTP_INTERCEPTORS,

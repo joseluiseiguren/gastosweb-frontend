@@ -1,0 +1,29 @@
+.conceptosTable {
+    margin-left: 5px;
+    padding-top: 5px;
+    width: 30%;
+    float: left;
+    /*border: black;
+    border-style: solid;*/
+}
+
+.conceptosTableHeader {
+    background-color: cornsilk;
+}
+
+.forms {
+    float: left;
+    margin-left: 15px;
+    width: 67%;
+    /*border: black;
+    border-style: solid;*/
+    padding: 15px;
+    background-color: lavender;
+    box-shadow: 10px 10px 5px white;
+    border: 1px solid black;
+    border-radius: 25px;
+}
+
+.formsTitulo {
+    text-align: center;
+}
