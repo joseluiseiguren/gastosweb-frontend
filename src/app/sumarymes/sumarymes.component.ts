@@ -15,6 +15,7 @@ export class SumarymesComponent implements OnInit {
   @Input() displayTitle: Boolean = true;
   private sumaryMonthTemp: SumaryMonth;
   errorMessage: string;
+  loading: Boolean;
 
   constructor(private _sumaryMonthService: SumaryMonthService,
               private _userService: UsersService) { 
@@ -32,10 +33,14 @@ export class SumarymesComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true;
     this._sumaryMonthService.getSumary(this.fecha).subscribe(
       data => this.sumaryMonthTemp = data,
       error => this.errorMessage = <any>error,
-      () => (this.copyData()));
+      () => {
+        this.copyData();
+        this.loading = false;
+      });
   }
 
   copyData() {

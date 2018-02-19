@@ -19,6 +19,7 @@ export class MensualComponent implements OnInit {
   bsValue: Date;
   sumMonth: SumaryMonth = new SumaryMonth();
   conceptosTotales: any[];
+  loading: Boolean = false;
 
   constructor(@Inject( APP_CONFIG ) private _appConfig: IAppConfig,
               private _diarioService: DiarioService,
@@ -72,29 +73,27 @@ export class MensualComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true;
     let fecha = this.bsValue.getFullYear().toString() + (this.bsValue.getMonth()+1).toString().padStart(2, '0');
     this._diarioService.getConceptosTotalMes(fecha)
         .subscribe(
-            data => this.conceptosTotales = data,
+            data => { 
+              this.conceptosTotales = data;
+              this.loading = false;
+            },
             error => this.errorMessage = <any>error);
   }
 
   loadDetail(event: boolean, ct: any) {
     if (event == true) {
       let fecha = this.bsValue.getFullYear().toString() + (this.bsValue.getMonth()+1).toString().padStart(2, '0');
-      console.log(fecha);
       this._diarioService.getConceptosMovimMes(ct.idconcepto, fecha)
         .subscribe(
             data => {
-              console.log(data);
               ct.dataAdic = new Array<any>();
               ct.dataAdic = data;
             },
             error => this.errorMessage = <any>error);
-
-      /*console.log(ct);
-      ct.pepe = new Array<any>();
-      ct.pepe[0] = "nafa";*/
     }
   }
 

@@ -1,4 +1,4 @@
-<table *ngIf="sumaryMonth!==undefined" class="table rad">
+<table *ngIf="sumaryMonth!==undefined && loading === false" class="table rad">
   <thead>
     <tr *ngIf="displayTitle">
       <th class="warning" colspan="2" style="text-align: center;">{{fecha | date:'LLLL yyyy'}}</th>
@@ -22,3 +22,4 @@
     </tr>
   </tbody>
 </table>
+<app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>

@@ -9,12 +9,19 @@
     overflow-y:scroll;
 }
 
+.nav {
+  position: fixed;
+  width: 100%;
+}
 
 .nav ul {
     list-style: none;
     background-color: #444;
     /*text-align: center;*/
-    padding: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 20px;
     margin: 0;
   }
   

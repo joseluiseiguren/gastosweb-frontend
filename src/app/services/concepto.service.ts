@@ -23,6 +23,21 @@ export class ConceptoService {
                         .catch(this.handleError);
     }
 
+    insertConcepto(descripcion:string, credito:boolean) : Observable<void> {
+    
+        return this._http.post<any>('http://localhost:3000/api/concepto', 
+                {descripcion: descripcion, 
+                 credito: credito});
+    }
+
+    updateConcepto(idConcepto: number, descripcion:string, credito:boolean) : Observable<void> {
+    
+        return this._http.put<any>('http://localhost:3000/api/concepto', 
+                {descripcion: descripcion, 
+                 credito: credito,
+                 idconcepto: idConcepto});
+    }
+
     private handleError(err: HttpErrorResponse) {
         // in a real world app, we may send the server to some remote logging infrastructure
         // instead of just logging it to the console

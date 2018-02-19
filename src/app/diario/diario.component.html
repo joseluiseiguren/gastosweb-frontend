@@ -17,7 +17,7 @@
             [bsConfig]="{dateInputFormat: 'LL'}">
   </div>
   
-  <table *ngIf="conceptos!==undefined" class="table">
+  <table *ngIf="conceptos!==undefined && loading === false" class="table">
     <thead>
       <tr>
         <th></th>
@@ -37,6 +37,7 @@
       </tr>
     </tbody>
   </table>
+  <app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>
 </div>
 
 <ng-template #template>

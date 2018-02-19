@@ -1,5 +1,5 @@
 <div class="conceptosTable">
-  <table *ngIf="conceptos!==undefined" class="table">
+  <table *ngIf="conceptos!==undefined && loadingGridConceptos === false" class="table">
     <thead class="conceptosTableHeader">
       <tr>
         <th>Concepto</th>
@@ -20,54 +20,77 @@
       </tr>
     </tbody>
   </table>
+  <app-loading *ngIf="loadingGridConceptos === true" [texto]="'Cargando...'"></app-loading>
+</div>
 
-  <button class="btn btn-info" (click)="cambiarPantalla(1, null);">
-      <span class="glyphicon glyphicon-plus"></span>
-      Agregar Nuevo
-  </button>
-    
+<div class="addNew">
+    <button class="btn btn-info" (click)="cambiarPantalla(1, null);">
+        <span class="glyphicon glyphicon-plus"></span>
+        Agregar Nuevo
+    </button>
 </div>
 
 <div *ngIf="pantallaActual == 1 || pantallaActual == 2" class="forms">
-  <form name="formAlta" (ngSubmit)="f.formAlta.valid && Alta()" #f="ngForm" novalidate>
+  <form (ngSubmit)="aceptar(conceptoForm)" #conceptoForm="ngForm" novalidate>
       <div class="formsTitulo"><h3>{{pantallaTitulo}}</h3></div> 
-      <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !conceptoActual.descripcion.valid }">
+      <div class="form-group">
           <div class="inner-addon left-addon">
-              <input type="text" autofocus class="form-control" name="descripcion" [(ngModel)]="conceptoActual.descripcion" #descripcion="ngModel" required placeholder="Descripcion"/>
-              <div *ngIf="f.submitted && !conceptoActual.descripcion.valid" class="help-block">Ingresar la Descripcion</div>
+              <input type="text" 
+                     class="form-control" 
+                     required
+                     autofocus
+                     [(ngModel)]="model.descripcion" 
+                     name="descripcion"
+                     placeholder="Descripcion"
+                     #descripcion="ngModel"
+                     #spy/>
+              <div [hidden]="descripcion.valid || descripcion.pristine" class="alert alert-danger">
+                    Ingresar la Descripcion
+              </div>
+              
           </div>
       </div>
-
+      
       <div class="form-group">
           <div class="inner-addon left-addon">
               <label for="creditoopt">Credito</label>  
               <input type="radio" 
                        id="creditoopt" 
-                       name="debcred" 
-                       (click)="changeNuevoDebCred(1)"
-                       [checked]="conceptoActual.suma === true">
+                       name="debcred"
+                       (click)="changeCredDeb(true)"  
+                       [checked]="model.suma === true">
               
               <div class="float-right pull-right" >
                 <label class="importeNegativo" for="debitoopt">Debito</label>  
                 <input type="radio"
                         id="debitoopt" 
-                        name="debcred" 
-                        (click)="changeNuevoDebCred(0)"
-                        [checked]="conceptoActual.suma === false">
+                        name="debcred"
+                        (click)="changeCredDeb(false)"  
+                        [checked]="model.suma === false">
               </div>
           </div>
       </div>
 
       <div class="form-group center">
-          <button [disabled]="loading" class="btn btn-success">
+          <button type="submit"
+                  [disabled]="loading" 
+                  class="btn btn-success"
+                  [disabled]="!conceptoForm.form.valid">
               <span class="glyphicon glyphicon-ok"></span>
-              Aceptar</button>
-          <img *ngIf="loading" 
-                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+              Aceptar
+          </button>
           <button class="btn btn-danger" (click)="cambiarPantalla(0, null);">
               <span class="glyphicon glyphicon-remove"></span>
-              Cancelar</button>
+              Cerrar
+          </button>
+          <app-loading *ngIf="loading === true" [texto]="''"></app-loading>
       </div>
-      <div *ngIf="error" class="alert alert-danger">{{error}}</div>
   </form>
+  <div class="col-lg-12 col-sm-12 col-xs-12 alert" 
+       [class.alert-success]="operationMessageStatus == 0"
+       [class.alert-danger]="operationMessageStatus == 1"
+       *ngIf="(operationMessageStatus == 0 && operationMessage.length > 0 && conceptoForm.pristine === true && loading === false) ||
+              (operationMessageStatus == 1 && operationMessage.length > 0 && loading === false)">
+    <strong>{{operationMessage}}</strong>
+  </div>
 </div>

@@ -16,8 +16,10 @@
 </div>
 
 <div class="conceptos">
-    <accordion>
-        <accordion-group *ngFor="let ct of conceptosTotales" #group (isOpenChange)="loadDetail($event, ct)">
+    <accordion *ngIf="loading === false">
+        <accordion-group *ngFor="let ct of conceptosTotales" 
+                         #group 
+                         (isOpenChange)="loadDetail($event, ct)">
           <div accordion-heading class="clearfix">
               <i class="glyphicon glyphicon-chevron-down"></i>
             {{ct.descripcion}}
@@ -25,8 +27,8 @@
               {{ct.saldo | currency:this._userService.getMoneda()}}
             </span>
           </div>
-          <div *ngIf="ct.dataAdic !== undefined">
-            <table class="table">
+          <div>
+            <table class="table" *ngIf="ct.dataAdic !== undefined">
                 <tbody>
                   <tr *ngFor="let data of ct.dataAdic" class="detalleConcepto">
                     <td class="cellDetalleConcepto">{{data.fecha | date:'mediumDate'}}</td>
@@ -37,7 +39,9 @@
                   </tr>
                 </tbody>
               </table>
+              <app-loading *ngIf="ct.dataAdic === undefined" [texto]="'Cargando...'"></app-loading>
           </div>
         </accordion-group>
       </accordion>
+      <app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>
 </div>

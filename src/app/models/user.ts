@@ -6,4 +6,5 @@ export class User {
     fechaalta: Date;
     idestado: number;
     password: string;
+    moneda: string;
 }

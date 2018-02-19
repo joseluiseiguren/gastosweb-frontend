@@ -4,13 +4,13 @@
 - poder cambiar contraseña
 - olvido de contraseña
 - poder cambiar email
-- registracion
+    - registracion
     - reporte mensual
 - reporte anual
 - reporte historico
     - web api
 - exportacion a excel
-- gestion de conceptos
+    - gestion de conceptos
     - poder personalizar la moneda
 - no harcodear urls en los services
 - la funcion de manejo de errores en los services se repite (optimizar)
@@ -18,8 +18,13 @@
     - grilla de gastos agregar hover en row
 - loguear login de usuarios
 - web api manejo de errores
-- poner loading en todas las comunicacion con el server
+    - poner loading en todas las comunicacion con el server
     - probar decimales con punto y con coma
     - revisar web api, para que el id de usuario lo tome del token
     - si de edita la url en el browser, no resalta el item en el nav bar
-- revisar scrolls en diario y mensual cuando esta todo expandido
+    - revisar scrolls en diario y mensual cuando esta todo expandido
+- en los badrequest de la api, devolver un json con el mensaje de porque fallo
+- prevenir sql inyection en los forms
+- capcha en registracion
+- enviaar un mail en la registracion
+- bloquear al usuario en 5 intentos de login fallidos

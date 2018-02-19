@@ -28,6 +28,20 @@ export class UsersService {
               );
     }
 
+    register( usuario:User ) : Observable<void> {
+
+        let fechanacimiento = usuario.fechanacimiento.getFullYear().toString() +  
+                (usuario.fechanacimiento.getMonth()+1).toString().padStart(2, '0') +
+                usuario.fechanacimiento.getDate().toString().padStart(2, '0');
+
+        return this._http.post<any>('http://localhost:3000/api/usuarios/registracion', 
+                {email: usuario.email,
+                 password: usuario.password,
+                 nombre: usuario.nombre,
+                 fechanacimiento: fechanacimiento,
+                 moneda: usuario.moneda});
+    }
+
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('alow');

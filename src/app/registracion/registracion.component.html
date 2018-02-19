@@ -1,0 +1,135 @@
+<div class="main">
+  <div class="polaroid">
+    <p class="titulo">Control de Gasto$ - Registracion</p>
+    <form (ngSubmit)="aceptar(registerForm)" 
+          #registerForm="ngForm" 
+          novalidate
+          *ngIf="operationMessageStatus != 0">
+
+      <div class="row">
+        <div class="col-xs-6 form-group">
+            <div class="inner-addon left-addon">
+              <label for="email">Email</label>
+              <input type="text" 
+                      id="email"
+                      class="form-control" 
+                      required
+                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                      autofocus
+                      [(ngModel)]="model.email" 
+                      name="email"
+                      placeholder="Email"
+                      #email="ngModel"/>
+              <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+                    Email Invalido
+              </div>
+            </div>
+        </div>
+        <div class="col-xs-6 form-group">
+            <div class="inner-addon left-addon">
+                <label for="nombre">Nombre</label>
+                <input type="text"
+                       id="nombre" 
+                       class="form-control" 
+                       required
+                       [(ngModel)]="model.nombre" 
+                       name="nombre"
+                       placeholder="Nombre"
+                       #nombre="ngModel"/>
+                <div [hidden]="nombre.valid || nombre.pristine" class="alert alert-danger">
+                      Nombre Invalido
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-6 form-group">
+            <div class="inner-addon left-addon">
+                <label for="fechanacim">Fecha Nacimiento</label>
+                <input type="text" 
+                       id="fechanacim"
+                       class="form-control" 
+                       required
+                       pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"
+                       [(ngModel)]="fechaNacim" 
+                       name="fechanacimiento"
+                       placeholder="Fecha Nacimiento (DD/MM/YYYY)"
+                       #fechanacim="ngModel"/>
+                <div [hidden]="fechanacim.valid || fechanacim.pristine" class="alert alert-danger">
+                      Fecha de Nacimiento Invalida
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 form-group">
+            <div class="inner-addon left-addon">
+                <label for="moneda">Moneda</label>
+                <select class="form-control" id="moneda" [(ngModel)]="model.moneda" name="monedas">
+                  <option *ngFor="let moneda of monedas" [value]="moneda">{{moneda}}</option>
+                </select>
+            </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-6 form-group">
+            <div class="inner-addon left-addon">
+                <label for="password">Password</label>
+                <input type="password" 
+                       id="password"
+                       class="form-control" 
+                       required
+                       [(ngModel)]="model.password" 
+                       name="password"
+                       placeholder="Password"
+                       #password="ngModel"/>
+                <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+                      Pasword Invalido
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 form-group">
+            <div class="inner-addon left-addon">
+                <label for="passwordRep">Repetir Password</label>
+                <input type="password" 
+                       id="passwordRep"
+                       class="form-control" 
+                       required
+                       [(ngModel)]="passwordCheck" 
+                       name="repetirpassword"
+                       placeholder="Repetir Password"
+                       #repeetirpassword="ngModel"/>
+                <div [hidden]="repeetirpassword.valid || repeetirpassword.pristine" class="alert alert-danger">
+                      Pasword Invalido
+                </div>
+            </div>
+        </div>
+      </div>
+      
+      <div class="form-group center">
+          <button type="submit"
+                  [disabled]="loading" 
+                  class="btn btn-success"
+                  [disabled]="!registerForm.form.valid">
+              <span class="glyphicon glyphicon-ok"></span>
+              Registrarse
+          </button>
+          <app-loading *ngIf="loading === true" [texto]="''"></app-loading>
+      </div>
+    </form>
+
+    <div class="col-lg-12 col-sm-12 col-xs-12 alert" 
+         [class.alert-success]="operationMessageStatus == 0"
+         [class.alert-danger]="operationMessageStatus == 1"
+         *ngIf="operationMessage.length > 0 && loading === false">
+      <strong>{{operationMessage}}</strong>
+      <a *ngIf="operationMessageStatus == 0"
+         [routerLink]="['/login']" 
+         class="btn btn-info float-right pull-right" 
+         role="button">
+         Ingresar  
+         <span class="glyphicon glyphicon-edit"></span>
+      </a>
+    </div>
+  </div>
+</div>

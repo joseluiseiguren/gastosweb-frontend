@@ -29,6 +29,7 @@ export class DiarioComponent implements OnInit {
     decimal: this._appConfig.SEPARADOR_DECIMALES,
     allowNegative: false
   };
+  loading: Boolean = false;
   
   constructor(private _conceptosDiarioService: DiarioService,
               private _modalService: BsModalService,
@@ -53,9 +54,13 @@ export class DiarioComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true;
     this._conceptosDiarioService.getConceptosImportes(this.bsValue)
         .subscribe(
-            data => this.conceptos = data,
+            data => { 
+              this.conceptos = data;
+              this.loading = false;
+            },
             error => this.errorMessage = <any>error);
   }
 
@@ -74,10 +79,10 @@ export class DiarioComponent implements OnInit {
                                     this.conceptoSel.idconcepto)
                 .subscribe(
                   data => {
-                    console.log("entro");
+                    //console.log("entro");
                   },
                   error => {
-                    console.log("error");               
+                    //console.log("error");               
                   });
 
     if (this.conceptoSel.credito == 1){

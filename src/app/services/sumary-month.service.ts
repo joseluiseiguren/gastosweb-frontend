@@ -20,7 +20,7 @@ export class SumaryMonthService {
     url = url.replace(":fecha", fecha.getFullYear().toString() + (fecha.getMonth()+1).toString());
 
     return this._http.get<SumaryMonth>(url)
-                    //.delay(3000)
+                    //.delay(5000)
                     .do(data => JSON.stringify(data))
                     .catch(this.handleError);
   }

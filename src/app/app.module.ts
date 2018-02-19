@@ -31,9 +31,12 @@ import { APP_CONFIG, APP_DI_CONFIG } from "./app.config/app-config.constants";
 import { LocalizacionService } from './services/localizacion.service';
 import { LOCALE_ID } from '@angular/core';
 import { ConceptoService } from './services/concepto.service';
+import { RegistracionComponent } from './registracion/registracion.component';
+import { LoadingComponent } from './loading/loading.component';
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
+  { path: 'registracion', component: RegistracionComponent},
   { path: 'dashboard', component: DashboardComponent, canActivateChild: [AuthGuard],
                           children: [
                             { path: 'diario', component: DiarioComponent},
@@ -56,7 +59,9 @@ const routes: Routes = [
     ConceptosComponent,
     SumarydiaComponent,
     SumarymesComponent,
-    DashboardComponent
+    DashboardComponent,
+    RegistracionComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,7 @@
     margin-left: 5px;
     padding-top: 5px;
     width: 30%;
+    height: 100px;
     float: left;
     /*border: black;
     border-style: solid;*/
@@ -22,6 +23,15 @@
     box-shadow: 10px 10px 5px white;
     border: 1px solid black;
     border-radius: 25px;
+}
+
+.addNew {
+    float: left;
+    margin-left: 15px;
+    width: 67%;
+    /*border: black;
+    border-style: solid;*/
+    padding: 15px;
 }
 
 .formsTitulo {
