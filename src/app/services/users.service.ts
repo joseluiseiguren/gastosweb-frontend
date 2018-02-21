@@ -4,22 +4,23 @@ import { Observable } from 'rxjs/Observable';
 import { User } from '../models/user';
 import { AuthInterceptor } from '../interceptors/AuthInterceptor';
 import { JwtHelper } from 'angular2-jwt';
+import { UrlService } from './url.service';
 
 @Injectable()
 export class UsersService {
     jwtHelper: JwtHelper = new JwtHelper();
 
-    constructor(private _http: HttpClient) { }
+    constructor(private _http: HttpClient,
+                private _urlService: UrlService) { }
 
     login(email:string, password:string ) : Observable<boolean> {
-        return this._http.post<any>('http://localhost:3000/api/usuarios/login', 
+        return this._http.post<any>(this._urlService.urlLogin(), 
                 {email, password})
                 .map(user => {
                     // login successful if there's a jwt token in the response
                     if (user && user.token) {
                         // store user details and jwt token in local storage to keep user logged in between page refreshes
                         localStorage.setItem('alow', user.token);
-                        console.log(this.jwtHelper.decodeToken(user.token));
                         return true;
                     }
 
@@ -34,7 +35,7 @@ export class UsersService {
                 (usuario.fechanacimiento.getMonth()+1).toString().padStart(2, '0') +
                 usuario.fechanacimiento.getDate().toString().padStart(2, '0');
 
-        return this._http.post<any>('http://localhost:3000/api/usuarios/registracion', 
+        return this._http.post<any>(this._urlService.urlRegistracion(), 
                 {email: usuario.email,
                  password: usuario.password,
                  nombre: usuario.nombre,
@@ -90,20 +91,4 @@ export class UsersService {
         return moneda;
     }
   
-    private handleError(err: HttpErrorResponse) {
-        // in a real world app, we may send the server to some remote logging infrastructure
-        // instead of just logging it to the console
-        let errorMessage = '';
-        if (err.error instanceof Error) {
-            // A client-side or network error occurred. Handle it accordingly.
-            errorMessage = `An error occurred: ${err.error.message}`;
-        } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
-        }
-        console.error(errorMessage);
-        return Observable.throw(errorMessage);
-    }
-
 }

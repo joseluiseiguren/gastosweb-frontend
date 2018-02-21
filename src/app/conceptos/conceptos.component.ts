@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConceptoService } from '../services/concepto.service';
 import { IConcepto } from '../models/concepto';
 import { NgForm } from '@angular/forms';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-conceptos',
@@ -10,7 +11,7 @@ import { NgForm } from '@angular/forms';
 })
 export class ConceptosComponent implements OnInit {
   conceptos: any[];
-  errorMessage: string;
+  errorMessageGridConceptos: string = "";
   model: IConcepto = new IConcepto();
   pantallaActual: number; /* 0-ninguna / 1 - Alta / 2 - Modificacion */
   pantallaTitulo: string;
@@ -19,12 +20,15 @@ export class ConceptosComponent implements OnInit {
   loading: boolean = false;
   loadingGridConceptos: boolean = false;
 
-  constructor(private _conceptoService: ConceptoService) {
-    this.getConceptos();
+  constructor(
+          private _conceptoService: ConceptoService,
+          private _helperService: HelperService) {
+    this.errorMessageGridConceptos = "";
     this.model.descripcion = "";
     this.model.id = 0;
     this.model.suma = false;
     this.pantallaActual = 0;
+    this.getConceptos();
   }
 
   ngOnInit() {
@@ -36,13 +40,17 @@ export class ConceptosComponent implements OnInit {
 
   getConceptos() {
     this.loadingGridConceptos = true;
+    this.errorMessageGridConceptos = "";
     this._conceptoService.getConceptos()
         .subscribe(
             data => { 
               this.conceptos = data;
               this.loadingGridConceptos = false;
             },
-            error => this.errorMessage = <any>error);
+            error => {
+              this.loadingGridConceptos = false; 
+              this.errorMessageGridConceptos = this._helperService.getErrorMessage(error);
+            });
   }
 
   cambiarPantalla(pantallaNueva: number, conceptoSeleccionado: any) {
@@ -75,7 +83,7 @@ export class ConceptosComponent implements OnInit {
                       this.getConceptos();
                     },
                     error => {
-                      this.operationMessage = (error.status == 0) ? "Se ha producido un error: " + error.message : error.error;
+                      this.operationMessage = this._helperService.getErrorMessage(error);
                       this.operationMessageStatus = 1;
                       this.loading = false;
                     });
@@ -93,7 +101,7 @@ export class ConceptosComponent implements OnInit {
                       this.getConceptos();
                     },
                     error => {
-                      this.operationMessage = (error.status == 0) ? "Se ha producido un error: " + error.message : error.error;
+                      this.operationMessage = this._helperService.getErrorMessage(error);
                       this.operationMessageStatus = 1;
                       this.loading = false;
                     });

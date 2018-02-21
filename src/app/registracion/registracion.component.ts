@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user';
 import { NgForm } from '@angular/forms';
 import { UsersService } from '../services/users.service';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-registracion',
@@ -17,7 +18,8 @@ export class RegistracionComponent implements OnInit {
   fechaNacim: string;
   monedas = ['$', 'U$D', '€'];
 
-  constructor(private _userService: UsersService) { 
+  constructor(private _userService: UsersService,
+              private _helperService: HelperService) { 
     this.model.moneda = "$";
   }
 
@@ -49,9 +51,9 @@ export class RegistracionComponent implements OnInit {
               this.loading  = false;
             },
             error => {
-                this.operationMessage = (error.status == 0) ? "Se ha producido un error: " + error.message : error.error;
-                this.operationMessageStatus = 1;
-                this.loading  = false;
+              this.operationMessageStatus = 1;  
+              this.loading  = false;
+              this.operationMessage = this._helperService.getErrorMessage(error)
             });
   }
 

@@ -3,6 +3,7 @@ import { SumaryMonthService } from '../services/sumary-month.service';
 import { SumaryMonth } from '../models/sumarymonth';
 import { OnChanges } from '@angular/core';
 import { UsersService } from '../services/users.service';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-sumarymes',
@@ -14,11 +15,12 @@ export class SumarymesComponent implements OnInit {
   @Input() sumaryMonth: SumaryMonth;
   @Input() displayTitle: Boolean = true;
   private sumaryMonthTemp: SumaryMonth;
-  errorMessage: string;
+  errorMessage: string = "";
   loading: Boolean;
 
   constructor(private _sumaryMonthService: SumaryMonthService,
-              private _userService: UsersService) { 
+              private _userService: UsersService,
+              private _helperService: HelperService) { 
   }
 
   ngOnInit() {
@@ -34,9 +36,13 @@ export class SumarymesComponent implements OnInit {
 
   getData() {
     this.loading = true;
+    this.errorMessage = "";
     this._sumaryMonthService.getSumary(this.fecha).subscribe(
       data => this.sumaryMonthTemp = data,
-      error => this.errorMessage = <any>error,
+      error => {
+        this.loading = false;
+        this.errorMessage = this._helperService.getErrorMessage(error);
+      },
       () => {
         this.copyData();
         this.loading = false;

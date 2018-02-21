@@ -33,6 +33,9 @@ import { LOCALE_ID } from '@angular/core';
 import { ConceptoService } from './services/concepto.service';
 import { RegistracionComponent } from './registracion/registracion.component';
 import { LoadingComponent } from './loading/loading.component';
+import { HelperService } from './services/helper.service';
+import { UrlService } from './services/url.service';
+import { ErrorMessageComponent } from './error-message/error-message.component';
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
@@ -61,7 +64,8 @@ const routes: Routes = [
     SumarymesComponent,
     DashboardComponent,
     RegistracionComponent,
-    LoadingComponent
+    LoadingComponent,
+    ErrorMessageComponent
   ],
   imports: [
     BrowserModule,
@@ -81,6 +85,8 @@ const routes: Routes = [
               BsModalService,
               UsersService,
               ConceptoService, 
+              HelperService,
+              UrlService,
               AuthGuard ,
               {
                 provide: HTTP_INTERCEPTORS,

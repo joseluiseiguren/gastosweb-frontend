@@ -1,4 +1,4 @@
-<div class="sumaryGral">
+<div class="sumaryGral" *ngIf="loading === false && errorMessage.length == 0">
   <div class="combos">
     <select #selectMes (change)="changeMes(selectMes.value)">
       <option *ngFor="let mes of meses" [value]="mes.numero" [selected]="mes.numero == mesActual.numero">
@@ -16,7 +16,7 @@
 </div>
 
 <div class="conceptos">
-    <accordion *ngIf="loading === false">
+    <accordion *ngIf="loading === false && errorMessage.length == 0">
         <accordion-group *ngFor="let ct of conceptosTotales" 
                          #group 
                          (isOpenChange)="loadDetail($event, ct)">
@@ -45,3 +45,5 @@
       </accordion>
       <app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>
 </div>
+
+<app-error-message *ngIf="errorMessage.length != 0 && loading === false" [message]="errorMessage"></app-error-message>

@@ -8,50 +8,33 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/delay';
 import { IConcepto } from '../models/concepto';
 import { UsersService } from './users.service';
+import { UrlService } from './url.service';
 
 @Injectable()
 export class ConceptoService {
   
-    constructor(private _http: HttpClient) { }
+    constructor(
+            private _http: HttpClient,
+            private _urlService: UrlService) { }
 
     getConceptos(): Observable<any[]> {
-        let url = 'http://localhost:3000/api/usuarios/conceptos';
-        
-        return this._http.get<any[]>(url)
+        return this._http.get<any[]>(this._urlService.urlGetConceptos())
                         //.delay(3000)
-                        .do(data => JSON.stringify(data))
-                        .catch(this.handleError);
+                        .do(data => JSON.stringify(data));
     }
 
     insertConcepto(descripcion:string, credito:boolean) : Observable<void> {
-    
-        return this._http.post<any>('http://localhost:3000/api/concepto', 
+        return this._http.post<any>(this._urlService.urlInsertConcepto(), 
                 {descripcion: descripcion, 
                  credito: credito});
     }
 
     updateConcepto(idConcepto: number, descripcion:string, credito:boolean) : Observable<void> {
-    
-        return this._http.put<any>('http://localhost:3000/api/concepto', 
+        return this._http.put<any>(this._urlService.urlUpdateConcepto(), 
                 {descripcion: descripcion, 
                  credito: credito,
                  idconcepto: idConcepto});
     }
 
-    private handleError(err: HttpErrorResponse) {
-        // in a real world app, we may send the server to some remote logging infrastructure
-        // instead of just logging it to the console
-        let errorMessage = '';
-        if (err.error instanceof Error) {
-            // A client-side or network error occurred. Handle it accordingly.
-            errorMessage = `An error occurred: ${err.error.message}`;
-        } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
-        }
-        console.error(errorMessage);
-        return Observable.throw(errorMessage);
-    }
 
 }

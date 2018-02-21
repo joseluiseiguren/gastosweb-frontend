@@ -10,7 +10,7 @@ import { UsersService } from '../services/users.service';
 export class LoginComponent implements OnInit {
     model: any = {};
     loading = false;
-    error = '';
+    error: string = "";
   
     constructor(private router: Router, private usersService: UsersService) { 
       if (this.usersService.isSessionExpired() === false) {
@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
+      this.error = "";
       this.loading = true;
 
       this.usersService.login(this.model.username, this.model.password)
@@ -40,7 +41,10 @@ export class LoginComponent implements OnInit {
                       this.error = 'Acceso Denegado';
                     }
                     else {
-                      this.error = 'Error inesperado';
+                      this.error = "Error inesperado";
+                      if (error.error.errorId != undefined) {
+                        this.error += "<br/>" + error.error.errorId;
+                      }
                     }
                     
                     this.loading = false;

@@ -1,6 +1,6 @@
 
 div.polaroid {
-    width: 284px;
+    width: auto;
     padding: 10px 10px 0px 10px;
     border: 1px solid #BFBFBF;
     background-color:honeydew;
@@ -35,6 +35,7 @@ div.polaroid {
     font-weight: normal; 
     line-height: 48px;
     text-align: center;
+    width: 300px;
 }
 
 /* enable absolute positioning */

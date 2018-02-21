@@ -8,6 +8,7 @@ import { UsersService } from '../services/users.service';
 import { LocalizacionService } from '../services/localizacion.service';
 import { APP_CONFIG } from '../app.config/app-config.constants';
 import { IAppConfig } from '../app.config/app-config.interface';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-diario',
@@ -20,7 +21,8 @@ export class DiarioComponent implements OnInit {
   conceptoSel: IConceptoDiario;
   nuevoImporte: number;
   nuevoDebCred: number;
-  errorMessage: string;
+  errorMessage: string = "";
+  errorMessageModal: string = "";
   modalRef: BsModalRef;
   sumMonth: SumaryMonth = new SumaryMonth();
   currencyMaskOptions = {
@@ -30,12 +32,14 @@ export class DiarioComponent implements OnInit {
     allowNegative: false
   };
   loading: Boolean = false;
+  loadingModal: Boolean = false;
   
   constructor(private _conceptosDiarioService: DiarioService,
               private _modalService: BsModalService,
               private _userService: UsersService,
               private _localizacionService: LocalizacionService,
-              @Inject( APP_CONFIG ) private _appConfig: IAppConfig) { 
+              @Inject( APP_CONFIG ) private _appConfig: IAppConfig,
+              private _helperService: HelperService) { 
     this.sumMonth.egresos = 0;
     this.sumMonth.ingresos = 0;
   }
@@ -55,16 +59,22 @@ export class DiarioComponent implements OnInit {
 
   getData() {
     this.loading = true;
+    this.errorMessage = "";
     this._conceptosDiarioService.getConceptosImportes(this.bsValue)
         .subscribe(
             data => { 
               this.conceptos = data;
               this.loading = false;
             },
-            error => this.errorMessage = <any>error);
+            error => {
+              this.loading = false; 
+              this.errorMessage = this._helperService.getErrorMessage(error);
+            });
   }
 
   openModal(template: TemplateRef<any>, concepto: IConceptoDiario) {
+    this.loadingModal = false;
+    this.errorMessageModal = "";
     this.conceptoSel = concepto;
     this.nuevoImporte = Math.abs(this.conceptoSel.importe);
     this.nuevoDebCred = this.conceptoSel.credito;
@@ -72,37 +82,38 @@ export class DiarioComponent implements OnInit {
   }
  
   confirm(): void {
-
+    this.loadingModal = true;
+    this.errorMessageModal = "";
     this._conceptosDiarioService.setConceptoImporte(
                                     this.bsValue, 
                                     (this.nuevoDebCred == 1) ? this.nuevoImporte : this.nuevoImporte*(-1), 
                                     this.conceptoSel.idconcepto)
                 .subscribe(
                   data => {
-                    //console.log("entro");
+                    this.loadingModal = false;
+                    if (this.conceptoSel.credito == 1){
+                      this.sumMonth.ingresos -= this.conceptoSel.importe;
+                    }
+                    else{
+                      this.sumMonth.egresos -= Math.abs(this.conceptoSel.importe);
+                    }
+                    
+                    this.conceptoSel.importe = (this.nuevoDebCred == 1) ? this.nuevoImporte : this.nuevoImporte*(-1);
+                    this.conceptoSel.credito = this.nuevoDebCred;
+                
+                    if (this.conceptoSel.credito == 1){
+                      this.sumMonth.ingresos += this.conceptoSel.importe;
+                    }
+                    else{
+                      this.sumMonth.egresos += Math.abs(this.conceptoSel.importe);
+                    }
+                
+                    this.modalRef.hide();
                   },
                   error => {
-                    //console.log("error");               
+                    this.loadingModal = false; 
+                    this.errorMessageModal = this._helperService.getErrorMessage(error);
                   });
-
-    if (this.conceptoSel.credito == 1){
-      this.sumMonth.ingresos -= this.conceptoSel.importe;
-    }
-    else{
-      this.sumMonth.egresos -= Math.abs(this.conceptoSel.importe);
-    }
-    
-    this.conceptoSel.importe = (this.nuevoDebCred == 1) ? this.nuevoImporte : this.nuevoImporte*(-1);
-    this.conceptoSel.credito = this.nuevoDebCred;
-
-    if (this.conceptoSel.credito == 1){
-      this.sumMonth.ingresos += this.conceptoSel.importe;
-    }
-    else{
-      this.sumMonth.egresos += Math.abs(this.conceptoSel.importe);
-    }
-
-    this.modalRef.hide();
   }
  
   decline(): void {

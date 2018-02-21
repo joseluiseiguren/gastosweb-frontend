@@ -17,7 +17,7 @@
             [bsConfig]="{dateInputFormat: 'LL'}">
   </div>
   
-  <table *ngIf="conceptos!==undefined && loading === false" class="table">
+  <table *ngIf="conceptos!==undefined && loading === false && errorMessage.length == 0" class="table">
     <thead>
       <tr>
         <th></th>
@@ -37,7 +37,9 @@
       </tr>
     </tbody>
   </table>
+
   <app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>
+  <app-error-message *ngIf="errorMessage.length != 0 && loading === false" [message]="errorMessage"></app-error-message>
 </div>
 
 <ng-template #template>
@@ -79,5 +81,8 @@
         </table>
       <br/>
       <button type="submit" class="btn btn-success" (click)="confirm()" >Aceptar</button>
+      <br/>
+      <app-loading *ngIf="loadingModal === true" [texto]="'Cargando...'"></app-loading>
+      <app-error-message *ngIf="errorMessageModal.length != 0 && loadingModal === false" [message]="errorMessageModal"></app-error-message>
   </div>
 </ng-template>

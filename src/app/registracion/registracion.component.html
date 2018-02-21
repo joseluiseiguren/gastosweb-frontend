@@ -118,10 +118,8 @@
       </div>
     </form>
 
-    <div class="col-lg-12 col-sm-12 col-xs-12 alert" 
-         [class.alert-success]="operationMessageStatus == 0"
-         [class.alert-danger]="operationMessageStatus == 1"
-         *ngIf="operationMessage.length > 0 && loading === false">
+    <div class="col-lg-12 col-sm-12 col-xs-12 alert alert-success" 
+         *ngIf="operationMessageStatus == 0 && operationMessage.length > 0 && loading === false">
       <strong>{{operationMessage}}</strong>
       <a *ngIf="operationMessageStatus == 0"
          [routerLink]="['/login']" 
@@ -131,5 +129,8 @@
          <span class="glyphicon glyphicon-edit"></span>
       </a>
     </div>
+
+    <app-error-message *ngIf="operationMessageStatus == 1 && operationMessage.length > 0 && loading === false" [message]="operationMessage"></app-error-message>
+
   </div>
 </div>

@@ -4,6 +4,7 @@ import { APP_CONFIG } from '../app.config/app-config.constants';
 import { DiarioService } from '../services/diario.service';
 import { SumaryMonth } from '../models/sumarymonth';
 import { UsersService } from '../services/users.service';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-mensual',
@@ -15,7 +16,7 @@ export class MensualComponent implements OnInit {
   meses: Meses[];
   anioActual: number = new Date().getFullYear();
   anios: number[] = new Array<number>();
-  errorMessage: string;
+  errorMessage: string = "";
   bsValue: Date;
   sumMonth: SumaryMonth = new SumaryMonth();
   conceptosTotales: any[];
@@ -23,7 +24,8 @@ export class MensualComponent implements OnInit {
 
   constructor(@Inject( APP_CONFIG ) private _appConfig: IAppConfig,
               private _diarioService: DiarioService,
-              private _userService: UsersService) { 
+              private _userService: UsersService,
+              private _helperService: HelperService) { 
     this.meses = new Array<Meses>();
     for (let _i = 0; _i < 12; _i++) {
       this.meses.push(new Meses(this.getMonthName(_i), _i+1));
@@ -59,6 +61,7 @@ export class MensualComponent implements OnInit {
   }
 
   getPrimerConsumo() {
+    this.errorMessage = "";
     this._diarioService.getPrimerConsumo()
         .subscribe(
             data => {
@@ -69,7 +72,10 @@ export class MensualComponent implements OnInit {
                 this.anios.push(_i);
               }
             },
-            error => this.errorMessage = <any>error);
+            error => {
+              this.loading = false; 
+              this.errorMessage = this._helperService.getErrorMessage(error);
+            });
   }
 
   getData() {
@@ -81,7 +87,10 @@ export class MensualComponent implements OnInit {
               this.conceptosTotales = data;
               this.loading = false;
             },
-            error => this.errorMessage = <any>error);
+            error => {
+              this.loading = false; 
+              this.errorMessage = this._helperService.getErrorMessage(error);
+            });
   }
 
   loadDetail(event: boolean, ct: any) {
@@ -93,7 +102,10 @@ export class MensualComponent implements OnInit {
               ct.dataAdic = new Array<any>();
               ct.dataAdic = data;
             },
-            error => this.errorMessage = <any>error);
+            error => {
+              this.loading = false; 
+              this.errorMessage = this._helperService.getErrorMessage(error);
+            });
     }
   }
 
