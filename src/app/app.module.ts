@@ -16,6 +16,7 @@ import { SumarydiaComponent } from './sumarydia/sumarydia.component';
 import { SumarymesComponent } from './sumarymes/sumarymes.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SumaryMonthService } from './services/sumary-month.service';
+import { SumaryAnioService } from './services/sumary-anio.service';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { DiarioService } from './services/diario.service';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
@@ -36,6 +37,7 @@ import { LoadingComponent } from './loading/loading.component';
 import { HelperService } from './services/helper.service';
 import { UrlService } from './services/url.service';
 import { ErrorMessageComponent } from './error-message/error-message.component';
+import { SumaryanioComponent } from './sumaryanio/sumaryanio.component';
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
@@ -65,7 +67,8 @@ const routes: Routes = [
     DashboardComponent,
     RegistracionComponent,
     LoadingComponent,
-    ErrorMessageComponent
+    ErrorMessageComponent,
+    SumaryanioComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +83,8 @@ const routes: Routes = [
     AccordionModule.forRoot(),
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
   ],
-  providers: [SumaryMonthService, 
+  providers: [SumaryMonthService,
+              SumaryAnioService ,
               DiarioService, 
               BsModalService,
               UsersService,

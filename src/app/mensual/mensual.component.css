@@ -55,3 +55,7 @@ select {
 .cellDetalleConcepto {
     padding: 1px;
 }
+
+.combos {
+    margin-bottom: 50px;
+}

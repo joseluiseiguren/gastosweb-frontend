@@ -5,6 +5,7 @@ import { DiarioService } from '../services/diario.service';
 import { SumaryMonth } from '../models/sumarymonth';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
+import { SumaryAnio } from '../models/sumaryanio';
 
 @Component({
   selector: 'app-mensual',
@@ -19,6 +20,7 @@ export class MensualComponent implements OnInit {
   errorMessage: string = "";
   bsValue: Date;
   sumMonth: SumaryMonth = new SumaryMonth();
+  sumAnio: SumaryAnio = new SumaryAnio();
   conceptosTotales: any[];
   loading: Boolean = false;
 
@@ -37,18 +39,19 @@ export class MensualComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getData();
   }
 
   changeMes(value: number) {
     let x = new Date(this.bsValue.getFullYear(), value-1, 1);
     this.bsValue = x;
+    this.mesActual = this.meses[value-1];
     this.getData();
   }
 
   changeAnio(value: number) {
     let x = new Date(value, this.bsValue.getMonth(), 1);
     this.bsValue = x;
+    this.anioActual = value;
     this.getData();
   }
 
@@ -71,6 +74,7 @@ export class MensualComponent implements OnInit {
               for (let _i = anioUltimoConsumo; _i >= anioPrimerConsumo; _i--) {
                 this.anios.push(_i);
               }
+              this.getData();
             },
             error => {
               this.loading = false; 
@@ -107,6 +111,10 @@ export class MensualComponent implements OnInit {
               this.errorMessage = this._helperService.getErrorMessage(error);
             });
     }
+  }
+
+  childLoadingStatus(errorMessage: string):void{
+    this.errorMessage = errorMessage;
   }
 
 }

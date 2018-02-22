@@ -49,4 +49,8 @@ export class UrlService {
     urlRegistracion(): string {
         return this._host + "api/usuarios/registracion";
     }
+
+    urlGetSumaryAnual(fecha: string): string {
+        return this._host + "api/anual/" + fecha + "/sumary";
+    }
 }

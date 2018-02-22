@@ -25,7 +25,7 @@
     - en los badrequest de la api, devolver un json con el mensaje de porque fallo
 - prevenir sql inyection en los forms
 - capcha en registracion
-- enviaar un mail en la registracion
+- enviar un mail en la registracion
 - bloquear al usuario en 5 intentos de login fallidos
 - unit testing webapi
 - unit testing frontend
@@ -34,6 +34,7 @@
 - usar constantes para los status code del frontend
     - el mensaje de error de cada pantalla tiene que ser un componente
 - el mensaje de error de cada pantalla que tenga un boton de retry
-- mensual: poner un loading a nivel pantalla GENERAL, y que si falla el 1er intento de conexion al server no siga con los siguientes
+    - mensual: poner un loading a nivel pantalla GENERAL, y que si falla el 1er intento de conexion al server no siga con los siguientes
 - probar en distintos browser
 - usar el componente loading y el de errores en el login
+- mejorar look and feel del loading para que sea centrado en pantalla

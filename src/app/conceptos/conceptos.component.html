@@ -1,98 +1,99 @@
-<div class="conceptosTable"
-    *ngIf="conceptos!==undefined && loadingGridConceptos === false && errorMessageGridConceptos.length == 0">
-  <table class="table">
-    <thead class="conceptosTableHeader">
-      <tr>
-        <th>Concepto</th>
-        <th>Tipo</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="selected" id="tr{{item.idconcepto}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
-          (click)="cambiarPantalla(2, item);"
-          [class.info]="odd"
-          [class.success]="even">
-        <td [class.importeNegativo]="item.credito == false">
-          {{item.descripcion}}
-        </td>
-        <td [class.importeNegativo]="item.credito == false">
-            {{(item.credito == true) ? 'Credito' : 'Debito'}}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
 <app-loading *ngIf="loadingGridConceptos === true" [texto]="'Cargando...'"></app-loading>
 <app-error-message *ngIf="errorMessageGridConceptos.length != 0 && loadingGridConceptos === false" [message]="errorMessageGridConceptos"></app-error-message>
 
-<div class="addNew"
-    *ngIf="loadingGridConceptos === false && errorMessageGridConceptos.length == 0">
-    <button class="btn btn-info" (click)="cambiarPantalla(1, null);">
-        <span class="glyphicon glyphicon-plus"></span>
-        Agregar Nuevo
-    </button>
-</div>
+<div *ngIf="loadingGridConceptos === false && errorMessageGridConceptos.length == 0">
+    <div class="conceptosTable" *ngIf="conceptos!==undefined">
+    <table class="table">
+        <thead class="conceptosTableHeader">
+        <tr>
+            <th>Concepto</th>
+            <th>Tipo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="selected" id="tr{{item.idconcepto}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
+            (click)="cambiarPantalla(2, item);"
+            [class.info]="odd"
+            [class.success]="even">
+            <td [class.importeNegativo]="item.credito == false">
+            {{item.descripcion}}
+            </td>
+            <td [class.importeNegativo]="item.credito == false">
+                {{(item.credito == true) ? 'Credito' : 'Debito'}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
 
-<div *ngIf="pantallaActual == 1 || pantallaActual == 2" class="forms">
-  <form (ngSubmit)="aceptar(conceptoForm)" #conceptoForm="ngForm" novalidate>
-      <div class="formsTitulo"><h3>{{pantallaTitulo}}</h3></div> 
-      <div class="form-group">
-          <div class="inner-addon left-addon">
-              <input type="text" 
-                     class="form-control" 
-                     required
-                     autofocus
-                     [(ngModel)]="model.descripcion" 
-                     name="descripcion"
-                     placeholder="Descripcion"
-                     #descripcion="ngModel"
-                     #spy/>
-              <div [hidden]="descripcion.valid || descripcion.pristine" class="alert alert-danger">
-                    Ingresar la Descripcion
-              </div>
-              
-          </div>
-      </div>
-      
-      <div class="form-group">
-          <div class="inner-addon left-addon">
-              <label for="creditoopt">Credito</label>  
-              <input type="radio" 
-                       id="creditoopt" 
-                       name="debcred"
-                       (click)="changeCredDeb(true)"  
-                       [checked]="model.suma === true">
-              
-              <div class="float-right pull-right" >
-                <label class="importeNegativo" for="debitoopt">Debito</label>  
-                <input type="radio"
-                        id="debitoopt" 
+    <div class="addNew">
+        <button class="btn btn-info" (click)="cambiarPantalla(1, null);">
+            <span class="glyphicon glyphicon-plus"></span>
+            Agregar Nuevo
+        </button>
+    </div>
+
+    <div *ngIf="pantallaActual == 1 || pantallaActual == 2" class="forms">
+    <form (ngSubmit)="aceptar(conceptoForm)" #conceptoForm="ngForm" novalidate>
+        <div class="formsTitulo"><h3>{{pantallaTitulo}}</h3></div> 
+        <div class="form-group">
+            <div class="inner-addon left-addon">
+                <input type="text" 
+                        class="form-control" 
+                        required
+                        autofocus
+                        [(ngModel)]="model.descripcion" 
+                        name="descripcion"
+                        placeholder="Descripcion"
+                        #descripcion="ngModel"
+                        #spy/>
+                <div [hidden]="descripcion.valid || descripcion.pristine" class="alert alert-danger">
+                        Ingresar la Descripcion
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="inner-addon left-addon">
+                <label for="creditoopt">Credito</label>  
+                <input type="radio" 
+                        id="creditoopt" 
                         name="debcred"
-                        (click)="changeCredDeb(false)"  
-                        [checked]="model.suma === false">
-              </div>
-          </div>
-      </div>
+                        (click)="changeCredDeb(true)"  
+                        [checked]="model.suma === true">
+                
+                <div class="float-right pull-right" >
+                    <label class="importeNegativo" for="debitoopt">Debito</label>  
+                    <input type="radio"
+                            id="debitoopt" 
+                            name="debcred"
+                            (click)="changeCredDeb(false)"  
+                            [checked]="model.suma === false">
+                </div>
+            </div>
+        </div>
 
-      <div class="form-group center">
-          <button type="submit"
-                  [disabled]="loading" 
-                  class="btn btn-success"
-                  [disabled]="!conceptoForm.form.valid">
-              <span class="glyphicon glyphicon-ok"></span>
-              Aceptar
-          </button>
-          <button class="btn btn-danger" (click)="cambiarPantalla(0, null);">
-              <span class="glyphicon glyphicon-remove"></span>
-              Cerrar
-          </button>
-          <app-loading *ngIf="loading === true" [texto]="''"></app-loading>
-      </div>
-  </form>
-  <div class="col-lg-12 col-sm-12 col-xs-12 alert alert-success" 
-       *ngIf="operationMessageStatus == 0 && operationMessage.length > 0 && conceptoForm.pristine === true && loading === false">
-    <strong>{{operationMessage}}</strong>
-  </div>
-  <app-error-message *ngIf="operationMessageStatus == 1 && operationMessage.length > 0 && loading === false" [message]="operationMessage"></app-error-message>
+        <div class="form-group center">
+            <button type="submit"
+                    [disabled]="loading" 
+                    class="btn btn-success"
+                    [disabled]="!conceptoForm.form.valid">
+                <span class="glyphicon glyphicon-ok"></span>
+                Aceptar
+            </button>
+            <button class="btn btn-danger" (click)="cambiarPantalla(0, null);">
+                <span class="glyphicon glyphicon-remove"></span>
+                Cerrar
+            </button>
+            <app-loading *ngIf="loading === true" [texto]="''"></app-loading>
+        </div>
+    </form>
+    <div class="col-lg-12 col-sm-12 col-xs-12 alert alert-success" 
+        *ngIf="operationMessageStatus == 0 && operationMessage.length > 0 && conceptoForm.pristine === true && loading === false">
+        <strong>{{operationMessage}}</strong>
+    </div>
+    <app-error-message *ngIf="operationMessageStatus == 1 && operationMessage.length > 0 && loading === false" [message]="operationMessage"></app-error-message>
 
+    </div>
 </div>

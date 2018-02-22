@@ -1,24 +1,24 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { SumaryMonthService } from '../services/sumary-month.service';
-import { SumaryMonth } from '../models/sumarymonth';
+import { SumaryAnioService } from '../services/sumary-anio.service';
+import { SumaryAnio } from '../models/sumaryanio';
 import { OnChanges } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
 
 @Component({
-  selector: 'app-sumarymes',
-  templateUrl: './sumarymes.component.html',
+  selector: 'app-sumaryanio',
+  templateUrl: './sumaryanio.component.html',
   styleUrls: ['../shared/styles/sumary.css']
 })
-export class SumarymesComponent implements OnInit {
+export class SumaryanioComponent implements OnInit {
   @Input() fecha: Date;
-  @Input() sumaryMonth: SumaryMonth;
+  @Input() sumaryAnio: SumaryAnio;
   @Input() displayTitle: Boolean = true;
   @Output() LoadingStatus = new EventEmitter();
-  private sumaryMonthTemp: SumaryMonth;
+  private sumaryAnioTemp: SumaryAnio;
   loading: Boolean;
 
-  constructor(private _sumaryMonthService: SumaryMonthService,
+  constructor(private _sumaryAnioService: SumaryAnioService,
               private _userService: UsersService,
               private _helperService: HelperService) { 
   }
@@ -28,16 +28,15 @@ export class SumarymesComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.fecha.previousValue === undefined ||
-        (changes.fecha.currentValue.getFullYear() != changes.fecha.previousValue.getFullYear() ||
-         changes.fecha.currentValue.getMonth() != changes.fecha.previousValue.getMonth())){
+        (changes.fecha.currentValue.getFullYear() != changes.fecha.previousValue.getFullYear())){
       this.getData();
     }
   }
 
   getData() {
     this.loading = true;
-    this._sumaryMonthService.getSumary(this.fecha).subscribe(
-      data => this.sumaryMonthTemp = data,
+    this._sumaryAnioService.getSumary(this.fecha).subscribe(
+      data => this.sumaryAnioTemp = data,
       error => {
         this.loading = false;
 
@@ -51,8 +50,8 @@ export class SumarymesComponent implements OnInit {
   }
 
   copyData() {
-    this.sumaryMonth.egresos = this.sumaryMonthTemp.egresos;
-    this.sumaryMonth.ingresos = this.sumaryMonthTemp.ingresos;
+    this.sumaryAnio.egresos = this.sumaryAnioTemp.egresos;
+    this.sumaryAnio.ingresos = this.sumaryAnioTemp.ingresos;
   }
 
   sendStatusToParent(errorMessage:string) {

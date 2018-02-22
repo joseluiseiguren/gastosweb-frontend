@@ -1,45 +1,48 @@
 <link rel="stylesheet" href="https://unpkg.com/ngx-bootstrap/datepicker/bs-datepicker.css">
 
-<div class="right">
-  <app-sumarydia [fecha]="bsValue" [conceptosDiarios]="conceptos"></app-sumarydia>
-  <app-sumarymes [fecha]="bsValue" [sumaryMonth]="sumMonth"> </app-sumarymes>
-</div>
+<app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>
+<app-error-message *ngIf="errorMessage.length != 0 && loading === false" [message]="errorMessage"></app-error-message>
 
-
-<div class="left">
-  <div class="fechaHolder">
-    <input type="text"
-            class="form-control fecha"
-            #dp="bsDatepicker"
-            bsDatepicker 
-            (ngModelChange)="changeDay($event)"
-            [ngModel]="bsValue"
-            [bsConfig]="{dateInputFormat: 'LL'}">
-  </div>
+<div *ngIf="loading === false && errorMessage.length == 0">
   
-  <table *ngIf="conceptos!==undefined && loading === false && errorMessage.length == 0" class="table">
-    <thead>
-      <tr>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="selected" id="tr{{item.idconcepto}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
-          (click)="openModal(template, item)"
-          [class.info]="odd"
-          [class.success]="even">
-        <td >{{item.descripcion}}</td>
-        <td class="importe"
-            [class.importeNegativo]="item.importe < 0 || item.credito === 0">
-            {{item.importe | currency:this._userService.getMoneda()}}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="right">
+    <app-sumarydia [fecha]="bsValue" [conceptosDiarios]="conceptos"></app-sumarydia>
+    <app-sumarymes [fecha]="bsValue" [sumaryMonth]="sumMonth" (LoadingStatus)="childLoadingStatus($event)"> </app-sumarymes>
+    <app-sumaryanio [fecha]="bsValue" [sumaryAnio]="sumAnio" (LoadingStatus)="childLoadingStatus($event)"> </app-sumaryanio>
+  </div>
 
-  <app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>
-  <app-error-message *ngIf="errorMessage.length != 0 && loading === false" [message]="errorMessage"></app-error-message>
+  <div class="left">
+    <div class="fechaHolder">
+      <input type="text"
+              class="form-control fecha"
+              #dp="bsDatepicker"
+              bsDatepicker 
+              (ngModelChange)="changeDay($event)"
+              [ngModel]="bsValue"
+              [bsConfig]="{dateInputFormat: 'LL'}">
+    </div>
+    
+    <table *ngIf="conceptos!==undefined && loading === false && errorMessage.length == 0" class="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="selected" id="tr{{item.idconcepto}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
+            (click)="openModal(template, item)"
+            [class.info]="odd"
+            [class.success]="even">
+          <td >{{item.descripcion}}</td>
+          <td class="importe"
+              [class.importeNegativo]="item.importe < 0 || item.credito === 0">
+              {{item.importe | currency:this._userService.getMoneda()}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <ng-template #template>

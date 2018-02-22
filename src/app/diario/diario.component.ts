@@ -9,6 +9,7 @@ import { LocalizacionService } from '../services/localizacion.service';
 import { APP_CONFIG } from '../app.config/app-config.constants';
 import { IAppConfig } from '../app.config/app-config.interface';
 import { HelperService } from '../services/helper.service';
+import { SumaryAnio } from '../models/sumaryanio';
 
 @Component({
   selector: 'app-diario',
@@ -25,6 +26,7 @@ export class DiarioComponent implements OnInit {
   errorMessageModal: string = "";
   modalRef: BsModalRef;
   sumMonth: SumaryMonth = new SumaryMonth();
+  sumAnio: SumaryMonth = new SumaryAnio();
   currencyMaskOptions = {
     prefix: this._userService.getMoneda() + ' ',
     thousands: this._appConfig.SEPARADOR_MILES,
@@ -42,6 +44,8 @@ export class DiarioComponent implements OnInit {
               private _helperService: HelperService) { 
     this.sumMonth.egresos = 0;
     this.sumMonth.ingresos = 0;
+    this.sumAnio.egresos = 0;
+    this.sumAnio.ingresos = 0;
   }
 
   ngOnInit() {
@@ -93,9 +97,11 @@ export class DiarioComponent implements OnInit {
                     this.loadingModal = false;
                     if (this.conceptoSel.credito == 1){
                       this.sumMonth.ingresos -= this.conceptoSel.importe;
+                      this.sumAnio.ingresos -= this.conceptoSel.importe;
                     }
                     else{
                       this.sumMonth.egresos -= Math.abs(this.conceptoSel.importe);
+                      this.sumAnio.egresos -= Math.abs(this.conceptoSel.importe);
                     }
                     
                     this.conceptoSel.importe = (this.nuevoDebCred == 1) ? this.nuevoImporte : this.nuevoImporte*(-1);
@@ -103,9 +109,11 @@ export class DiarioComponent implements OnInit {
                 
                     if (this.conceptoSel.credito == 1){
                       this.sumMonth.ingresos += this.conceptoSel.importe;
+                      this.sumAnio.ingresos += this.conceptoSel.importe;
                     }
                     else{
                       this.sumMonth.egresos += Math.abs(this.conceptoSel.importe);
+                      this.sumAnio.egresos += Math.abs(this.conceptoSel.importe);
                     }
                 
                     this.modalRef.hide();
@@ -122,6 +130,10 @@ export class DiarioComponent implements OnInit {
 
   changeNuevoDebCred(credito: number): void {
     this.nuevoDebCred = credito;
+  }
+
+  childLoadingStatus(errorMessage: string):void{
+    this.errorMessage = errorMessage;
   }
 
 }
