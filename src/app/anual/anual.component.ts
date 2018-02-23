@@ -40,6 +40,7 @@ export class AnualComponent implements OnInit {
 
   getPrimerConsumo() {
     this.errorMessage = "";
+    this.loading = true;
     this._diarioService.getPrimerConsumo()
         .subscribe(
             data => {
@@ -59,8 +60,7 @@ export class AnualComponent implements OnInit {
 
   getData() {
     this.loading = true;
-    let fecha = this.bsValue.getFullYear().toString() + (this.bsValue.getMonth()+1).toString().padStart(2, '0');
-    this._diarioService.getConceptosTotalMes(fecha)
+    this._diarioService.getConceptosTotalAnio(this.bsValue.getFullYear())
         .subscribe(
             data => { 
               this.conceptosTotales = data;
@@ -74,12 +74,12 @@ export class AnualComponent implements OnInit {
 
   loadDetail(event: boolean, ct: any) {
     if (event == true) {
-      let fecha = this.bsValue.getFullYear().toString() + (this.bsValue.getMonth()+1).toString().padStart(2, '0');
-      this._diarioService.getConceptosMovimMes(ct.idconcepto, fecha)
+      this._diarioService.getConceptosMovimAnio(ct.idconcepto, this.bsValue.getFullYear())
         .subscribe(
             data => {
               ct.dataAdic = new Array<any>();
               ct.dataAdic = data;
+              console.log(ct.dataAdic);
             },
             error => {
               this.loading = false; 

@@ -53,4 +53,16 @@ export class DiarioService {
                     //.delay(3000)
                     .do(data => JSON.stringify(data));
   }
+
+  getConceptosTotalAnio(anio: number /*YYYY*/): Observable<any[]> {
+    return this._http.get<any[]>(this._urlService.urlGetConceptosTotalAnio(anio))
+                  //.delay(3000)
+                  .do(data => JSON.stringify(data));
+  }
+
+  getConceptosMovimAnio(idConcepto: number, anio: number /*YYYY*/): Observable<any[]> {
+    return this._http.get<any[]>(this._urlService.urlGetConceptosMovimAnio(idConcepto, anio))
+                    //.delay(3000)
+                    .do(data => JSON.stringify(data));
+  }
 }

@@ -10,11 +10,9 @@ select {
     border: 1px solid #ccc;
     height: 34px;
     background: aliceblue;
-    float: left;
-  }
-  
-  select::-ms-expand { 
-      display: none; /* remove default arrow in IE 10 and 11 */
+    /*float: left;*/
+    display: block;
+    margin: 0 auto;
   }
   
   @media screen and (min-width:0\0) {
@@ -57,5 +55,5 @@ select {
 }
 
 .combos {
-    margin-bottom: 50px;
+    margin-bottom: 10px;
 }

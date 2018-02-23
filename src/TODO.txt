@@ -5,7 +5,7 @@
 - olvido de contraseña
     - registracion
     - reporte mensual
-- reporte anual
+    - reporte anual
 - reporte historico
     - web api
 - exportacion a excel
@@ -38,3 +38,4 @@
 - probar en distintos browser
 - usar el componente loading y el de errores en el login
 - mejorar look and feel del loading para que sea centrado en pantalla
+- poner indices en los select

@@ -31,11 +31,11 @@ export class UrlService {
     }
 
     urlGetConceptosTotalMes(fecha: string): string {
-        return this._host + "api/conceptos/sumary/" + fecha;
+        return this._host + "api/conceptos/mensual/" + fecha + "/sumary";
     }
 
     urlGetConceptosMovimMes(idConcepto: number, fecha: string): string {
-        return this._host + "api/conceptos/" + idConcepto.toString() + "/movimientos/" + fecha;
+        return this._host + "api/conceptos/" + idConcepto.toString() + "/movimientos/mensual/" + fecha;
     }
 
     urlGetSumaryMensual(fecha: string): string {
@@ -52,5 +52,13 @@ export class UrlService {
 
     urlGetSumaryAnual(fecha: string): string {
         return this._host + "api/anual/" + fecha + "/sumary";
+    }
+
+    urlGetConceptosTotalAnio(anio: number): string {
+        return this._host + "api/conceptos/anual/" + anio.toString() + "/sumary";
+    }
+
+    urlGetConceptosMovimAnio(idConcepto: number, anio: number): string {
+        return this._host + "api/conceptos/" + idConcepto.toString() + "/movimientos/anual/" + anio.toString();
     }
 }

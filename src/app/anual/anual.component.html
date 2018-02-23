@@ -29,7 +29,7 @@
               <table class="table" *ngIf="ct.dataAdic !== undefined">
                   <tbody>
                     <tr *ngFor="let data of ct.dataAdic" class="detalleConcepto">
-                      <td class="cellDetalleConcepto">{{data.fecha | date:'LLLL yyyy'}}</td>
+                      <td class="cellDetalleConcepto">{{this._helperService.convertStringMMYYYYToDate(data.mes) | date:'LLLL yyyy'}}</td>
                       <td class="importe cellDetalleConcepto"
                           [class.importeNegativo]="data.importe < 0">
                           {{data.importe | currency:this._userService.getMoneda()}}

@@ -30,4 +30,13 @@ export class HelperService {
           
           return message;
     } 
+
+    convertStringMMYYYYToDate(fecha: string /* MMYYYY */): Date {
+        let mes = Number(fecha.substring(0,2))-1;
+        let anio = Number(fecha.substring(2,6));
+        
+        let retFecha = new Date(anio, mes, 1);
+        
+        return retFecha;
+    }
 }
