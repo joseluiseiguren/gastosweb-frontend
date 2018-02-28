@@ -38,6 +38,7 @@ import { HelperService } from './services/helper.service';
 import { UrlService } from './services/url.service';
 import { ErrorMessageComponent } from './error-message/error-message.component';
 import { SumaryanioComponent } from './sumaryanio/sumaryanio.component';
+import { UserprofileComponent } from './userprofile/userprofile.component';
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
@@ -49,6 +50,7 @@ const routes: Routes = [
                             { path: 'anual', component: AnualComponent },
                             { path: 'historico', component: HistoricoComponent },
                             { path: 'conceptos', component: ConceptosComponent },
+                            { path: 'userprofile', component: UserprofileComponent },
                             { path: '', component: DiarioComponent },
                           ]},
   { path: '**', redirectTo: '/dashboard/diario', pathMatch: 'full'}
@@ -68,7 +70,8 @@ const routes: Routes = [
     RegistracionComponent,
     LoadingComponent,
     ErrorMessageComponent,
-    SumaryanioComponent
+    SumaryanioComponent,
+    UserprofileComponent
   ],
   imports: [
     BrowserModule,

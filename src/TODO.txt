@@ -39,3 +39,4 @@
 - usar el componente loading y el de errores en el login
 - mejorar look and feel del loading para que sea centrado en pantalla
 - poner indices en los select
+- cuando hay error generico, el desplegable del usuario queda por atras

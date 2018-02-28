@@ -39,4 +39,13 @@ export class HelperService {
         
         return retFecha;
     }
+
+    /* La fecha de entrada es 1980-05-13T00:00:00.000Z y la de salida 13/05/1980*/
+    convertStringYYYMMDDToStringDDMMYYYY(fecha: string): string {
+        let dia = fecha.substring(8, 10);
+        let mes = fecha.substring(5, 7);
+        let anio = fecha.slice(0, 4);
+        
+        return dia + "/" + mes + "/" + anio;
+    }
 }

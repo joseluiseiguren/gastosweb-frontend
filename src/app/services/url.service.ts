@@ -61,4 +61,8 @@ export class UrlService {
     urlGetConceptosMovimAnio(idConcepto: number, anio: number): string {
         return this._host + "api/conceptos/" + idConcepto.toString() + "/movimientos/anual/" + anio.toString();
     }
+
+    urlGetUserProfile(idUsuario: number): string {
+        return this._host + "api/usuarios/" + idUsuario.toString();
+    }
 }

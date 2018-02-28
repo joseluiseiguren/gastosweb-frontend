@@ -90,5 +90,11 @@ export class UsersService {
 
         return moneda;
     }
+
+    getProfile(): Observable<User> {
+        return this._http.get<User>(this._urlService.urlGetUserProfile(this.getUserId()))
+                        //.delay(3000)
+                        .do(data => JSON.stringify(data));
+    }
   
 }
