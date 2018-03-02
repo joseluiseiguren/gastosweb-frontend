@@ -50,6 +50,10 @@ export class UrlService {
         return this._host + "api/usuarios/registracion";
     }
 
+    urlUserUpdateProfile(): string {
+        return this._host + "api/usuario";
+    }
+
     urlGetSumaryAnual(fecha: string): string {
         return this._host + "api/anual/" + fecha + "/sumary";
     }
@@ -64,5 +68,17 @@ export class UrlService {
 
     urlGetUserProfile(idUsuario: number): string {
         return this._host + "api/usuarios/" + idUsuario.toString();
+    }
+
+    urlGetSumaryHistorico(): string {
+        return this._host + "api/historico/sumary";
+    }
+
+    urlGetConceptosTotalHistorico(): string {
+        return this._host + "api/conceptos/historico/sumary";
+    }
+
+    urlGetConceptosMovimHistorico(idConcepto: number): string {
+        return this._host + "api/conceptos/" + idConcepto.toString() + "/movimientos/historico";
     }
 }

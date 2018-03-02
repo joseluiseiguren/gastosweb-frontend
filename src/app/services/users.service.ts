@@ -43,6 +43,20 @@ export class UsersService {
                  moneda: usuario.moneda});
     }
 
+    updateProfile( usuario:User ) : Observable<void> {
+
+        let fechanacimiento = usuario.fechanacimiento.getFullYear().toString() +  
+                (usuario.fechanacimiento.getMonth()+1).toString().padStart(2, '0') +
+                usuario.fechanacimiento.getDate().toString().padStart(2, '0');
+
+        return this._http.put<any>(this._urlService.urlUserUpdateProfile(), 
+                {email: usuario.email,
+                 password: usuario.password,
+                 nombre: usuario.nombre,
+                 fechanacimiento: fechanacimiento,
+                 moneda: usuario.moneda});
+    }
+
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('alow');

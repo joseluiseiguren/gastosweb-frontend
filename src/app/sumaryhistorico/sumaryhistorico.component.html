@@ -1,0 +1,21 @@
+<table *ngIf="sumaryHistorico!==undefined && loading === false" class="table rad">
+  <thead>
+  </thead>
+  <tbody>
+    <tr class="success">
+      <td>Ingresos</td>
+      <td class="importe">{{sumaryHistorico.ingresos | currency: this._userService.getMoneda()}}</td>
+    </tr>
+    <tr class="danger">
+      <td>Egresos</td>
+      <td class="importe">{{sumaryHistorico.egresos | currency: this._userService.getMoneda()}}</td>
+    </tr>
+    <tr class="info">
+      <td>Saldo</td>
+      <td class="importe saldo"
+          [class.saldoNegativo]="(sumaryHistorico.ingresos - sumaryHistorico.egresos) < 0">
+          {{(sumaryHistorico.ingresos - sumaryHistorico.egresos) | currency: this._userService.getMoneda()}}
+      </td>
+    </tr>
+  </tbody>
+</table>

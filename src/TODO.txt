@@ -1,12 +1,12 @@
     - log out
     - hacer bien el login por back y validar lo que hay en el localstorage (ver si el la mejor forma de hacer el login)
     - mostrar nombre de usuario logueado
-- edit profile del usuario
+    - edit profile del usuario
 - olvido de contraseña
     - registracion
     - reporte mensual
     - reporte anual
-- reporte historico
+    - reporte historico
     - web api
 - exportacion a excel
     - gestion de conceptos
@@ -15,7 +15,7 @@
     - la funcion de manejo de errores en los services se repite (optimizar)
 - hay modelos que se comparten entre webapi y frontend, por ejemplo el de usuarios -> unirlos
     - grilla de gastos agregar hover en row
-- loguear login de usuarios
+    - loguear login de usuarios
     - web api manejo de errores
     - poner loading en todas las comunicacion con el server
     - probar decimales con punto y con coma
@@ -40,3 +40,4 @@
 - mejorar look and feel del loading para que sea centrado en pantalla
 - poner indices en los select
 - cuando hay error generico, el desplegable del usuario queda por atras
+- popup de carga de gastos diario: poner foco en input siempre

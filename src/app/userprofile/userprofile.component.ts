@@ -62,25 +62,20 @@ export class UserprofileComponent implements OnInit {
       Number(this.fechaNacim.slice(0,2)),
       0, 0, 0, 0);
 
-      this.operationMessageStatus = 0;
-      this.operationMessage = "Modificacion Exitosa";
-      form.resetForm();
-      this.loadingAceptar  = false;
-      this.getData();
-
-    /*this._userService.register(this.model)
+    this._userService.updateProfile(this.model)
           .subscribe(
             data => {
               this.operationMessageStatus = 0;
               this.operationMessage = "Modificacion Exitosa";
               form.resetForm();
               this.loadingAceptar  = false;
+              this.getData();
             },
             error => {
               this.operationMessageStatus = 1;  
               this.loadingAceptar  = false;
               this.operationMessage = this._helperService.getErrorMessage(error)
-            });*/
+            });
   }
 
 }

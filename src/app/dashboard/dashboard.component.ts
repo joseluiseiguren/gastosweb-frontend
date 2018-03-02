@@ -13,7 +13,7 @@ export class DashboardComponent implements OnInit {
   private urlDiario: string = '/dashboard/diario';
   private urlMensual: string = '/dashboard/mensual';
   private urlAnual: string = '/dashboard/anual';
-  private urlHistoricoDiario: string = '/dashboard/historico';
+  private urlHistorico: string = '/dashboard/historico';
   private urlConceptos: string = '/dashboard/conceptos';
 
   constructor(private _userService: UsersService, private router: Router) {

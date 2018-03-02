@@ -65,4 +65,16 @@ export class DiarioService {
                     //.delay(3000)
                     .do(data => JSON.stringify(data));
   }
+
+  getConceptosTotalHistorico(): Observable<any[]> {
+    return this._http.get<any[]>(this._urlService.urlGetConceptosTotalHistorico())
+                  //.delay(3000)
+                  .do(data => JSON.stringify(data));
+  }
+
+  getConceptosMovimHistorico(idConcepto: number): Observable<any[]> {
+    return this._http.get<any[]>(this._urlService.urlGetConceptosMovimHistorico(idConcepto))
+                    //.delay(3000)
+                    .do(data => JSON.stringify(data));
+  }
 }

@@ -79,7 +79,6 @@ export class AnualComponent implements OnInit {
             data => {
               ct.dataAdic = new Array<any>();
               ct.dataAdic = data;
-              console.log(ct.dataAdic);
             },
             error => {
               this.loading = false; 
