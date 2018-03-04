@@ -11,7 +11,7 @@ import { SumaryHistoricoService } from '../services/sumary-historico.service';
 })
 export class SumaryhistoricoComponent implements OnInit {
   @Output() LoadingStatus = new EventEmitter();
-  private sumaryHistorico: SumaryHistorico;
+  public sumaryHistorico: SumaryHistorico;
   loading: Boolean = false;
   
   constructor(private _sumaryHistoricoService: SumaryHistoricoService,

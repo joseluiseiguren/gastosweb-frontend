@@ -9,12 +9,12 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
   userName: string;
-  private urlActual = '';
-  private urlDiario: string = '/dashboard/diario';
-  private urlMensual: string = '/dashboard/mensual';
-  private urlAnual: string = '/dashboard/anual';
-  private urlHistorico: string = '/dashboard/historico';
-  private urlConceptos: string = '/dashboard/conceptos';
+  public urlActual = '';
+  public urlDiario: string = '/dashboard/diario';
+  public urlMensual: string = '/dashboard/mensual';
+  public urlAnual: string = '/dashboard/anual';
+  public urlHistorico: string = '/dashboard/historico';
+  public urlConceptos: string = '/dashboard/conceptos';
 
   constructor(private _userService: UsersService, private router: Router) {
     this.userName = this._userService.getUserName();
