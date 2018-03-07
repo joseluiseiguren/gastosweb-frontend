@@ -41,3 +41,4 @@
 - poner indices en los select
 - cuando hay error generico, el desplegable del usuario queda por atras
 - popup de carga de gastos diario: poner foco en input siempre
+- Conceptos que no sumen ni resten: y que puedan ser cargados en multiples monedas
