@@ -1,0 +1,8 @@
+DEPLOY ANGULAR APP TO GITHUB
+----------------------------
+ng build --prod --base-href "https://joseluiseiguren.github.io/gastosweb-frontend/" -vc=true
+git config --global credential.helper wincred
+git remote set-url origin https://github.com/joseluiseiguren/gastosweb-frontend.git
+angular-cli-ghpages --no-silent
+Ingresar desde un browser a:
+  https://joseluiseiguren.github.io/gastosweb-frontend/
