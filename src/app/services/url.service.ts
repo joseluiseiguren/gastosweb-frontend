@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class UrlService {
-    //private _host: string = "http://localhost:3000/";
-    private _host: string = "http://controlgastos.eu-4.evennode.com";
+    private _host: string = "http://localhost:3000/";
+    //private _host: string = "http://controlgastos.eu-4.evennode.com";
 
     constructor() { }
 
