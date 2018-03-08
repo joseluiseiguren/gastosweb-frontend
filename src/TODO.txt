@@ -25,11 +25,7 @@
     - en los badrequest de la api, devolver un json con el mensaje de porque fallo
 - prevenir sql inyection en los forms
 - capcha en registracion
-- enviar un mail en la registracion
-- bloquear al usuario en 5 intentos de login fallidos
-- unit testing webapi
 - unit testing frontend
-- webapi: abrir el index.ts en multiples files
 - en los post validar largos de los campos
 - usar constantes para los status code del frontend
     - el mensaje de error de cada pantalla tiene que ser un componente
@@ -38,7 +34,12 @@
 - probar en distintos browser
 - usar el componente loading y el de errores en el login
 - mejorar look and feel del loading para que sea centrado en pantalla
-- poner indices en los select
 - cuando hay error generico, el desplegable del usuario queda por atras
 - popup de carga de gastos diario: poner foco en input siempre
+- popup de carga de gastos diario: no tener que cargar los decimales obligatoriamente
 - Conceptos que no sumen ni resten: y que puedan ser cargados en multiples monedas
+- Cuando hay error, el mensaje tapa el logout
+- No funciona el routing en prod
+- Tener un file con la URL de webapi de test y otro de prod
+- En celular se ve mal 
+
