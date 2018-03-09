@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class UrlService {
-    private _host: string = "http://localhost:3000/";
-    //private _host: string = "http://controlgastos.eu-4.evennode.com/";
+    private _host: string = environment.apiUrl;
 
-    constructor() { }
+    constructor() { 
+        //console.log(this._host);
+    }
 
     urlGetConceptos(): string {
         return this._host + "api/usuarios/conceptos";

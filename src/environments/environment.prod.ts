@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: 'http://controlgastos.eu-4.evennode.com/',
+  
 };
