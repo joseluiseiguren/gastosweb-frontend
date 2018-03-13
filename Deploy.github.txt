@@ -13,4 +13,5 @@ Ingresar desde un browser a:
 DEPLOY ANGULAR APP TO FORGE IO
 -------------------------------
 ng build --prod -vc=true
+subir por ftp
 http://controlgastos.getforge.io/

@@ -59,6 +59,16 @@
             [(ngModel)]="nuevoImporte" 
             (keyup.enter)="confirm()"
             (click)="importe2.select()" />
+
+    <!--<input #importe2 
+            autofocus
+            name="importe" 
+            class="form-control"
+            [class.importeNegativo]="!nuevoDebCred" 
+            (blur)="transformAmount($event)"
+            [(ngModel)]="nuevoImporte" 
+            (keyup.enter)="confirm()"
+            (click)="importe2.select()" />-->
       <br/>
       <table width="100%">
           <thead>

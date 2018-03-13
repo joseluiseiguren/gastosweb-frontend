@@ -8,4 +8,6 @@ import 'hammerjs';
 })
 export class AppComponent {
   pageTitle = 'app';
+
+  constructor() {  }   
 }

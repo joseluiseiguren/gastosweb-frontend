@@ -3,6 +3,7 @@ import { User } from '../models/user';
 import { NgForm } from '@angular/forms';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
+import { IpService } from '../services/ip.service';
 
 @Component({
   selector: 'app-registracion',
@@ -19,8 +20,9 @@ export class RegistracionComponent implements OnInit {
   monedas = ['$', 'U$D', '€'];
 
   constructor(private _userService: UsersService,
-              private _helperService: HelperService) { 
-    this.model.moneda = "$";
+              private _helperService: HelperService,
+              private _ipService: IpService) { 
+    this.model.moneda = "$";    
   }
 
   ngOnInit() {

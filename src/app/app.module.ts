@@ -41,6 +41,8 @@ import { ErrorMessageComponent } from './error-message/error-message.component';
 import { SumaryanioComponent } from './sumaryanio/sumaryanio.component';
 import { UserprofileComponent } from './userprofile/userprofile.component';
 import { SumaryhistoricoComponent } from './sumaryhistorico/sumaryhistorico.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { IpService } from './services/ip.service';
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
@@ -96,6 +98,7 @@ const routes: Routes = [
               BsModalService,
               UsersService,
               ConceptoService, 
+              IpService,
               HelperService,
               UrlService,
               AuthGuard ,
@@ -108,6 +111,7 @@ const routes: Routes = [
                 provide: APP_CONFIG,
                 useValue: APP_DI_CONFIG
               },
+              {provide: LocationStrategy, useClass: HashLocationStrategy},
               LocalizacionService,
               { provide: LOCALE_ID,
                 useValue: window.navigator.language }

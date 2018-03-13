@@ -39,7 +39,7 @@
 - popup de carga de gastos diario: no tener que cargar los decimales obligatoriamente
 - Conceptos que no sumen ni resten: y que puedan ser cargados en multiples monedas
 - Cuando hay error, el mensaje tapa el logout
-- No funciona el routing en prod
-- Tener un file con la URL de webapi de test y otro de prod
+    - No funciona el routing en prod
+    - Tener un file con la URL de webapi de test y otro de prod
 - En celular se ve mal 
 

@@ -13,9 +13,9 @@ export class UsersService {
     constructor(private _http: HttpClient,
                 private _urlService: UrlService) { }
 
-    login(email:string, password:string ) : Observable<boolean> {
+    login(email:string, password:string, location:string ) : Observable<boolean> {
         return this._http.post<any>(this._urlService.urlLogin(), 
-                {email, password})
+                {email, password, location})
                 .map(user => {
                     // login successful if there's a jwt token in the response
                     if (user && user.token) {
