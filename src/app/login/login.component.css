@@ -9,7 +9,7 @@ div.polaroid {
     position: absolute;
     left: 50%;
     top: 20%;
-    transform: translate(-50%, -20%);   
+    transform: translate(-50%, -20%);
 }
 
 .main {
@@ -20,6 +20,7 @@ div.polaroid {
     top: 0;
     background-color: cornsilk;
     z-index: 10;
+    overflow: auto;
 }
 
 .center {
@@ -64,3 +65,47 @@ div.polaroid {
     float: right;
 }
 
+@media only screen and (max-width: 600px) {
+    div.polaroid {
+        width: 95%;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        box-shadow: none;
+        transform: translate(-50%, -10%);
+    }
+
+    .titulo {
+        font-size: 15px; 
+        width: auto;
+    }
+
+    .alert-danger {
+        font-size: 10px; 
+    }
+
+    .form-control {
+        font-size: 10px; 
+    }
+
+    .form-group {
+        margin-top: 5px; 
+    }
+
+    label {
+        font-size: 10px; 
+    }
+
+    .btn {
+        font-size: 10px; 
+    }
+
+    .alert {
+        font-size: 10px; 
+    }
+
+    .help-block {
+        font-size: 10px; 
+    }
+
+    
+}
