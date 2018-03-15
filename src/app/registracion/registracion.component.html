@@ -54,7 +54,7 @@
                        pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"
                        [(ngModel)]="fechaNacim" 
                        name="fechanacimiento"
-                       placeholder="Fecha Nacimiento (DD/MM/YYYY)"
+                       placeholder="DD/MM/YYYY"
                        #fechanacim="ngModel"/>
                 <div [hidden]="fechanacim.valid || fechanacim.pristine" class="alert alert-danger">
                       Fecha de Nacimiento Invalida
