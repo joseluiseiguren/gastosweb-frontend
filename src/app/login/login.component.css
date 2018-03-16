@@ -1,26 +1,15 @@
 
 div.polaroid {
-    width: auto;
+    width: 500px;
     padding: 10px 10px 0px 10px;
     border: 1px solid #BFBFBF;
     background-color:honeydew;
     box-shadow: 10px 10px 5px #aaaaaa;
-    
-    position: absolute;
-    left: 50%;
-    top: 20%;
-    transform: translate(-50%, -20%);
+    display: inline-block;
 }
 
-.main {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background-color: cornsilk;
-    z-index: 10;
-    overflow: auto;
+.polaroidContainer {
+    text-align: center;
 }
 
 .center {
@@ -28,15 +17,23 @@ div.polaroid {
     margin-top: 20px;
 }
 
+.help-block {
+    text-align: left;
+}
+
+.alert {
+    text-align: left;
+}
+
 .titulo {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     color: #7c795d; 
     font-family: 'Trocchi', serif; 
-    font-size: 30px; 
+    font-size: 20px; 
     font-weight: normal; 
     line-height: 48px;
     text-align: center;
-    width: 300px;
+    width: auto;
 }
 
 /* enable absolute positioning */
@@ -62,7 +59,9 @@ div.polaroid {
 .registracion {
     margin-top: 10px;
     margin-right: 10px;
-    float: right;
+    text-align: right;
+    margin-bottom: 10px;
+
 }
 
 @media only screen and (max-width: 600px) {
@@ -71,7 +70,7 @@ div.polaroid {
         margin-top: 5px;
         margin-bottom: 10px;
         box-shadow: none;
-        transform: translate(-50%, -10%);
+        /*transform: translate(-50%, -10%);*/
     }
 
     .titulo {

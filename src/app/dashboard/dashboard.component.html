@@ -1,3 +1,4 @@
+<!--
 <div class="main">
   <div class="nav">
       <ul>
@@ -22,5 +23,27 @@
     <router-outlet></router-outlet>
   </div>
 
+</div>
+-->
+<div class="nav">
+    <ul>
+      <li><a [class.active]="urlActual == urlDiario" (click)="route(urlDiario)">Diario</a></li>
+      <li><a [class.active]="urlActual == urlMensual" (click)="route(urlMensual)">Mensual</a></li>
+      <li><a [class.active]="urlActual == urlAnual" (click)="route(urlAnual)">Anual</a></li>
+      <li><a [class.active]="urlActual == urlHistorico" (click)="route(urlHistorico)">Historico</a></li>
+      <li><a [class.active]="urlActual == urlConceptos" (click)="route(urlConceptos)">Conceptos</a></li>
+      <li class="user"><a>
+                          <i class="glyphicon glyphicon-user"></i>
+                          {{userName}}
+                        </a>
+        <ul>
+          <li><a [routerLink]="['/dashboard/userprofile']">Perfil</a></li>
+          <li><a (click)="logout()">Log Out</a></li>
+        </ul>
+      </li>
+    </ul>
+</div>
+<div style="margin-top:43px; margin-left:1px;">
+  <router-outlet></router-outlet>
 </div>
 

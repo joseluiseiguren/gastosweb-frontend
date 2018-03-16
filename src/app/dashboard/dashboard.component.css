@@ -1,4 +1,4 @@
-.main {
+/*.main {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -7,9 +7,10 @@
     background: darkgray;
     z-index: 10;
     overflow-y:scroll;
-}
+}*/
 
 .nav {
+  top: 0px;
   position: fixed;
   width: 100%;
 }
@@ -57,54 +58,61 @@
     font-size: .7em;
   }
 
-  /*******************************************
-     Style menu for larger screens
-  
-     Using 650px (130px each * 5 items), but ems
-     or other values could be used depending on other factors
-  ********************************************/
-  
-  @media screen and (min-width: 650px) {
-    .nav li {
-      width: 130px;
-      /*width: calc(100% / 6);*/
-      border-bottom: none;
-      height: 40px;
-      line-height: 40px;
-      font-size: 1.0em;
-      display: inline-block;
-      margin-right: -4px;
-    }
-  
-    .nav a {
-      border-bottom: none;
-    }
-  
-    .nav > ul > li {
-      text-align: center;
-    }
-  
-    .nav > ul > li > a {
-      padding-left: 0;
-    }
-  
-    /* Sub Menus */
-    .nav li ul {
-      position: absolute;
-      display: none;
-      width: inherit;
-    }
-  
-    .nav li:hover ul {
-      display: block;
-    }
-  
-    .nav li ul li {
-      display: block;
-    }
-  }
-
   .nav > ul > li:last-child
   {
       float:right;
   }
+
+/*******************************************
+    Style menu for larger screens
+
+    Using 650px (130px each * 5 items), but ems
+    or other values could be used depending on other factors
+********************************************/
+
+@media screen and (min-width: 600px) {
+  .nav li {
+    width: 130px;
+    /*width: calc(100% / 6);*/
+    border-bottom: none;
+    height: 40px;
+    line-height: 40px;
+    font-size: 1.0em;
+    display: inline-block;
+    margin-right: -4px;
+  }
+
+  .nav a {
+    border-bottom: none;
+  }
+
+  .nav > ul > li {
+    text-align: center;
+  }
+
+  .nav > ul > li > a {
+    padding-left: 0;
+  }
+
+  /* Sub Menus */
+  .nav li ul {
+    position: absolute;
+    display: none;
+    width: inherit;
+  }
+
+  .nav li:hover ul {
+    display: block;
+  }
+
+  .nav li ul li {
+    display: block;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .nav {
+      display: none;
+  } 
+}
+ 
