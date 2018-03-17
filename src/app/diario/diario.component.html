@@ -43,6 +43,11 @@
       </tbody>
     </table>
   </div>
+  <div class="mobile">
+    <app-sumarydia [fecha]="bsValue" [conceptosDiarios]="conceptos"></app-sumarydia>
+    <app-sumarymes [fecha]="bsValue" [sumaryMonth]="sumMonth" (LoadingStatus)="childLoadingStatus($event)"> </app-sumarymes>
+    <app-sumaryanio [fecha]="bsValue" [sumaryAnio]="sumAnio" (LoadingStatus)="childLoadingStatus($event)"> </app-sumaryanio>
+  </div>
 </div>
 
 <ng-template #template>

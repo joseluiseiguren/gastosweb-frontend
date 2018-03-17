@@ -31,23 +31,27 @@
     padding-top: 500px;
 }
 
+.mobile {
+    display: none;
+}
+
 
 @media only screen and (max-width: 600px) {
-    .nav {
-        display: none;
-    }
-  
-    .right {
-        /*display: none;*/
+    .mobile {
+        display: initial;
         width: 100%;
         position:relative;
         margin:0 auto;
         right:0;
     }
 
+    .right {
+        display: none;
+    }
+
     .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
         padding: 4px;
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .left {
