@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ElementRef, ViewRef, ComponentRef, ViewContainerRef, ViewChild, ContentChild, SimpleChanges, Inject } from '@angular/core';
+import { Component, OnInit, TemplateRef, ElementRef, ViewRef, ComponentRef, ViewContainerRef, ViewChild, ContentChild, SimpleChanges, Inject, ViewChildren, QueryList, ContentChildren } from '@angular/core';
 import { DiarioService } from '../services/diario.service';
 import { IConceptoDiario } from '../models/concepto.diario';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -35,7 +35,7 @@ export class DiarioComponent implements OnInit {
   };
   loading: Boolean = false;
   loadingModal: Boolean = false;
-  
+
   constructor(private _conceptosDiarioService: DiarioService,
               private _modalService: BsModalService,
               private _userService: UsersService,
@@ -50,6 +50,10 @@ export class DiarioComponent implements OnInit {
 
   ngOnInit() {
     this.getData();
+
+    this._modalService.onShown.subscribe(() => {
+      document.getElementById('importe2').focus();  
+    });
   }
 
   changeDay(newValue: Date) {
@@ -82,7 +86,14 @@ export class DiarioComponent implements OnInit {
     this.conceptoSel = concepto;
     this.nuevoImporte = Math.abs(this.conceptoSel.importe);
     this.nuevoDebCred = this.conceptoSel.credito;
-    this.modalRef = this._modalService.show(template, {class: 'modal-sm', ignoreBackdropClick: false, animated: true, keyboard: true}  );
+
+    
+    this.modalRef = this._modalService.show(template, 
+                                      {class: 'modal-sm', 
+                                       ignoreBackdropClick: false, 
+                                       animated: true, 
+                                       keyboard: true,
+                                       focus: true}  );
   }
  
   confirm(): void {
@@ -135,5 +146,7 @@ export class DiarioComponent implements OnInit {
   childLoadingStatus(errorMessage: string):void{
     this.errorMessage = errorMessage;
   }
+
+  
 
 }
