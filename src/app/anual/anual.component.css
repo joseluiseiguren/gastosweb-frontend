@@ -10,16 +10,8 @@ select {
     border: 1px solid #ccc;
     height: 34px;
     background: aliceblue;
-    /*float: left;*/
     display: block;
     margin: 0 auto;
-  }
-  
-  @media screen and (min-width:0\0) {
-      select {
-          background:none\9;
-          padding: 5px\9;
-      }
   }
 
 .sumaryGral {
@@ -56,4 +48,43 @@ select {
 
 .combos {
     margin-bottom: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+    select {
+        font-size: 12px;
+        padding-top: 0px;
+    }
+
+    .sumaryGral {
+        padding-left: 0px;
+        margin-right: 5px;
+        width: 100%;
+        position: relative;
+        display: inline-block;
+        /*border: black;
+        border-style: solid;*/
+    }
+
+    .content {
+        padding-right: 10px;
+        
+    }
+
+    .conceptos {
+        clear: both;
+        width: 100%;
+        margin-left: 5px;
+        /*border: black;
+        border-style: solid;*/
+    }
+
+    .clearfix {
+        font-size: 12px;
+    }
+
+    .cellDetalleConcepto {
+        font-size: 10px;
+    }
+    
 }

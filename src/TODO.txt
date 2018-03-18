@@ -43,6 +43,7 @@
     - Tener un file con la URL de webapi de test y otro de prod
 - En celular se ve mal 
 - hover en mensual, anual e historico
+- version mobile, que muestre el teclado numerico en input de carga
 
 
 CEL JOSEPH

@@ -1,7 +1,7 @@
 <app-error-message *ngIf="errorMessage.length != 0 && loading === false" [message]="errorMessage"></app-error-message>
 <app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>
 
-<div *ngIf="loading === false && errorMessage.length == 0">
+<div *ngIf="loading === false && errorMessage.length == 0" class="content">
   <div class="sumaryGral">
     <div class="combos">
       <select #selectAnio (change)="changeAnio(selectAnio.value)">
