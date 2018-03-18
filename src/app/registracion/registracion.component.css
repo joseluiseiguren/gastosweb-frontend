@@ -7,11 +7,6 @@ div.polaroid {
     border: 1px solid #BFBFBF;
     background-color:honeydew;
     box-shadow: 10px 10px 5px #aaaaaa;
-    
-    /* para centrar horizontalmente */ 
-    /*left: 50%;
-    position: absolute;
-    transform: translate(-50%, 0%); */
     display: inline-block;
 }
 

@@ -37,3 +37,44 @@
 .formsTitulo {
     text-align: center;
 }
+
+@media only screen and (max-width: 600px) {
+    
+    .conceptosTable {
+        font-size: 11px;
+        width: 97%;
+        margin-right: 5px;
+        margin-top: 15px;
+    }
+    
+    .forms {
+        box-shadow: none;
+    }
+
+    .forms h3 {
+        font-size: 14px;
+    }
+
+    .form-control {
+        font-size: 12px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    .btn {
+        font-size: 12px;
+    }
+
+    .addNew {
+        position: fixed;
+        top: 10px;
+        padding-left: 0px;
+        margin-left: 5px;
+    }
+
+    strong{
+        font-size: 12px;
+    }
+}

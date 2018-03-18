@@ -44,7 +44,10 @@
 - En celular se ve mal 
 - hover en mensual, anual e historico
 - version mobile, que muestre el teclado numerico en input de carga
-
+- cuando esta el input de diario abierto, y expira la sesion, no te lleva directo a la pantalla de login
+- probar errores en version mobile
+- cuando esta el submenu de usuario abiero, y se hace click en otro lado que no sea el nav, no se cierra
+- conceptos: hacer popup de alta y modificacion
 
 CEL JOSEPH
 '14', '2018-03-13 21:13:42', '1', '', '', '{\"height\":534,\"width\":320,\"appCodeName\":\"Mozilla\",\"appVersion\":\"5.0 (Linux; Android 5.1.1; SM-J111M Build/LMY47V) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.137 Mobile Safari/537.36\",\"language\":\"en-US\",\"platform\":\"Linux armv7l\",\"userAgent\":\"Mozilla/5.0 (Linux; Android 5.1.1; SM-J111M Build/LMY47V) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.137 Mobile Safari/537.36\"}'

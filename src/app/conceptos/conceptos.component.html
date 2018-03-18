@@ -2,28 +2,29 @@
 <app-error-message *ngIf="errorMessageGridConceptos.length != 0 && loadingGridConceptos === false" [message]="errorMessageGridConceptos"></app-error-message>
 
 <div *ngIf="loadingGridConceptos === false && errorMessageGridConceptos.length == 0">
+    
     <div class="conceptosTable" *ngIf="conceptos!==undefined">
-    <table class="table">
-        <thead class="conceptosTableHeader">
-        <tr>
-            <th>Concepto</th>
-            <th>Tipo</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="selected" id="tr{{item.idconcepto}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
-            (click)="cambiarPantalla(2, item);"
-            [class.info]="odd"
-            [class.success]="even">
-            <td [class.importeNegativo]="item.credito == false">
-            {{item.descripcion}}
-            </td>
-            <td [class.importeNegativo]="item.credito == false">
-                {{(item.credito == true) ? 'Credito' : 'Debito'}}
-            </td>
-        </tr>
-        </tbody>
-    </table>
+        <table class="table">
+            <thead class="conceptosTableHeader">
+            <tr>
+                <th>Concepto</th>
+                <th>Tipo</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="selected" id="tr{{item.idconcepto}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
+                (click)="cambiarPantalla(2, item);"
+                [class.info]="odd"
+                [class.success]="even">
+                <td [class.importeNegativo]="item.credito == false">
+                {{item.descripcion}}
+                </td>
+                <td [class.importeNegativo]="item.credito == false">
+                    {{(item.credito == true) ? 'Credito' : 'Debito'}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="addNew">
