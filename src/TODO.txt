@@ -35,15 +35,15 @@
 - usar el componente loading y el de errores en el login
 - mejorar look and feel del loading para que sea centrado en pantalla
 - cuando hay error generico, el desplegable del usuario queda por atras
-- popup de carga de gastos diario: poner foco en input siempre
+    - popup de carga de gastos diario: poner foco en input siempre
 - popup de carga de gastos diario: no tener que cargar los decimales obligatoriamente
 - Conceptos que no sumen ni resten: y que puedan ser cargados en multiples monedas
 - Cuando hay error, el mensaje tapa el logout
     - No funciona el routing en prod
     - Tener un file con la URL de webapi de test y otro de prod
-- En celular se ve mal 
-- hover en mensual, anual e historico
-- version mobile, que muestre el teclado numerico en input de carga
+    - En celular se ve mal 
+    - hover en mensual, anual e historico
+    - version mobile, que muestre el teclado numerico en input de carga
 - cuando esta el input de diario abierto, y expira la sesion, no te lleva directo a la pantalla de login
 - probar errores en version mobile
 - cuando esta el submenu de usuario abiero, y se hace click en otro lado que no sea el nav, no se cierra
