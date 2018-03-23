@@ -41,7 +41,7 @@ import { ErrorMessageComponent } from './error-message/error-message.component';
 import { SumaryanioComponent } from './sumaryanio/sumaryanio.component';
 import { UserprofileComponent } from './userprofile/userprofile.component';
 import { SumaryhistoricoComponent } from './sumaryhistorico/sumaryhistorico.component';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HashLocationStrategy, LocationStrategy, CurrencyPipe } from '@angular/common';
 import { IpService } from './services/ip.service';
 
 const routes: Routes = [    
@@ -101,6 +101,7 @@ const routes: Routes = [
               IpService,
               HelperService,
               UrlService,
+              CurrencyPipe,
               AuthGuard ,
               {
                 provide: HTTP_INTERCEPTORS,

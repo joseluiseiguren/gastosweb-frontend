@@ -64,8 +64,14 @@ export class UsersService {
 
     isSessionExpired(): boolean {
         let token = localStorage.getItem('alow');
-        if (token === null || 
-            this.jwtHelper.isTokenExpired(token) === true) {
+        if (token === null) {
+            return true;
+        }
+
+        //console.log("expira: " + this.jwtHelper.getTokenExpirationDate(token).toString());
+
+        if (this.jwtHelper.isTokenExpired(token) === true) {
+            
             return true;
         }
 

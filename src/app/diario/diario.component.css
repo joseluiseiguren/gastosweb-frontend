@@ -35,6 +35,9 @@
     display: none;
 }
 
+.inputimporte { 
+    text-align: right; 
+}
 
 @media only screen and (max-width: 600px) {
     .mobile {

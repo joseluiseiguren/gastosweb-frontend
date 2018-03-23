@@ -51,58 +51,60 @@
 </div>
 
 <ng-template #template>
-  <div class="modal-body text-center" #divcontent>
-    <p>{{conceptoSel.descripcion}}</p>
+  <form (ngSubmit)="aceptar(registerForm)" 
+        #cargaForm="ngForm" 
+        novalidate>
+    <div class="modal-body text-center" #divcontent>
+      <p>{{conceptoSel.descripcion}}</p>
 
-    <input #importe2
-            type="tel"
-            id="importe2" 
-            autofocus
-            name="importe" 
-            class="form-control"
-            [class.importeNegativo]="!nuevoDebCred" 
-            currencyMask
-            [options]="currencyMaskOptions"
-            [(ngModel)]="nuevoImporte" 
-            (keyup.enter)="confirm()"
-            (click)="importe2.select()" />
-
-    <!--<input #importe2 
-            autofocus
-            name="importe" 
-            class="form-control"
-            [class.importeNegativo]="!nuevoDebCred" 
-            (blur)="transformAmount($event)"
-            [(ngModel)]="nuevoImporte" 
-            (keyup.enter)="confirm()"
-            (click)="importe2.select()" />-->
+      <input type="tel"
+              id="nuevoImporte"
+              class="form-control inputimporte" 
+              [class.importeNegativo]="!nuevoDebCred" 
+              required
+              pattern="^((\d+)|(\d{1,3})(\,\d{3}|)*)(\.\d{2}|)$"
+              autofocus
+              autocomplete="off"
+              [(ngModel)]="model" 
+              name="nuevoImporte"
+              placeholder="Importe"
+              #nuevoImporte="ngModel"/>
+      <div [hidden]="nuevoImporte.valid || nuevoImporte.pristine" class="alert alert-danger">
+          Importe Invalido
+      </div>
       <br/>
       <table width="100%">
-          <thead>
-            <tr>
-              <th class="debito">
-                <label for="creditoopt">Credito</label>
-                <input type="radio" 
-                       id="creditoopt" 
-                       name="debcred" 
-                       (click)="changeNuevoDebCred(1)"
-                       [checked]="nuevoDebCred === 1">
-              </th>
-              <th class="debito importeNegativo">
-                <label for="debitoopt">Debito</label>
-                <input type="radio" 
-                       id="debitoopt" 
-                       name="debcred"
-                       (click)="changeNuevoDebCred(0)"
-                       [checked]="nuevoDebCred === 0">
-              </th>
-            </tr>
-          </thead>
-        </table>
+        <thead>
+          <tr>
+            <th class="debito">
+              <label for="creditoopt">Credito</label>
+              <input type="radio" 
+                    id="creditoopt" 
+                    name="debcred" 
+                    (click)="changeNuevoDebCred(1)"
+                    [checked]="nuevoDebCred === 1">
+            </th>
+            <th class="debito importeNegativo">
+              <label for="debitoopt">Debito</label>
+              <input type="radio" 
+                    id="debitoopt" 
+                    name="debcred"
+                    (click)="changeNuevoDebCred(0)"
+                    [checked]="nuevoDebCred === 0">
+            </th>
+          </tr>
+        </thead>
+      </table>
       <br/>
-      <button type="submit" class="btn btn-success" (click)="confirm()" >Aceptar</button>
-      <br/>
+      <button type="submit"
+                    [disabled]="loadingModal" 
+                    class="btn btn-success"
+                    [disabled]="!cargaForm.form.valid">
+        <span class="glyphicon glyphicon-ok"></span>
+        Aceptar
+      </button>
       <app-loading *ngIf="loadingModal === true" [texto]="'Cargando...'"></app-loading>
-      <app-error-message *ngIf="errorMessageModal.length != 0 && loadingModal === false" [message]="errorMessageModal"></app-error-message>
-  </div>
+      <app-error-message *ngIf="errorMessageModal.length != 0 && loadingModal === false" [message]="errorMessageModal"></app-error-message>    
+    </div>
+  </form>
 </ng-template>

@@ -60,6 +60,7 @@ export class LoginComponent implements OnInit {
               .subscribe(
                   data => {
                     if (data === true) {
+                      this.loading = false;
                       this.ingresarApp();          
                     }
                     else {

@@ -22,6 +22,10 @@ export class HelperService {
             case 400: /* bad request */
               message = error.error.message;
               break;
+
+            case 401: /* Unathorized */
+              message = "Session Expirada";
+              break;
             
             case 500: /* internal server error */
               message = "Error Inesperado: " + error.error.errorId;

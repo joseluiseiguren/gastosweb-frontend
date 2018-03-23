@@ -10,6 +10,8 @@ import { APP_CONFIG } from '../app.config/app-config.constants';
 import { IAppConfig } from '../app.config/app-config.interface';
 import { HelperService } from '../services/helper.service';
 import { SumaryAnio } from '../models/sumaryanio';
+import { CurrencyPipe } from '@angular/common';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-diario',
@@ -20,7 +22,6 @@ export class DiarioComponent implements OnInit {
   bsValue: Date = new Date();
   conceptos: IConceptoDiario[];
   conceptoSel: IConceptoDiario;
-  nuevoImporte: number;
   nuevoDebCred: number;
   errorMessage: string = "";
   errorMessageModal: string = "";
@@ -31,17 +32,20 @@ export class DiarioComponent implements OnInit {
     prefix: this._userService.getMoneda() + ' ',
     thousands: this._appConfig.SEPARADOR_MILES,
     decimal: this._appConfig.SEPARADOR_DECIMALES,
-    allowNegative: false
+    allowNegative: false,
+    precision: 2
   };
   loading: Boolean = false;
   loadingModal: Boolean = false;
+  model: string = "";
 
   constructor(private _conceptosDiarioService: DiarioService,
               private _modalService: BsModalService,
               private _userService: UsersService,
               private _localizacionService: LocalizacionService,
               @Inject( APP_CONFIG ) private _appConfig: IAppConfig,
-              private _helperService: HelperService) { 
+              private _helperService: HelperService,
+              private _currencyPipe:CurrencyPipe) { 
     this.sumMonth.egresos = 0;
     this.sumMonth.ingresos = 0;
     this.sumAnio.egresos = 0;
@@ -52,7 +56,7 @@ export class DiarioComponent implements OnInit {
     this.getData();
 
     this._modalService.onShown.subscribe(() => {
-      document.getElementById('importe2').focus();  
+      (<HTMLInputElement>document.getElementById('nuevoImporte')).focus();
     });
   }
 
@@ -84,10 +88,13 @@ export class DiarioComponent implements OnInit {
     this.loadingModal = false;
     this.errorMessageModal = "";
     this.conceptoSel = concepto;
-    this.nuevoImporte = Math.abs(this.conceptoSel.importe);
+    if (Math.abs(this.conceptoSel.importe) != 0){
+      this.model = Math.abs(this.conceptoSel.importe).toLocaleString(undefined, {minimumFractionDigits: 2});
+    } else {
+      this.model = "";
+    }
     this.nuevoDebCred = this.conceptoSel.credito;
 
-    
     this.modalRef = this._modalService.show(template, 
                                       {class: 'modal-sm', 
                                        ignoreBackdropClick: false, 
@@ -96,12 +103,35 @@ export class DiarioComponent implements OnInit {
                                        focus: true}  );
   }
  
-  confirm(): void {
-    this.loadingModal = true;
+  decline(): void {
+    this.modalRef.hide();
+  }
+
+  changeNuevoDebCred(credito: number): void {
+    this.nuevoDebCred = credito;
+  }
+
+  childLoadingStatus(errorMessage: string):void{
+    this.errorMessage = errorMessage;
+  }
+
+  aceptar(form: NgForm){
+    this.loadingModal  = true;
     this.errorMessageModal = "";
+
+    // se eliminan las comas
+    this.model = this.model.replace(/,/g, '');
+
+    // se valida que el importe sea correcto
+    if (isNaN(parseFloat(this.model))){
+      console.log("invalid");
+      this.loadingModal  = false;
+      return;
+    }
+
     this._conceptosDiarioService.setConceptoImporte(
                                     this.bsValue, 
-                                    (this.nuevoDebCred == 1) ? this.nuevoImporte : this.nuevoImporte*(-1), 
+                                    (this.nuevoDebCred == 1) ? parseFloat(this.model) : parseFloat(this.model)*(-1), 
                                     this.conceptoSel.idconcepto)
                 .subscribe(
                   data => {
@@ -115,7 +145,7 @@ export class DiarioComponent implements OnInit {
                       this.sumAnio.egresos -= Math.abs(this.conceptoSel.importe);
                     }
                     
-                    this.conceptoSel.importe = (this.nuevoDebCred == 1) ? this.nuevoImporte : this.nuevoImporte*(-1);
+                    this.conceptoSel.importe = (this.nuevoDebCred == 1) ? parseFloat(this.model) : parseFloat(this.model)*(-1);
                     this.conceptoSel.credito = this.nuevoDebCred;
                 
                     if (this.conceptoSel.credito == 1){
@@ -132,21 +162,7 @@ export class DiarioComponent implements OnInit {
                   error => {
                     this.loadingModal = false; 
                     this.errorMessageModal = this._helperService.getErrorMessage(error);
+                    this.modalRef.hide();
                   });
   }
- 
-  decline(): void {
-    this.modalRef.hide();
-  }
-
-  changeNuevoDebCred(credito: number): void {
-    this.nuevoDebCred = credito;
-  }
-
-  childLoadingStatus(errorMessage: string):void{
-    this.errorMessage = errorMessage;
-  }
-
-  
-
 }
