@@ -12,10 +12,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="selected" id="tr{{item.idconcepto}}" *ngFor="let item of conceptos; let odd=odd; let even=even;" 
-                (click)="cambiarPantalla(2, item);"
-                [class.info]="odd"
-                [class.success]="even">
+            <tr id="tr{{item.idconcepto}}" *ngFor="let item of conceptos;" 
+                (click)="cambiarPantalla(2, item);">
                 <td [class.importeNegativo]="item.credito == false">
                 {{item.descripcion}}
                 </td>

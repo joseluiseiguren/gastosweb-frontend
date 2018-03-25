@@ -31,12 +31,33 @@
     padding-top: 500px;
 }
 
+.table tr:hover{
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+.table tr:nth-child(odd) td{
+    background-color: #e9ecf5;
+}
+
+.table tr:nth-child(even) td{
+    background-color: white;
+}
+
 .mobile {
     display: none;
 }
 
 .inputimporte { 
     text-align: right; 
+}
+
+.odd {
+    background-color: azure;
+}
+
+.even {
+    background-color: bisque;
 }
 
 @media only screen and (max-width: 600px) {
