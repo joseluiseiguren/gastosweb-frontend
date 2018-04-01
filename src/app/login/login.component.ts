@@ -33,16 +33,22 @@ export class LoginComponent implements OnInit {
         .subscribe(
           data => { 
             this.location.ip = data.ip;
-            this.location.country_code = data.country_code;
-            this.location.country_name = data.country_name;
-            this.location.region_code = data.region_code;
-            this.location.region_name = data.region_name;
             this.location.city = data.city;
-            this.location.zip_code = data.zip_code;
-            this.location.time_zone = data.time_zone;
+            this.location.region = data.region;
+            this.location.region_code = data.region_code;
+            this.location.country = data.country;
+            this.location.country_name = data.country_name;
+            this.location.continent_code = data.continent_code;
+            this.location.postal = data.postal;
             this.location.latitude = data.latitude;
             this.location.longitude = data.longitude;
-            this.location.metro_code = data.metro_code;
+            this.location.timezone = data.timezone;
+            this.location.utc_offset = data.utc_offset;
+            this.location.country_calling_code = data.country_calling_code;
+            this.location.currency = data.currency;
+            this.location.languages = data.languages;
+            this.location.asn = data.asn;
+            this.location.org = data.org;
           },
           error => {
             console.log(error);

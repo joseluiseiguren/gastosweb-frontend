@@ -13,7 +13,8 @@ export class IpService {
   constructor(private _http: HttpClient) { }
 
   getClientIp(): Observable<any> {
-    let url = "http://freegeoip.net/json/";
+    //let url = "http://freegeoip.net/json/";
+    let url = "https://ipapi.co/json/";
     
     return this._http.get(url)
                     .do(data => JSON.stringify(data))
