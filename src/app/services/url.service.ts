@@ -37,8 +37,8 @@ export class UrlService {
         return this._host + "api/conceptos/mensual/" + fecha + "/sumary";
     }
 
-    urlGetConceptosMovimMes(idConcepto: number, fecha: string): string {
-        return this._host + "api/conceptos/" + idConcepto.toString() + "/movimientos/mensual/" + fecha;
+    urlGetConceptosMovimMes(idConcepto: string, fecha: string): string {
+        return this._host + "api/conceptos/" + idConcepto + "/movimientos/mensual/" + fecha;
     }
 
     urlGetSumaryMensual(fecha: string): string {
@@ -65,8 +65,8 @@ export class UrlService {
         return this._host + "api/conceptos/anual/" + anio.toString() + "/sumary";
     }
 
-    urlGetConceptosMovimAnio(idConcepto: number, anio: number): string {
-        return this._host + "api/conceptos/" + idConcepto.toString() + "/movimientos/anual/" + anio.toString();
+    urlGetConceptosMovimAnio(idConcepto: string, anio: number): string {
+        return this._host + "api/conceptos/" + idConcepto + "/movimientos/anual/" + anio.toString();
     }
 
     urlGetUserProfile(idUsuario: number): string {
@@ -81,7 +81,7 @@ export class UrlService {
         return this._host + "api/conceptos/historico/sumary";
     }
 
-    urlGetConceptosMovimHistorico(idConcepto: number): string {
-        return this._host + "api/conceptos/" + idConcepto.toString() + "/movimientos/historico";
+    urlGetConceptosMovimHistorico(idConcepto: string): string {
+        return this._host + "api/conceptos/" + idConcepto + "/movimientos/historico";
     }
 }

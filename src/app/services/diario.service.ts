@@ -48,7 +48,7 @@ export class DiarioService {
                   .do(data => JSON.stringify(data));
   }
 
-  getConceptosMovimMes(idConcepto: number, fecha: string /*YYYYMM*/): Observable<any[]> {
+  getConceptosMovimMes(idConcepto: string, fecha: string /*YYYYMM*/): Observable<any[]> {
     return this._http.get<any[]>(this._urlService.urlGetConceptosMovimMes(idConcepto, fecha))
                     //.delay(3000)
                     .do(data => JSON.stringify(data));
@@ -60,7 +60,7 @@ export class DiarioService {
                   .do(data => JSON.stringify(data));
   }
 
-  getConceptosMovimAnio(idConcepto: number, anio: number /*YYYY*/): Observable<any[]> {
+  getConceptosMovimAnio(idConcepto: string, anio: number /*YYYY*/): Observable<any[]> {
     return this._http.get<any[]>(this._urlService.urlGetConceptosMovimAnio(idConcepto, anio))
                     //.delay(3000)
                     .do(data => JSON.stringify(data));
@@ -72,7 +72,7 @@ export class DiarioService {
                   .do(data => JSON.stringify(data));
   }
 
-  getConceptosMovimHistorico(idConcepto: number): Observable<any[]> {
+  getConceptosMovimHistorico(idConcepto: string): Observable<any[]> {
     return this._http.get<any[]>(this._urlService.urlGetConceptosMovimHistorico(idConcepto))
                     //.delay(3000)
                     .do(data => JSON.stringify(data));

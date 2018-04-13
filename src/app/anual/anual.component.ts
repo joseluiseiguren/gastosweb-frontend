@@ -74,7 +74,7 @@ export class AnualComponent implements OnInit {
 
   loadDetail(event: boolean, ct: any) {
     if (event == true) {
-      this._diarioService.getConceptosMovimAnio(ct.idconcepto, this.bsValue.getFullYear())
+      this._diarioService.getConceptosMovimAnio(ct.idConcepto, this.bsValue.getFullYear())
         .subscribe(
             data => {
               ct.dataAdic = new Array<any>();

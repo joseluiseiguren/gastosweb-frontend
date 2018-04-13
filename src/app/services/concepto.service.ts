@@ -29,7 +29,7 @@ export class ConceptoService {
                  credito: credito});
     }
 
-    updateConcepto(idConcepto: number, descripcion:string, credito:boolean) : Observable<void> {
+    updateConcepto(idConcepto: string, descripcion:string, credito:boolean) : Observable<void> {
         return this._http.put<any>(this._urlService.urlUpdateConcepto(), 
                 {descripcion: descripcion, 
                  credito: credito,

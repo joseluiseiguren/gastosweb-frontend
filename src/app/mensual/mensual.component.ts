@@ -100,7 +100,7 @@ export class MensualComponent implements OnInit {
   loadDetail(event: boolean, ct: any) {
     if (event == true) {
       let fecha = this.bsValue.getFullYear().toString() + (this.bsValue.getMonth()+1).toString().padStart(2, '0');
-      this._diarioService.getConceptosMovimMes(ct.idconcepto, fecha)
+      this._diarioService.getConceptosMovimMes(ct.idConcepto, fecha)
         .subscribe(
             data => {
               ct.dataAdic = new Array<any>();

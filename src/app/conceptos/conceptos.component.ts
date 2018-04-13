@@ -25,7 +25,7 @@ export class ConceptosComponent implements OnInit {
           private _helperService: HelperService) {
     this.errorMessageGridConceptos = "";
     this.model.descripcion = "";
-    this.model.id = 0;
+    this.model.id = "";
     this.model.suma = false;
     this.pantallaActual = 0;
     this.getConceptos();
@@ -44,7 +44,7 @@ export class ConceptosComponent implements OnInit {
     this._conceptoService.getConceptos()
         .subscribe(
             data => { 
-              this.conceptos = data;
+              this.conceptos = data;              
               this.loadingGridConceptos = false;
             },
             error => {
@@ -61,7 +61,7 @@ export class ConceptosComponent implements OnInit {
     if (conceptoSeleccionado != null) {
       this.model.descripcion = conceptoSeleccionado.descripcion;
       this.model.suma = conceptoSeleccionado.credito;
-      this.model.id = conceptoSeleccionado.id;
+      this.model.id = conceptoSeleccionado._id;
     } 
   }
 
@@ -89,7 +89,7 @@ export class ConceptosComponent implements OnInit {
                     });
     }
     else {
-      // MODIFICACION
+      // MODIFICACION      
       this._conceptoService.updateConcepto(
                             this.model.id,
                             this.model.descripcion, 

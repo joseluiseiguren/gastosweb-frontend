@@ -12,7 +12,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr id="tr{{item.idconcepto}}" *ngFor="let item of conceptos;" 
+            <tr id="tr{{item._id}}" *ngFor="let item of conceptos;" 
                 (click)="cambiarPantalla(2, item);">
                 <td [class.importeNegativo]="item.credito == false">
                 {{item.descripcion}}

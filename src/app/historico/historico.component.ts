@@ -41,7 +41,7 @@ export class HistoricoComponent implements OnInit {
 
   loadDetail(event: boolean, ct: any) {
     if (event == true) {
-      this._diarioService.getConceptosMovimHistorico(ct.idconcepto)
+      this._diarioService.getConceptosMovimHistorico(ct.idConcepto)
         .subscribe(
             data => {
               ct.dataAdic = new Array<any>();

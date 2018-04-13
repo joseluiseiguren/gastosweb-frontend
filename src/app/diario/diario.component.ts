@@ -93,7 +93,7 @@ export class DiarioComponent implements OnInit {
     } else {
       this.model = "";
     }
-    this.nuevoDebCred = this.conceptoSel.credito;
+    this.nuevoDebCred = (this.conceptoSel.credito) ? 1 : 0;
 
     this.modalRef = this._modalService.show(template, 
                                       {class: 'modal-sm', 
