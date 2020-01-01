@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { User } from '../models/user';
-import { AuthInterceptor } from '../interceptors/AuthInterceptor';
-import { JwtHelper } from 'angular2-jwt';
 import { UrlService } from './url.service';
+import { map, tap } from "rxjs/operators";
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable()
 export class UsersService {
-    jwtHelper: JwtHelper = new JwtHelper();
+    jwtHelper: JwtHelperService = new JwtHelperService();
 
     constructor(private _http: HttpClient,
                 private _urlService: UrlService) { }
@@ -16,7 +16,7 @@ export class UsersService {
     login(email:string, password:string, location:string ) : Observable<boolean> {
         return this._http.post<any>(this._urlService.urlLogin(), 
                 {email, password, location})
-                .map(user => {
+                .pipe(map(user => {
                     // login successful if there's a jwt token in the response
                     if (user && user.token) {
                         // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -26,7 +26,7 @@ export class UsersService {
 
                     return false;
                 }               
-              );
+                ));
     }
 
     register( usuario:User ) : Observable<void> {
@@ -114,7 +114,7 @@ export class UsersService {
     getProfile(): Observable<User> {
         return this._http.get<User>(this._urlService.urlGetUserProfile(this.getUserId()))
                         //.delay(3000)
-                        .do(data => JSON.stringify(data));
+                        .pipe(tap(data => JSON.stringify(data)));
     }
   
 }

@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { UsersService } from '../services/users.service';
 import { Router } from '@angular/router';
+import { tap } from 'rxjs/internal/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -23,7 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     if (localStorage.getItem('alow') !== null) {
       const changedReq = req.clone({ headers: req.headers.set('x-access-token', localStorage.getItem('alow')) });
-      return next.handle(changedReq).do((event: HttpEvent<any>) => {
+      return next.handle(changedReq).pipe(tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
           // do stuff
           //console.log(event);
@@ -40,7 +41,7 @@ export class AuthInterceptor implements HttpInterceptor {
             this._router.navigate(['/login']);
           }
         }
-      });
+      }));
     }
 
     return next.handle(req);
