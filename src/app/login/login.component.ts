@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsersService } from '../services/users.service';
 import { IpService } from '../services/ip.service';
-import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
 @Component({
@@ -11,10 +11,8 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-    model: any = {};
     loading = false;
     location: any = {};
-
     loginForm: FormGroup;
     
     constructor(private router: Router, 
@@ -70,7 +68,7 @@ export class LoginComponent implements OnInit {
     login() {
       this.loading = true;
 
-      this.usersService.login(this.model.username, this.model.password, JSON.stringify(this.location))
+      this.usersService.login(this.loginForm.value.emailFormControl, this.loginForm.value.pwdFormControl, JSON.stringify(this.location))
               .subscribe(
                   data => {
                     if (data === true) {
