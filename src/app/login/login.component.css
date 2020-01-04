@@ -1,4 +1,51 @@
+.loginContainer {
+    padding-top: 25px;  
+    text-align: center;
+  }
+  
+  
+  div.login {
+    width: 500px;
+    padding: 10px 10px 0px 10px;
+    border: 1px solid #BFBFBF;
+    box-shadow: 10px 10px 5px #aaaaaa;
+    display: inline-block;
+  }
+  
+  .full-width-form {
+    width: 100%;
+  }
+  
+  .formfield-full-width {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .mat-register {
+    color: rgb(45, 155, 206);
+  }
+  
+  .register-container{
+    float: left;
+    text-align: left;  
+  }
+  
+  .login-button-container{
+    float: right;
+    text-align: center;  
+  }
+  
+  .buttons-section{
+    padding-top: 10px;
+    padding-bottom: 50px;
+  }
+  
 
+
+
+
+/*
 div.polaroid {
     width: 500px;
     padding: 10px 10px 0px 10px;
@@ -36,23 +83,19 @@ div.polaroid {
     width: auto;
 }
 
-/* enable absolute positioning */
 .inner-addon { 
     position: relative; 
 }
 
-/* style icon */
 .inner-addon .glyphicon {
   position: absolute;
   padding: 10px;
   pointer-events: none;
 }
 
-/* align icon */
 .left-addon .glyphicon  { left:  0px;}
 .right-addon .glyphicon { right: 0px;}
 
-/* add padding  */
 .left-addon input  { padding-left:  30px; }
 .right-addon input { padding-right: 30px; }
 
@@ -70,7 +113,6 @@ div.polaroid {
         margin-top: 5px;
         margin-bottom: 10px;
         box-shadow: none;
-        /*transform: translate(-50%, -10%);*/
     }
 
     .titulo {
@@ -104,7 +146,6 @@ div.polaroid {
 
     .help-block {
         font-size: 10px; 
-    }
-
-    
+    }  
 }
+*/

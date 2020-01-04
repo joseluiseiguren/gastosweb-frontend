@@ -1,4 +1,6 @@
+<!--
 <link rel="stylesheet" href="https://unpkg.com/ngx-bootstrap/datepicker/bs-datepicker.css">
+-->
 
 <app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>
 <app-error-message *ngIf="errorMessage.length != 0 && loading === false" [message]="errorMessage"></app-error-message>
@@ -15,11 +17,8 @@
     <div class="fechaHolder">
       <input type="text"
               class="form-control fecha"
-              #dp="bsDatepicker"
-              bsDatepicker 
               (ngModelChange)="changeDay($event)"
-              [ngModel]="bsValue"
-              [bsConfig]="{dateInputFormat: 'LL'}">
+              [ngModel]="bsValue">
     </div>
     
     <table *ngIf="conceptos!==undefined && loading === false && errorMessage.length == 0" class="table">

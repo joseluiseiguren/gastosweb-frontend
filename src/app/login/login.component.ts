@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsersService } from '../services/users.service';
 import { IpService } from '../services/ip.service';
+import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-login',
@@ -11,11 +13,14 @@ import { IpService } from '../services/ip.service';
 export class LoginComponent implements OnInit {
     model: any = {};
     loading = false;
-    error: string = "";
     location: any = {};
-  
+
+    loginForm: FormGroup;
+    
     constructor(private router: Router, 
+                private formBuilder: FormBuilder,
                 private usersService: UsersService,
+                public snackBar: MatSnackBar,
                 private _ipService: IpService) { 
       if (this.usersService.isSessionExpired() === false) {
         this.ingresarApp();
@@ -55,11 +60,14 @@ export class LoginComponent implements OnInit {
       });
     }
 
-    ngOnInit() {
+    ngOnInit() {    
+      this.loginForm = this.formBuilder.group({
+        emailFormControl: ['', [Validators.required, Validators.email]],
+        pwdFormControl: ['', [Validators.required]]
+      });  
     }
 
     login() {
-      this.error = "";
       this.loading = true;
 
       this.usersService.login(this.model.username, this.model.password, JSON.stringify(this.location))
@@ -70,22 +78,25 @@ export class LoginComponent implements OnInit {
                       this.ingresarApp();          
                     }
                     else {
-                      this.error = 'Acceso Denegado';
+                      this.snackBar.open('Acceso Denegado', '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
                       this.loading = false;
                     }
                   },
                   error => {
+                    let errorMessage: string;
                     if (error.status === 401) {
-                      this.error = 'Acceso Denegado';
+                      errorMessage = 'Acceso Denegado';
                     }
                     else {
-                      this.error = "Error inesperado";
+                      errorMessage = "Error inesperado: ";
                       if (error.error.errorId != undefined) {
-                        this.error += "<br/>" + error.error.errorId;
+                        errorMessage += error.error.errorId;
                       }
                     }
                     
                     this.loading = false;
+                    this.snackBar.open(errorMessage, '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
+
                   });
     }
 

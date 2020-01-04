@@ -8,20 +8,19 @@ import { MensualComponent } from './mensual/mensual.component';
 import { AnualComponent } from './anual/anual.component';
 import { HistoricoComponent } from './historico/historico.component';
 import { ConceptosComponent } from './conceptos/conceptos.component';
-import { ButtonsModule } from 'ngx-bootstrap/buttons';
+/*import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';*/
 import { SumarydiaComponent } from './sumarydia/sumarydia.component';
 import { SumarymesComponent } from './sumarymes/sumarymes.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SumaryMonthService } from './services/sumary-month.service';
 import { SumaryAnioService } from './services/sumary-anio.service';
 import { SumaryHistoricoService } from './services/sumary-historico.service';
-import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { DiarioService } from './services/diario.service';
-import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
-import { CurrencyMaskModule } from "ng2-currency-mask";
+//import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
+//import { CurrencyMaskModule } from "ng2-currency-mask";
 import { LoginModule } from './login/login.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
@@ -82,20 +81,20 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     LoginModule,
-    ModalModule,
+    //ModalModule,
     HttpClientModule,
-    CurrencyMaskModule,
-    ButtonsModule.forRoot(),
+    //CurrencyMaskModule,
+    /*ButtonsModule.forRoot(),
     BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
-    AccordionModule.forRoot(),
+    AccordionModule.forRoot(),*/
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
   ],
   providers: [SumaryMonthService,
               SumaryAnioService,
               SumaryHistoricoService,
               DiarioService, 
-              BsModalService,
+              //BsModalService,
               UsersService,
               ConceptoService, 
               IpService,

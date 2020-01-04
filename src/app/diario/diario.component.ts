@@ -1,8 +1,8 @@
 import { Component, OnInit, TemplateRef, ElementRef, ViewRef, ComponentRef, ViewContainerRef, ViewChild, ContentChild, SimpleChanges, Inject, ViewChildren, QueryList, ContentChildren } from '@angular/core';
 import { DiarioService } from '../services/diario.service';
 import { IConceptoDiario } from '../models/concepto.diario';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+/*import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';*/
 import { SumaryMonth } from '../models/sumarymonth';
 import { UsersService } from '../services/users.service';
 import { LocalizacionService } from '../services/localizacion.service';
@@ -25,7 +25,7 @@ export class DiarioComponent implements OnInit {
   nuevoDebCred: number;
   errorMessage: string = "";
   errorMessageModal: string = "";
-  modalRef: BsModalRef;
+  //modalRef: BsModalRef;
   sumMonth: SumaryMonth = new SumaryMonth();
   sumAnio: SumaryMonth = new SumaryAnio();
   currencyMaskOptions = {
@@ -40,7 +40,7 @@ export class DiarioComponent implements OnInit {
   model: string = "";
 
   constructor(private _conceptosDiarioService: DiarioService,
-              private _modalService: BsModalService,
+              //private _modalService: BsModalService,
               private _userService: UsersService,
               private _localizacionService: LocalizacionService,
               @Inject( APP_CONFIG ) private _appConfig: IAppConfig,
@@ -55,9 +55,9 @@ export class DiarioComponent implements OnInit {
   ngOnInit() {
     this.getData();
 
-    this._modalService.onShown.subscribe(() => {
+    /*this._modalService.onShown.subscribe(() => {
       (<HTMLInputElement>document.getElementById('nuevoImporte')).focus();
-    });
+    });*/
   }
 
   changeDay(newValue: Date) {
@@ -95,16 +95,16 @@ export class DiarioComponent implements OnInit {
     }
     this.nuevoDebCred = (this.conceptoSel.credito) ? 1 : 0;
 
-    this.modalRef = this._modalService.show(template, 
+    /*this.modalRef = this._modalService.show(template, 
                                       {class: 'modal-sm', 
                                        ignoreBackdropClick: false, 
                                        animated: true, 
                                        keyboard: true,
-                                       focus: true}  );
+                                       focus: true}  );*/
   }
  
   decline(): void {
-    this.modalRef.hide();
+    //this.modalRef.hide();
   }
 
   changeNuevoDebCred(credito: number): void {
@@ -157,12 +157,12 @@ export class DiarioComponent implements OnInit {
                       this.sumAnio.egresos += Math.abs(this.conceptoSel.importe);
                     }
                 
-                    this.modalRef.hide();
+                    //this.modalRef.hide();
                   },
                   error => {
                     this.loadingModal = false; 
                     this.errorMessageModal = this._helperService.getErrorMessage(error);
-                    this.modalRef.hide();
+                    //this.modalRef.hide();
                   });
   }
 }
