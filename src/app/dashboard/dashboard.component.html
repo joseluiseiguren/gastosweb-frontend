@@ -26,13 +26,17 @@
               <a mat-list-item routerLink=".">
                 <mat-icon>add_chart</mat-icon>Conceptos
               </a>
-              <mat-divider></mat-divider>              
+              <mat-divider></mat-divider>
               <a mat-list-item routerLink=".">
                 <mat-icon>person_outline</mat-icon>Perfil
               </a>              
               <a mat-list-item (click)="logout()">
                 <mat-icon>exit_to_app</mat-icon>LogOut
               </a>
+              <mat-divider></mat-divider>
+              <a mat-list-item (click)="about()">
+                <mat-icon>content_paste</mat-icon>Acerca De
+              </a>              
           </mat-nav-list>
       </mat-sidenav>
       <mat-sidenav-content>

@@ -63,6 +63,7 @@ import { MatToolbarModule,
   MatDatepickerModule } from  '@angular/material';
 import { MatIconModule  } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
@@ -96,7 +97,8 @@ const routes: Routes = [
     ErrorMessageComponent,
     SumaryanioComponent,
     UserprofileComponent,
-    SumaryhistoricoComponent
+    SumaryhistoricoComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
@@ -158,6 +160,7 @@ const routes: Routes = [
               { provide: LOCALE_ID,
                 useValue: window.navigator.language }
             ],
+  entryComponents: [ AboutComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

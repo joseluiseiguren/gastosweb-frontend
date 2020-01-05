@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { Router } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { MatDialog } from '@angular/material';
+import { AboutComponent } from '../about/about.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +24,8 @@ export class DashboardComponent implements OnInit {
   constructor(private _userService: UsersService, 
               private router: Router,
               changeDetectorRef: ChangeDetectorRef, 
-              media: MediaMatcher) {
+              media: MediaMatcher,
+              public aboutDialog: MatDialog) {
     this.userName = this._userService.getUserName();
     this.urlActual = this.router.url;
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -54,5 +57,13 @@ export class DashboardComponent implements OnInit {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
-  
+  about(): void {
+    const dialogRef = this.aboutDialog.open(AboutComponent, {
+      width: '250px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');      
+    });
+  }
 }
