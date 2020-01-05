@@ -22,8 +22,6 @@ import { MatToolbarModule,
          MatSnackBarModule,
          MatTableModule,
          MatDatepickerModule } from  '@angular/material';
-
-import { MatStepperModule  } from '@angular/material/stepper';
 import { MatIconModule  } from '@angular/material/icon';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
@@ -57,7 +55,6 @@ const routes: Routes = [
     MatSidenavModule,
     MatExpansionModule,
     MatGridListModule,
-    MatStepperModule,
     MatTabsModule,
     MatDialogModule,
     MatSnackBarModule,
