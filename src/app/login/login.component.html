@@ -23,9 +23,9 @@
           <a mat-button color="register" routerLink="/registracion">Registrarse</a>              
         </div>
         <div class="login-button-container">
-          <button mat-raised-button color="primary" [disabled]="!loginForm.valid || loading">Login
+          <button mat-raised-button type="submit" color="primary" [disabled]="!loginForm.valid || loading">Login
             <mat-icon>directions_run</mat-icon>              
-          </button>
+          </button>          
           <mat-spinner *ngIf="loading" [diameter]="30"></mat-spinner>
         </div>        
       </div>      

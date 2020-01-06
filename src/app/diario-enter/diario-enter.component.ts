@@ -27,4 +27,13 @@ export class DiarioEnterComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  onSave(): void {
+    console.log('xxx');
+    
+    
+    this.dialogRef.close();
+  }
+
+ 
+
 }
