@@ -1,0 +1,9 @@
+.cancel-button{
+    float: left;
+    text-align: left;  
+  }
+
+  .save-button{
+    float: right;
+    text-align: center;  
+  }

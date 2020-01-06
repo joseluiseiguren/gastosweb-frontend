@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>{{data.concepto.descripcion}}</h2>
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+        <input matInput  placeholder="Importe" formControlName="importeFormControl">
+    </mat-form-field>
+    
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button class="mat-raised-button" (click)="onCancel()" cdkFocusInitial>Cancelar</button>
+    <button mat-button class="mat-raised-button mat-primary" (click)="onSave()" [disabled]="!form.valid">Aceptar</button>
+    <!--<button mat-button [mat-dialog-close]="data.concepto.importe">Aceptar</button>-->    
+</mat-dialog-actions>

@@ -1,3 +1,26 @@
+.loading {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.conceptos-table {
+    width: 80%;
+}
+
+.mat-row:nth-child(even){
+    background-color:rgb(243, 244, 252);
+}
+
+
+/*
 .right {
     width: 20%;
     border: 5px black;
@@ -84,3 +107,4 @@
         padding-right: 1px;
     }    
 }
+*/

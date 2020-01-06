@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { DiarioComponent } from './diario/diario.component';
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
@@ -64,6 +64,7 @@ import { MatToolbarModule,
 import { MatIconModule  } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { AboutComponent } from './about/about.component';
+import { DiarioEnterComponent } from './diario-enter/diario-enter.component';
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
@@ -98,11 +99,13 @@ const routes: Routes = [
     SumaryanioComponent,
     UserprofileComponent,
     SumaryhistoricoComponent,
-    AboutComponent
+    AboutComponent,
+    DiarioEnterComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     LoginModule,
     //ModalModule,
     HttpClientModule,
@@ -160,7 +163,7 @@ const routes: Routes = [
               { provide: LOCALE_ID,
                 useValue: window.navigator.language }
             ],
-  entryComponents: [ AboutComponent ],
+  entryComponents: [ AboutComponent, DiarioEnterComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

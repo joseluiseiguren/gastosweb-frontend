@@ -12,6 +12,8 @@ import { HelperService } from '../services/helper.service';
 import { SumaryAnio } from '../models/sumaryanio';
 import { CurrencyPipe } from '@angular/common';
 import { NgForm } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+import { DiarioEnterComponent } from '../diario-enter/diario-enter.component';
 
 @Component({
   selector: 'app-diario',
@@ -38,6 +40,7 @@ export class DiarioComponent implements OnInit {
   loading: Boolean = false;
   loadingModal: Boolean = false;
   model: string = "";
+  displayedColumns: string[] = ['descripcion', 'importe'];
 
   constructor(private _conceptosDiarioService: DiarioService,
               //private _modalService: BsModalService,
@@ -45,7 +48,8 @@ export class DiarioComponent implements OnInit {
               private _localizacionService: LocalizacionService,
               @Inject( APP_CONFIG ) private _appConfig: IAppConfig,
               private _helperService: HelperService,
-              private _currencyPipe:CurrencyPipe) { 
+              private _currencyPipe:CurrencyPipe,
+              public enterDiario: MatDialog) { 
     this.sumMonth.egresos = 0;
     this.sumMonth.ingresos = 0;
     this.sumAnio.egresos = 0;
@@ -85,7 +89,7 @@ export class DiarioComponent implements OnInit {
   }
 
   openModal(template: TemplateRef<any>, concepto: IConceptoDiario) {
-    this.loadingModal = false;
+    /*this.loadingModal = false;
     this.errorMessageModal = "";
     this.conceptoSel = concepto;
     if (Math.abs(this.conceptoSel.importe) != 0){
@@ -95,12 +99,25 @@ export class DiarioComponent implements OnInit {
     }
     this.nuevoDebCred = (this.conceptoSel.credito) ? 1 : 0;
 
-    /*this.modalRef = this._modalService.show(template, 
+    this.modalRef = this._modalService.show(template, 
                                       {class: 'modal-sm', 
                                        ignoreBackdropClick: false, 
                                        animated: true, 
                                        keyboard: true,
                                        focus: true}  );*/
+  }
+
+  openConcepto(concepto: IConceptoDiario){
+    
+    const dialogRef = this.enterDiario.open(DiarioEnterComponent, {
+      data: {concepto: concepto},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined){
+        concepto.importe = result;
+      }      
+    });
   }
  
   decline(): void {
