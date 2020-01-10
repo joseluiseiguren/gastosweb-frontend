@@ -2,16 +2,21 @@
 <mat-dialog-content>
     <form [formGroup]="form" class="full-width-form" (ngSubmit)="onSave()" novalidate>
         <mat-form-field>
-            <input matInput class="importe" placeholder="Importe" formControlName="importeFormControl" appTwoDigitDecimaNumber autocomplete="off">
+            <input matInput 
+                    (focus)="$event.target.select()" 
+                    class="importe" 
+                    placeholder="Importe" 
+                    formControlName="importeFormControl" 
+                    appTwoDigitDecimaNumber 
+                    autocomplete="off">
         </mat-form-field>
         <div>
-            <mat-radio-group>
-                <mat-radio-button value="1" [checked]="data.concepto.credito === false">Débito</mat-radio-button>
-                <mat-radio-button value="2" [checked]="data.concepto.credito === true">Crédito</mat-radio-button>
+            <mat-radio-group formControlName="debitoCreditoControl">
+                <mat-radio-button value="0">Débito</mat-radio-button>
+                <mat-radio-button value="1">Crédito</mat-radio-button>
             </mat-radio-group>
         </div>
-        
-        
+                
         <div class="buttons-section">
             <mat-card-actions>
                 <div class="cancel-button">

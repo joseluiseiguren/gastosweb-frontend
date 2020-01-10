@@ -18,12 +18,15 @@ export class TwoDigitDecimaNumberDirective {
     //console.log(event.key);
     // Allow Backspace, tab, end, and home keys
     if (this.specialKeys.indexOf(event.key) !== -1) {
+      //console.log("1");
       return;
     }
     let current: string = this.el.nativeElement.value;
     const position = this.el.nativeElement.selectionStart;
     const next: string = [current.slice(0, position), event.key == 'Decimal' ? '.' : event.key, current.slice(position)].join('');
     if (next && !String(next).match(this.regex)) {
+      console.log(next);
+      console.log(String(next).match(this.regex));
       event.preventDefault();
     }
   }

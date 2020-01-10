@@ -67,6 +67,7 @@ import { MatListModule } from '@angular/material/list';
 import { AboutComponent } from './about/about.component';
 import { DiarioEnterComponent } from './diario-enter/diario-enter.component';
 import { TwoDigitDecimaNumberDirective } from './directives/TwoDigitDecimaNumberDirective';
+import { FormatingService } from './sharedServices/formatingService';
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
@@ -150,6 +151,7 @@ const routes: Routes = [
               ConceptoService, 
               IpService,
               HelperService,
+              FormatingService,
               UrlService,
               CurrencyPipe,
               AuthGuard ,

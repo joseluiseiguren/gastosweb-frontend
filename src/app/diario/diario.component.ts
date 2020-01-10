@@ -109,8 +109,9 @@ export class DiarioComponent implements OnInit {
 
   openConcepto(concepto: IConceptoDiario){
     
+    concepto.importe = 985;
     const dialogRef = this.enterDiario.open(DiarioEnterComponent, {
-      data: {concepto: concepto},
+      data: {concepto},
     });
 
     dialogRef.afterClosed().subscribe(result => {
