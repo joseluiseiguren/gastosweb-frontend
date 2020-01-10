@@ -9,6 +9,14 @@
   }
 
   .buttons-section{
-    padding-top: 10px;
-    padding-bottom: 50px;
+    padding-top: 30px;
+    padding-bottom: 40px;
+  }
+
+  .importe{
+    text-align: right
+  }
+
+  .mat-radio-button ~ .mat-radio-button {
+    margin-left: 50px;
   }

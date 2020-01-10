@@ -28,7 +28,7 @@ export class DiarioEnterComponent implements OnInit {
   }
 
   onSave(): void {
-    console.log('xxx');
+    console.log(this.form.value.importeFormControl);
     
     
     this.dialogRef.close();

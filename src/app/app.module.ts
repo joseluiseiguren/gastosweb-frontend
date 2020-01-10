@@ -62,9 +62,11 @@ import { MatToolbarModule,
   MatTableModule,
   MatDatepickerModule } from  '@angular/material';
 import { MatIconModule  } from '@angular/material/icon';
+import { MatRadioModule, MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { MatListModule } from '@angular/material/list';
 import { AboutComponent } from './about/about.component';
 import { DiarioEnterComponent } from './diario-enter/diario-enter.component';
+import { TwoDigitDecimaNumberDirective } from './directives/TwoDigitDecimaNumberDirective';
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
@@ -100,7 +102,8 @@ const routes: Routes = [
     UserprofileComponent,
     SumaryhistoricoComponent,
     AboutComponent,
-    DiarioEnterComponent
+    DiarioEnterComponent,    
+    TwoDigitDecimaNumberDirective
   ],
   imports: [
     BrowserModule,
@@ -130,6 +133,7 @@ const routes: Routes = [
     MatSnackBarModule,
     MatTableModule,
     MatListModule,
+    MatRadioModule,
     //CurrencyMaskModule,
     /*ButtonsModule.forRoot(),
     BsDatepickerModule.forRoot(),
@@ -161,7 +165,11 @@ const routes: Routes = [
               {provide: LocationStrategy, useClass: HashLocationStrategy},
               LocalizacionService,
               { provide: LOCALE_ID,
-                useValue: window.navigator.language }
+                useValue: window.navigator.language 
+              },
+              { provide: MAT_RADIO_DEFAULT_OPTIONS,
+                useValue: { color: 'accent' }
+              },
             ],
   entryComponents: [ AboutComponent, DiarioEnterComponent ],
   bootstrap: [AppComponent]
