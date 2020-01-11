@@ -25,7 +25,7 @@ export class DiarioEnterComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      importeFormControl: [this.formating.FormatNumber(this.data.concepto.importe, true), [Validators.required]],
+      importeFormControl: [this.formating.FormatNumber(this.data.concepto.importe, true, false), [Validators.required]],
       debitoCreditoControl: this.isCredito().toString() === 'true' ? '1' : '0'      
     });    
   }
