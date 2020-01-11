@@ -1,16 +1,13 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DiarioService } from '../services/diario.service';
 import { IConceptoDiario } from '../models/concepto.diario';
 import { SumaryMonth } from '../models/sumarymonth';
 import { UsersService } from '../services/users.service';
-import { LocalizacionService } from '../services/localizacion.service';
-import { APP_CONFIG } from '../app.config/app-config.constants';
-import { IAppConfig } from '../app.config/app-config.interface';
 import { HelperService } from '../services/helper.service';
 import { SumaryAnio } from '../models/sumaryanio';
-import { CurrencyPipe } from '@angular/common';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDatepickerInputEvent } from '@angular/material';
 import { DiarioEnterComponent } from '../diario-enter/diario-enter.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-diario',
@@ -18,31 +15,18 @@ import { DiarioEnterComponent } from '../diario-enter/diario-enter.component';
   styleUrls: ['./diario.component.css']
 })
 export class DiarioComponent implements OnInit {
-  bsValue: Date = new Date();
   conceptos: IConceptoDiario[];
   conceptoSel: IConceptoDiario;
-  nuevoDebCred: number;
   errorMessage: string = "";
-  errorMessageModal: string = "";
   sumMonth: SumaryMonth = new SumaryMonth();
   sumAnio: SumaryMonth = new SumaryAnio();
-  currencyMaskOptions = {
-    prefix: this._userService.getMoneda() + ' ',
-    thousands: this._appConfig.SEPARADOR_MILES,
-    decimal: this._appConfig.SEPARADOR_DECIMALES,
-    allowNegative: false,
-    precision: 2
-  };
   loading: Boolean = false;
-  model: string = "";
   displayedColumns: string[] = ['descripcion', 'importe'];
+  currentDate = new FormControl(new Date());
 
   constructor(private _conceptosDiarioService: DiarioService,
               private _userService: UsersService,
-              private _localizacionService: LocalizacionService,
-              @Inject( APP_CONFIG ) private _appConfig: IAppConfig,
               private _helperService: HelperService,
-              private _currencyPipe:CurrencyPipe,
               public enterDiario: MatDialog) { 
     this.sumMonth.egresos = 0;
     this.sumMonth.ingresos = 0;
@@ -52,25 +36,16 @@ export class DiarioComponent implements OnInit {
 
   ngOnInit() {
     this.getData();
-
-    /*this._modalService.onShown.subscribe(() => {
-      (<HTMLInputElement>document.getElementById('nuevoImporte')).focus();
-    });*/
   }
 
-  changeDay(newValue: Date) {
-    if (newValue.getFullYear() != this.bsValue.getFullYear() ||
-        newValue.getMonth() != this.bsValue.getMonth() ||
-        newValue.getDate() != this.bsValue.getDate()){
-        this.bsValue = newValue;
-        this.getData();
-    }
+  changeDate(type: string, event: MatDatepickerInputEvent<Date>) {
+    this.getData();
   }
 
   getData() {
     this.loading = true;
     this.errorMessage = "";
-    this._conceptosDiarioService.getConceptosImportes(this.bsValue)
+    this._conceptosDiarioService.getConceptosImportes(this.currentDate.value)
         .subscribe(
             data => { 
               this.conceptos = data;
@@ -84,64 +59,5 @@ export class DiarioComponent implements OnInit {
 
   openConcepto(concepto: IConceptoDiario){    
     this.enterDiario.open(DiarioEnterComponent, { data: {concepto} });    
-  }
- 
-  changeNuevoDebCred(credito: number): void {
-    this.nuevoDebCred = credito;
-  }
-
-  childLoadingStatus(errorMessage: string):void{
-    this.errorMessage = errorMessage;
-  }
-
-  /*aceptar(form: NgForm){
-    this.loadingModal  = true;
-    this.errorMessageModal = "";
-
-    // se eliminan las comas
-    this.model = this.model.replace(/,/g, '');
-
-    // se valida que el importe sea correcto
-    if (isNaN(parseFloat(this.model))){
-      console.log("invalid");
-      this.loadingModal  = false;
-      return;
-    }
-
-    this._conceptosDiarioService.setConceptoImporte(
-                                    this.bsValue, 
-                                    (this.nuevoDebCred == 1) ? parseFloat(this.model) : parseFloat(this.model)*(-1), 
-                                    this.conceptoSel.idconcepto)
-                .subscribe(
-                  data => {
-                    this.loadingModal = false;
-                    if (this.conceptoSel.credito == 1){
-                      this.sumMonth.ingresos -= this.conceptoSel.importe;
-                      this.sumAnio.ingresos -= this.conceptoSel.importe;
-                    }
-                    else{
-                      this.sumMonth.egresos -= Math.abs(this.conceptoSel.importe);
-                      this.sumAnio.egresos -= Math.abs(this.conceptoSel.importe);
-                    }
-                    
-                    this.conceptoSel.importe = (this.nuevoDebCred == 1) ? parseFloat(this.model) : parseFloat(this.model)*(-1);
-                    this.conceptoSel.credito = this.nuevoDebCred;
-                
-                    if (this.conceptoSel.credito == 1){
-                      this.sumMonth.ingresos += this.conceptoSel.importe;
-                      this.sumAnio.ingresos += this.conceptoSel.importe;
-                    }
-                    else{
-                      this.sumMonth.egresos += Math.abs(this.conceptoSel.importe);
-                      this.sumAnio.egresos += Math.abs(this.conceptoSel.importe);
-                    }
-                
-                    //this.modalRef.hide();
-                  },
-                  error => {
-                    this.loadingModal = false; 
-                    this.errorMessageModal = this._helperService.getErrorMessage(error);
-                    //this.modalRef.hide();
-                  });
-  }*/
+  }  
 }

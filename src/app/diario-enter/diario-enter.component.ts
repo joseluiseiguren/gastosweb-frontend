@@ -26,7 +26,7 @@ export class DiarioEnterComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       importeFormControl: [this.formating.FormatNumber(this.data.concepto.importe, true), [Validators.required]],
-      debitoCreditoControl: this.data.concepto.credito.toString() === 'true' ? '1' : '0'      
+      debitoCreditoControl: this.isCredito().toString() === 'true' ? '1' : '0'      
     });    
   }
 
@@ -36,13 +36,14 @@ export class DiarioEnterComponent implements OnInit {
 
   onSave(): void {
     this.loading = true;
+    let newImporte = parseFloat(this.form.value.importeFormControl.toString().replace(',', '.'));
     this._conceptosDiarioService.setConceptoImporte(
         new Date(this.data.concepto.fecha), 
-        (this.form.value.debitoCreditoControl === 1) ? parseFloat(this.form.value.importeFormControl) : parseFloat(this.form.value.importeFormControl)*(-1), 
+        (this.form.value.debitoCreditoControl === 1) ? newImporte : newImporte*-1, 
         this.data.concepto.idconcepto)
             .subscribe(
               () => { 
-                this.data.concepto.importe = this.form.value.importeFormControl;
+                this.data.concepto.importe = (this.form.value.debitoCreditoControl == 1 || this.form.value.importeFormControl == 0) ? newImporte : newImporte*-1;
                 this.data.concepto.credito = this.form.value.debitoCreditoControl;
                 this.dialogRef.close(this.data.concepto); 
               },
@@ -52,6 +53,22 @@ export class DiarioEnterComponent implements OnInit {
                 this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });                
               }
             );
+  }
+
+  private isCredito(): boolean {
+    
+    if (this.data.concepto.importe == 0){
+      return this.data.concepto.credito == 1 ? true : false;
+    }
+    else{
+      if (this.data.concepto.importe > 0){
+        return true;
+      } else{
+        return false;
+      }
+    }
+    
+    
   }
 
   

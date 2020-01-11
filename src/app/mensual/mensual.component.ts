@@ -1,6 +1,4 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { IAppConfig } from '../app.config/app-config.interface';
-import { APP_CONFIG } from '../app.config/app-config.constants';
 import { DiarioService } from '../services/diario.service';
 import { SumaryMonth } from '../models/sumarymonth';
 import { UsersService } from '../services/users.service';
@@ -24,8 +22,7 @@ export class MensualComponent implements OnInit {
   conceptosTotales: any[];
   loading: Boolean = false;
 
-  constructor(@Inject( APP_CONFIG ) private _appConfig: IAppConfig,
-              private _diarioService: DiarioService,
+  constructor(private _diarioService: DiarioService,
               private _userService: UsersService,
               private _helperService: HelperService) { 
     this.meses = new Array<Meses>();
@@ -58,9 +55,10 @@ export class MensualComponent implements OnInit {
   private getMonthName(value: number) : string {
     let x = new Date();
     x.setMonth(value);
-    let mes = x.toLocaleString(this._appConfig.LOCALE, { month: "long" });
+    /*let mes = x.toLocaleString(this._appConfig.LOCALE, { month: "long" });
     mes = mes.charAt(0).toUpperCase() + mes.slice(1).toLowerCase();
-    return mes;
+    return mes;*/
+    return '';
   }
 
   getPrimerConsumo() {

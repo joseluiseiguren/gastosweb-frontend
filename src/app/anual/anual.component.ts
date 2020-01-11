@@ -1,6 +1,4 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { IAppConfig } from '../app.config/app-config.interface';
-import { APP_CONFIG } from '../app.config/app-config.constants';
 import { DiarioService } from '../services/diario.service';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
@@ -20,8 +18,7 @@ export class AnualComponent implements OnInit {
   conceptosTotales: any[];
   loading: Boolean = false;
 
-  constructor(@Inject( APP_CONFIG ) private _appConfig: IAppConfig,
-              private _diarioService: DiarioService,
+  constructor(private _diarioService: DiarioService,
               private _userService: UsersService,
               private _helperService: HelperService) {
     this.getPrimerConsumo();
