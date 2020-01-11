@@ -1,8 +1,6 @@
-import { Component, OnInit, TemplateRef, ElementRef, ViewRef, ComponentRef, ViewContainerRef, ViewChild, ContentChild, SimpleChanges, Inject, ViewChildren, QueryList, ContentChildren } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { DiarioService } from '../services/diario.service';
 import { IConceptoDiario } from '../models/concepto.diario';
-/*import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';*/
 import { SumaryMonth } from '../models/sumarymonth';
 import { UsersService } from '../services/users.service';
 import { LocalizacionService } from '../services/localizacion.service';
@@ -11,7 +9,6 @@ import { IAppConfig } from '../app.config/app-config.interface';
 import { HelperService } from '../services/helper.service';
 import { SumaryAnio } from '../models/sumaryanio';
 import { CurrencyPipe } from '@angular/common';
-import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { DiarioEnterComponent } from '../diario-enter/diario-enter.component';
 
@@ -27,7 +24,6 @@ export class DiarioComponent implements OnInit {
   nuevoDebCred: number;
   errorMessage: string = "";
   errorMessageModal: string = "";
-  //modalRef: BsModalRef;
   sumMonth: SumaryMonth = new SumaryMonth();
   sumAnio: SumaryMonth = new SumaryAnio();
   currencyMaskOptions = {
@@ -38,12 +34,10 @@ export class DiarioComponent implements OnInit {
     precision: 2
   };
   loading: Boolean = false;
-  loadingModal: Boolean = false;
   model: string = "";
   displayedColumns: string[] = ['descripcion', 'importe'];
 
   constructor(private _conceptosDiarioService: DiarioService,
-              //private _modalService: BsModalService,
               private _userService: UsersService,
               private _localizacionService: LocalizacionService,
               @Inject( APP_CONFIG ) private _appConfig: IAppConfig,
@@ -88,43 +82,10 @@ export class DiarioComponent implements OnInit {
             });
   }
 
-  openModal(template: TemplateRef<any>, concepto: IConceptoDiario) {
-    /*this.loadingModal = false;
-    this.errorMessageModal = "";
-    this.conceptoSel = concepto;
-    if (Math.abs(this.conceptoSel.importe) != 0){
-      this.model = Math.abs(this.conceptoSel.importe).toLocaleString(undefined, {minimumFractionDigits: 2});
-    } else {
-      this.model = "";
-    }
-    this.nuevoDebCred = (this.conceptoSel.credito) ? 1 : 0;
-
-    this.modalRef = this._modalService.show(template, 
-                                      {class: 'modal-sm', 
-                                       ignoreBackdropClick: false, 
-                                       animated: true, 
-                                       keyboard: true,
-                                       focus: true}  );*/
-  }
-
-  openConcepto(concepto: IConceptoDiario){
-    
-    concepto.importe = 985;
-    const dialogRef = this.enterDiario.open(DiarioEnterComponent, {
-      data: {concepto},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined){
-        concepto.importe = result;
-      }      
-    });
+  openConcepto(concepto: IConceptoDiario){    
+    this.enterDiario.open(DiarioEnterComponent, { data: {concepto} });    
   }
  
-  decline(): void {
-    //this.modalRef.hide();
-  }
-
   changeNuevoDebCred(credito: number): void {
     this.nuevoDebCred = credito;
   }
@@ -133,7 +94,7 @@ export class DiarioComponent implements OnInit {
     this.errorMessage = errorMessage;
   }
 
-  aceptar(form: NgForm){
+  /*aceptar(form: NgForm){
     this.loadingModal  = true;
     this.errorMessageModal = "";
 
@@ -182,5 +143,5 @@ export class DiarioComponent implements OnInit {
                     this.errorMessageModal = this._helperService.getErrorMessage(error);
                     //this.modalRef.hide();
                   });
-  }
+  }*/
 }

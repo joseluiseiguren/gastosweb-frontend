@@ -1,5 +1,10 @@
-<h2 mat-dialog-title>{{data.concepto.descripcion}}</h2>
-<mat-dialog-content>
+<div class="title">
+    <h2 mat-dialog-title>{{data.concepto.descripcion}}</h2>
+</div>
+<div class="spinner">
+    <mat-spinner class="spinner" *ngIf="loading" [diameter]="20"></mat-spinner>
+</div>
+<mat-dialog-content>    
     <form [formGroup]="form" class="full-width-form" (ngSubmit)="onSave()" novalidate>
         <mat-form-field>
             <input matInput 
@@ -12,8 +17,8 @@
         </mat-form-field>
         <div>
             <mat-radio-group formControlName="debitoCreditoControl">
-                <mat-radio-button value="0">Débito</mat-radio-button>
-                <mat-radio-button value="1">Crédito</mat-radio-button>
+                <mat-radio-button class="debito" value="0">Débito</mat-radio-button>
+                <mat-radio-button class="credito" value="1">Crédito</mat-radio-button>
             </mat-radio-group>
         </div>
                 
@@ -23,15 +28,10 @@
                     <button  mat-raised-button type="button" (click)="onCancel()">Close</button>
                 </div>
                 <div class="save-button">
-                    <button  mat-raised-button type="submit" [disabled]="!(form.valid)" color="primary">Aceptar</button>
+                    <button mat-raised-button type="submit" [disabled]="!(form.valid) || loading" color="primary">Aceptar</button>                    
                 </div>
             </mat-card-actions>
-        </div>
+        </div>        
     </form>
     
 </mat-dialog-content>
-<!--
-<mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="data.concepto.importe">Aceptar</button>
-</mat-dialog-actions>
--->

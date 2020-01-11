@@ -14,9 +14,52 @@
   }
 
   .importe{
-    text-align: right
+    text-align: right;
   }
 
   .mat-radio-button ~ .mat-radio-button {
     margin-left: 50px;
   }
+
+  .title{
+    float: left;
+    text-align: left;  
+    width: 90%;
+  }
+
+  .spinner{
+    float: right;
+    text-align: right;    
+  }
+
+.debito{
+  color: red;
+}
+
+::ng-deep .debito.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element  {
+  background-color: red !important;
+}
+
+::ng-deep .debito.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: red!important;
+}
+
+::ng-deep .debito.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color:red!important;
+}
+
+.credito{
+  color: black;
+}
+
+::ng-deep .credito.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element  {
+  background-color: black !important;
+}
+
+::ng-deep .credito.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: black!important;
+}
+
+::ng-deep .credito.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color:black!important;
+}

@@ -10,7 +10,7 @@
  
     <ng-container matColumnDef="importe">
         <th mat-header-cell *matHeaderCellDef>Importe</th>
-        <td mat-cell *matCellDef="let element"> {{element.importe}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.importe | currency:this._userService.getMoneda()}} </td>
     </ng-container>
   
     <tr mat-header-row style="display: none;" *matHeaderRowDef="displayedColumns"></tr>
