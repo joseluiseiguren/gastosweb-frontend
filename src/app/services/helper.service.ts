@@ -51,5 +51,5 @@ export class HelperService {
         let anio = fecha.slice(0, 4);
         
         return dia + "/" + mes + "/" + anio;
-    }
+    }    
 }

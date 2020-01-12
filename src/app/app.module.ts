@@ -54,7 +54,8 @@ import { MatToolbarModule,
   MatTableModule,
   MatDatepickerModule } from  '@angular/material';
 import { MatIconModule  } from '@angular/material/icon';
-import { MatRadioModule, MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatListModule } from '@angular/material/list';
 import { AboutComponent } from './about/about.component';
 import { DiarioEnterComponent } from './diario-enter/diario-enter.component';
@@ -130,6 +131,7 @@ const routes: Routes = [
     MatTableModule,
     MatListModule,
     MatRadioModule,
+    MatChipsModule,
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
   ],
   providers: [SumaryMonthService,
@@ -143,7 +145,7 @@ const routes: Routes = [
               FormatingService,
               UrlService,
               CurrencyPipe,
-              AuthGuard ,
+              AuthGuard,
               {
                 provide: HTTP_INTERCEPTORS,
                 useClass: AuthInterceptor,
@@ -152,10 +154,7 @@ const routes: Routes = [
               {provide: LocationStrategy, useClass: HashLocationStrategy},
               { provide: LOCALE_ID,
                 useValue: window.navigator.language.split('-')[0]
-              },
-              { provide: MAT_RADIO_DEFAULT_OPTIONS,
-                useValue: { color: 'accent' }
-              },
+              }              
             ],
   entryComponents: [ AboutComponent, DiarioEnterComponent ],
   bootstrap: [AppComponent]

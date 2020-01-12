@@ -12,7 +12,7 @@
 }
 
 .conceptos-table {
-    width: 80%;
+    width: 100%;
 }
 
 .mat-row:nth-child(even){
@@ -27,11 +27,36 @@
     color: red;
 }
 
-.datePicker{
+.datePicker {
+    width: 150px;
     margin-left: 5px;
-    margin-top: 5px;
+    margin-top: 10px;
+    float: left;
+    text-align: center;
 }
 
+.saldos { 
+    margin-top: 20px;
+    margin-right: 20px;
+    float: right;    
+}
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+  
 
 /*
 .right {

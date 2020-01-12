@@ -1,18 +1,25 @@
 <mat-spinner class="loading" *ngIf="loading === true"></mat-spinner>
 
 <div *ngIf="loading === false">
-  <div class="datePicker">
-    <mat-form-field>
+  <div>
+    <mat-form-field class="datePicker">
       <input matInput 
              readonly 
              [matDatepicker]="picker" 
              placeholder="Fecha Consumos" 
              [formControl]="currentDate"
+             (click)="picker.open()"
              (dateChange)="changeDate('change', $event)">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker [startAt]="currentDate" #picker></mat-datepicker>
+      <mat-datepicker [startAt]="currentDate" #picker></mat-datepicker>      
     </mat-form-field>
+    <div>
+      <mat-chip-list class="saldos">
+        <mat-chip>Saldo Diario: 5.362,58 $</mat-chip>        
+      </mat-chip-list>  
+  </div>    
   </div>
+
   <table mat-table [dataSource]="conceptos" class="mat-elevation-z8 conceptos-table">
     
     <ng-container matColumnDef="descripcion">

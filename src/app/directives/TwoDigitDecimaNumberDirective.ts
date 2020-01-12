@@ -28,7 +28,7 @@ export class TwoDigitDecimaNumberDirective {
 
     if (this.whatDecimalSeparator() == ','){
       if (next && !String(next).match(this.regexEs)) {
-        if (keyPressed == '.'){
+        if (keyPressed == '.' && this.el.nativeElement.value.indexOf(',') == -1){
           this.validateFields(event);
         } else{
           event.preventDefault();

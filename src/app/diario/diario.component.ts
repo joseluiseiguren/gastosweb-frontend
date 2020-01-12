@@ -23,7 +23,7 @@ export class DiarioComponent implements OnInit {
   loading: Boolean = false;
   displayedColumns: string[] = ['descripcion', 'importe'];
   currentDate = new FormControl(new Date());
-
+  
   constructor(private _conceptosDiarioService: DiarioService,
               private _userService: UsersService,
               private _helperService: HelperService,

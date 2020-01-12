@@ -1,16 +1,17 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { Router } from '@angular/router';
-import { MediaMatcher } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material';
 import { AboutComponent } from '../about/about.component';
+import { ComponentBase } from '../services/ComponentBase';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent extends ComponentBase implements OnInit {
   userName: string;
   public urlActual = '';
   public urlDiario: string = '/dashboard/diario';
@@ -19,21 +20,16 @@ export class DashboardComponent implements OnInit {
   public urlHistorico: string = '/dashboard/historico';
   public urlConceptos: string = '/dashboard/conceptos';
   public showUserMenu: boolean = false;
-  mobileQuery: MediaQueryList;
   
   constructor(private _userService: UsersService, 
               private router: Router,
-              changeDetectorRef: ChangeDetectorRef, 
-              media: MediaMatcher,
+              private changeDetectorRef: ChangeDetectorRef, 
+              private media: MediaMatcher,
               public aboutDialog: MatDialog) {
+    super(changeDetectorRef, media);
     this.userName = this._userService.getUserName();
-    this.urlActual = this.router.url;
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.urlActual = this.router.url;        
   }
-
-  private _mobileQueryListener: () => void;
 
   ngOnInit() {
   }
@@ -54,7 +50,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    super.ngOnDestroy();
   }
 
   about(): void {
