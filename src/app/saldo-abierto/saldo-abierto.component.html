@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>Saldo Abierto</h2>
+<mat-dialog-content>    
+    <p>Ingresos: {{data.ingresos | currency:this._userService.getMoneda()}}</p>
+    <p>Egresos: {{data.egresos | currency:this._userService.getMoneda()}}</p>
+    <p>Saldo: {{data.ingresos - data.egresos | currency:this._userService.getMoneda()}}</p>
+    
+</mat-dialog-content>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cerrar</button>
+</div>

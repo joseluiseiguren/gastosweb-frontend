@@ -13,11 +13,7 @@
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker [startAt]="currentDate" #picker></mat-datepicker>      
     </mat-form-field>
-    <div>
-      <mat-chip-list class="saldos">
-        <mat-chip>Saldo Diario: 5.362,58 $</mat-chip>        
-      </mat-chip-list>  
-  </div>    
+    <app-saldo [titulo]="'Saldo Diario'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>    
   </div>
 
   <table mat-table [dataSource]="conceptos" class="mat-elevation-z8 conceptos-table">

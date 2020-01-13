@@ -1,0 +1,6 @@
+<mat-chip-list class="saldos">
+    <mat-chip [class.saldoNegativo]="saldo < 0" 
+              (click)="onClick()">
+              {{titulo}}: {{saldo | currency:this._userService.getMoneda()}}
+    </mat-chip>        
+</mat-chip-list> 

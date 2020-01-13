@@ -63,6 +63,8 @@ import { TwoDigitDecimaNumberDirective } from './directives/TwoDigitDecimaNumber
 import { FormatingService } from './sharedServices/formatingService';
 import localeEs from '@angular/common/locales/es';
 import localeEn from '@angular/common/locales/en';
+import { SaldoComponent } from './saldo/saldo.component';
+import { SaldoAbiertoComponent } from './saldo-abierto/saldo-abierto.component';
 registerLocaleData(localeEs, localeEs); 
 registerLocaleData(localeEn, localeEn); 
 
@@ -101,7 +103,7 @@ const routes: Routes = [
     SumaryhistoricoComponent,
     AboutComponent,
     DiarioEnterComponent,    
-    TwoDigitDecimaNumberDirective
+    TwoDigitDecimaNumberDirective, SaldoComponent, SaldoAbiertoComponent
   ],
   imports: [
     BrowserModule,
@@ -156,7 +158,7 @@ const routes: Routes = [
                 useValue: window.navigator.language.split('-')[0]
               }              
             ],
-  entryComponents: [ AboutComponent, DiarioEnterComponent ],
+  entryComponents: [ AboutComponent, DiarioEnterComponent, SaldoAbiertoComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

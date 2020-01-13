@@ -8,6 +8,7 @@ import { SumaryAnio } from '../models/sumaryanio';
 import { MatDialog, MatDatepickerInputEvent } from '@angular/material';
 import { DiarioEnterComponent } from '../diario-enter/diario-enter.component';
 import { FormControl } from '@angular/forms';
+import { SaldoAbiertoComponent } from '../saldo-abierto/saldo-abierto.component';
 
 @Component({
   selector: 'app-diario',
@@ -16,10 +17,7 @@ import { FormControl } from '@angular/forms';
 })
 export class DiarioComponent implements OnInit {
   conceptos: IConceptoDiario[];
-  conceptoSel: IConceptoDiario;
   errorMessage: string = "";
-  sumMonth: SumaryMonth = new SumaryMonth();
-  sumAnio: SumaryMonth = new SumaryAnio();
   loading: Boolean = false;
   displayedColumns: string[] = ['descripcion', 'importe'];
   currentDate = new FormControl(new Date());
@@ -27,12 +25,8 @@ export class DiarioComponent implements OnInit {
   constructor(private _conceptosDiarioService: DiarioService,
               private _userService: UsersService,
               private _helperService: HelperService,
-              public enterDiario: MatDialog) { 
-    this.sumMonth.egresos = 0;
-    this.sumMonth.ingresos = 0;
-    this.sumAnio.egresos = 0;
-    this.sumAnio.ingresos = 0;
-  }
+              public enterDiario: MatDialog,
+              public saldoAbierto: MatDialog) {  }
 
   ngOnInit() {
     this.getData();
@@ -59,5 +53,33 @@ export class DiarioComponent implements OnInit {
 
   openConcepto(concepto: IConceptoDiario){    
     this.enterDiario.open(DiarioEnterComponent, { data: {concepto} });    
-  }  
+  }
+  
+  getIngresos() {
+    var ingresos: number = 0;
+
+    if (this.conceptos.filter(x => x.importe > 0).length > 0) {
+      ingresos = this.conceptos.filter(x => x.importe > 0)
+                              .map(c => c.importe)
+                              .reduce((sum, current) => sum + current);
+    }
+    
+    return Math.abs(ingresos);                              
+  }
+
+  getEgresos() {
+    var egresos: number = 0;
+
+    if (this.conceptos.filter(x => x.importe < 0).length > 0) {
+      egresos = this.conceptos.filter(x => x.importe < 0)
+                              .map(c => c.importe)
+                              .reduce((sum, current) => sum + current);
+    }
+
+    return Math.abs(egresos);
+  }
+
+  private showOpenSaldo(){
+    this.saldoAbierto.open(SaldoAbiertoComponent, { data: {ingresos: this.getIngresos(), egresos: this.getEgresos()} });    
+  }
 }
