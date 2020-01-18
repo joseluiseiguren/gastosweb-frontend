@@ -11,12 +11,12 @@ export class SaldoComponent implements OnInit {
   @Input() saldo: number;
   @Output() saldoClicked = new EventEmitter();
   
-  constructor(private _userService: UsersService) { }
+  constructor(public _userService: UsersService) { }
 
   ngOnInit() {
   }
 
-  private onClick(){
+  onClick(){
     this.saldoClicked.emit();
   }
 }

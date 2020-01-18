@@ -39,7 +39,7 @@ export class DiarioEnterComponent implements OnInit {
     let newImporte = parseFloat(this.form.value.importeFormControl.toString().replace(',', '.'));
     this._conceptosDiarioService.setConceptoImporte(
         new Date(this.data.concepto.fecha), 
-        (this.form.value.debitoCreditoControl === 1) ? newImporte : newImporte*-1, 
+        (this.form.value.debitoCreditoControl == 1) ? newImporte : newImporte*-1, 
         this.data.concepto.idconcepto)
             .subscribe(
               () => { 

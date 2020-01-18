@@ -9,6 +9,11 @@ import { MatDialog, MatDatepickerInputEvent } from '@angular/material';
 import { DiarioEnterComponent } from '../diario-enter/diario-enter.component';
 import { FormControl } from '@angular/forms';
 import { SaldoAbiertoComponent } from '../saldo-abierto/saldo-abierto.component';
+import { ISaldoItem } from '../models/saldoItem';
+import { DatePipe } from '@angular/common';
+import { SumaryMonthService } from '../services/sumary-month.service';
+import { SumaryAnioService } from '../services/sumary-anio.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-diario',
@@ -25,15 +30,18 @@ export class DiarioComponent implements OnInit {
   constructor(private _conceptosDiarioService: DiarioService,
               private _userService: UsersService,
               private _helperService: HelperService,
+              private datePipe: DatePipe,
+              private _sumaryMonthService: SumaryMonthService,
+              private _sumaryAnioService: SumaryAnioService,
               public enterDiario: MatDialog,
               public saldoAbierto: MatDialog) {  }
 
   ngOnInit() {
-    this.getData();
+    this.getData();    
   }
 
   changeDate(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.getData();
+    this.getData();    
   }
 
   getData() {
@@ -80,6 +88,37 @@ export class DiarioComponent implements OnInit {
   }
 
   private showOpenSaldo(){
-    this.saldoAbierto.open(SaldoAbiertoComponent, { data: {ingresos: this.getIngresos(), egresos: this.getEgresos()} });    
+    let saldos: ISaldoItem[] = [];    
+    saldos.push(new ISaldoItem("" + this.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'mediumDate')), "today", this.getIngresos(), this.getEgresos()));
+
+    forkJoin(this._sumaryMonthService.getSumary(this.currentDate.value), this._sumaryAnioService.getSumary(this.currentDate.value))
+        .subscribe(([mensual, anual]) => {
+          saldos.push(new ISaldoItem("" + this.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'LLLL yyyy')), "calendar_today", mensual.ingresos, mensual.egresos));          
+          saldos.push(new ISaldoItem("Año " + this.datePipe.transform(new Date(this.currentDate.value), 'yyyy'), "airplay", anual.ingresos, anual.egresos));
+
+          this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
+        },
+        error => {
+          this.errorMessage = this._helperService.getErrorMessage(error);
+        });
+        
+
+
+    
+    
+    
+    
+
+    
+  }
+
+  private toCamelCase(strInput: string) : string {
+    let str = strInput.split(" ");
+
+    for (var i = 0, x = str.length; i < x; i++) {
+        str[i] = str[i][0].toUpperCase() + str[i].substr(1);
+    }
+
+    return str.join(" ");
   }
 }

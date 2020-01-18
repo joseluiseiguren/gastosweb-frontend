@@ -32,7 +32,7 @@ import { ErrorMessageComponent } from './error-message/error-message.component';
 import { SumaryanioComponent } from './sumaryanio/sumaryanio.component';
 import { UserprofileComponent } from './userprofile/userprofile.component';
 import { SumaryhistoricoComponent } from './sumaryhistorico/sumaryhistorico.component';
-import { HashLocationStrategy, LocationStrategy, CurrencyPipe, registerLocaleData } from '@angular/common';
+import { HashLocationStrategy, LocationStrategy, CurrencyPipe, registerLocaleData, DatePipe } from '@angular/common';
 import { IpService } from './services/ip.service';
 import { MatToolbarModule, 
   MatCardModule, 
@@ -65,6 +65,7 @@ import localeEs from '@angular/common/locales/es';
 import localeEn from '@angular/common/locales/en';
 import { SaldoComponent } from './saldo/saldo.component';
 import { SaldoAbiertoComponent } from './saldo-abierto/saldo-abierto.component';
+import { SaldoItemComponent } from './saldo-item/saldo-item.component';
 registerLocaleData(localeEs, localeEs); 
 registerLocaleData(localeEn, localeEn); 
 
@@ -103,7 +104,7 @@ const routes: Routes = [
     SumaryhistoricoComponent,
     AboutComponent,
     DiarioEnterComponent,    
-    TwoDigitDecimaNumberDirective, SaldoComponent, SaldoAbiertoComponent
+    TwoDigitDecimaNumberDirective, SaldoComponent, SaldoAbiertoComponent, SaldoItemComponent
   ],
   imports: [
     BrowserModule,
@@ -147,6 +148,7 @@ const routes: Routes = [
               FormatingService,
               UrlService,
               CurrencyPipe,
+              DatePipe,
               AuthGuard,
               {
                 provide: HTTP_INTERCEPTORS,
