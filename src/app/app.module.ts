@@ -8,7 +8,6 @@ import { MensualComponent } from './mensual/mensual.component';
 import { AnualComponent } from './anual/anual.component';
 import { HistoricoComponent } from './historico/historico.component';
 import { ConceptosComponent } from './conceptos/conceptos.component';
-import { SumarydiaComponent } from './sumarydia/sumarydia.component';
 import { SumarymesComponent } from './sumarymes/sumarymes.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SumaryMonthService } from './services/sumary-month.service';
@@ -66,6 +65,7 @@ import localeEn from '@angular/common/locales/en';
 import { SaldoComponent } from './saldo/saldo.component';
 import { SaldoAbiertoComponent } from './saldo-abierto/saldo-abierto.component';
 import { SaldoItemComponent } from './saldo-item/saldo-item.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 registerLocaleData(localeEs, localeEs); 
 registerLocaleData(localeEn, localeEn); 
 
@@ -93,7 +93,6 @@ const routes: Routes = [
     AnualComponent,
     HistoricoComponent,
     ConceptosComponent,
-    SumarydiaComponent,
     SumarymesComponent,
     DashboardComponent,
     RegistracionComponent,
@@ -104,7 +103,7 @@ const routes: Routes = [
     SumaryhistoricoComponent,
     AboutComponent,
     DiarioEnterComponent,    
-    TwoDigitDecimaNumberDirective, SaldoComponent, SaldoAbiertoComponent, SaldoItemComponent
+    TwoDigitDecimaNumberDirective, SaldoComponent, SaldoAbiertoComponent, SaldoItemComponent, WelcomeComponent
   ],
   imports: [
     BrowserModule,
@@ -160,7 +159,7 @@ const routes: Routes = [
                 useValue: window.navigator.language.split('-')[0]
               }              
             ],
-  entryComponents: [ AboutComponent, DiarioEnterComponent, SaldoAbiertoComponent ],
+  entryComponents: [ AboutComponent, DiarioEnterComponent, SaldoAbiertoComponent, WelcomeComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

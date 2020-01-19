@@ -25,7 +25,7 @@ export class DiarioComponent implements OnInit {
   errorMessage: string = "";
   loading: Boolean = false;
   displayedColumns: string[] = ['descripcion', 'importe'];
-  currentDate = new FormControl(new Date());
+  currentDate = new FormControl(new Date());  
   
   constructor(private _conceptosDiarioService: DiarioService,
               private _userService: UsersService,
