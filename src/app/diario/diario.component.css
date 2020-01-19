@@ -37,11 +37,21 @@
 .tableContent {
     display: flex;
     justify-content: center;
+    position: fixed;
+    width: 100%;
+    height: 84%;
+    top: 16%;
+    overflow-y: scroll;
+    max-block-size: -webkit-fill-available;        
 }
 
 .header {
     display: flex;
     justify-content: space-evenly;
+    position: fixed;
+    width: 100%;    
+    border-bottom-style: solid;
+    
 }
 
   

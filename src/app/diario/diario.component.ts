@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DiarioService } from '../services/diario.service';
 import { IConceptoDiario } from '../models/concepto.diario';
-import { SumaryMonth } from '../models/sumarymonth';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
-import { SumaryAnio } from '../models/sumaryanio';
 import { MatDialog, MatDatepickerInputEvent } from '@angular/material';
 import { DiarioEnterComponent } from '../diario-enter/diario-enter.component';
 import { FormControl } from '@angular/forms';
