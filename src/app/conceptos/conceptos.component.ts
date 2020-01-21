@@ -3,6 +3,7 @@ import { ConceptoService } from '../services/concepto.service';
 import { IConcepto } from '../models/concepto';
 import { NgForm } from '@angular/forms';
 import { HelperService } from '../services/helper.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-conceptos',
@@ -10,13 +11,41 @@ import { HelperService } from '../services/helper.service';
   styleUrls: ['./conceptos.component.css']
 })
 export class ConceptosComponent implements OnInit {
+  displayedColumns: string[] = ['concepto', 'tipo'];
+  loading: boolean = false;
+  conceptos: IConcepto[] = [];
+
+  constructor(private _conceptoService: ConceptoService,
+              private _helperService: HelperService,
+              public snackBar: MatSnackBar){  }
+
+  ngOnInit() {
+    this.getConceptos();
+  }
+
+  getConceptos() {
+    this.loading = true;
+    this._conceptoService.getConceptos()
+        .subscribe(
+            data => { 
+              this.conceptos = data;              
+              this.loading = false;
+            },
+            error => {
+              this.loading = false; 
+              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
+            });
+  }
+  
+  
+  /*
   conceptos: any[];
   errorMessageGridConceptos: string = "";
   model: IConcepto = new IConcepto();
-  pantallaActual: number; /* 0-ninguna / 1 - Alta / 2 - Modificacion */
+  pantallaActual: number; // 0-ninguna / 1 - Alta / 2 - Modificacion
   pantallaTitulo: string;
   operationMessage: string = "";
-  operationMessageStatus: number = 0; /* 0 - OK / 1 - Error */
+  operationMessageStatus: number = 0; // 0 - OK / 1 - Error 
   loading: boolean = false;
   loadingGridConceptos: boolean = false;
 
@@ -28,7 +57,7 @@ export class ConceptosComponent implements OnInit {
     this.model.id = "";
     this.model.suma = false;
     this.pantallaActual = 0;
-    this.getConceptos();
+    //this.getConceptos();
   }
 
   ngOnInit() {
@@ -107,4 +136,5 @@ export class ConceptosComponent implements OnInit {
                     });
     }
   }
+  */
 }

@@ -10,23 +10,23 @@
        [style.marginTop.px]="isMobile() ? 56 : 0">
           <mat-sidenav #snav [fixedInViewport]="isMobile()" fixedTopGap="56" (click)="snav.toggle()">
           <mat-nav-list>            
-              <a mat-list-item [routerLink]="['page1']">
+              <a mat-list-item (click)="route('dashboard/diario')">
                 <mat-icon>today</mat-icon>Diario
               </a>
-              <a mat-list-item [routerLink]="['page2']">
+              <a mat-list-item (click)="route('dashboard/mensual')">
                 <mat-icon>calendar_today</mat-icon>Mensual
               </a>
-              <a mat-list-item routerLink=".">
+              <a mat-list-item (click)="route('dashboard/anual')">
                 <mat-icon>airplay</mat-icon>Anual
               </a>
-              <a mat-list-item routerLink=".">
+              <a mat-list-item (click)="route('dashboard/historico')">
                 <mat-icon>blur_linear</mat-icon>Historico
               </a>
-              <a mat-list-item routerLink=".">
+              <a mat-list-item (click)="route('dashboard/conceptos')">
                 <mat-icon>add_chart</mat-icon>Conceptos
               </a>
               <mat-divider></mat-divider>
-              <a mat-list-item routerLink=".">
+              <a mat-list-item (click)="route('dashboard/perfil')">
                 <mat-icon>person_outline</mat-icon>Perfil
               </a>              
               <a mat-list-item (click)="logout()">

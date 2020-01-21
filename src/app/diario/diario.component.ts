@@ -3,7 +3,7 @@ import { DiarioService } from '../services/diario.service';
 import { IConceptoDiario } from '../models/concepto.diario';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
-import { MatDialog, MatDatepickerInputEvent } from '@angular/material';
+import { MatDialog, MatDatepickerInputEvent, MatSnackBar } from '@angular/material';
 import { DiarioEnterComponent } from '../diario-enter/diario-enter.component';
 import { FormControl } from '@angular/forms';
 import { SaldoAbiertoComponent } from '../saldo-abierto/saldo-abierto.component';
@@ -20,7 +20,6 @@ import { forkJoin } from 'rxjs';
 })
 export class DiarioComponent implements OnInit {
   conceptos: IConceptoDiario[];
-  errorMessage: string = "";
   loading: Boolean = false;
   displayedColumns: string[] = ['descripcion', 'importe'];
   currentDate = new FormControl(new Date());  
@@ -29,6 +28,7 @@ export class DiarioComponent implements OnInit {
               private _userService: UsersService,
               private _helperService: HelperService,
               private datePipe: DatePipe,
+              public snackBar: MatSnackBar,
               private _sumaryMonthService: SumaryMonthService,
               private _sumaryAnioService: SumaryAnioService,
               public enterDiario: MatDialog,
@@ -44,7 +44,6 @@ export class DiarioComponent implements OnInit {
 
   getData() {
     this.loading = true;
-    this.errorMessage = "";
     this._conceptosDiarioService.getConceptosImportes(this.currentDate.value)
         .subscribe(
             data => { 
@@ -53,7 +52,7 @@ export class DiarioComponent implements OnInit {
             },
             error => {
               this.loading = false; 
-              this.errorMessage = this._helperService.getErrorMessage(error);
+              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
             });
   }
 
@@ -97,7 +96,7 @@ export class DiarioComponent implements OnInit {
           this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
         },
         error => {
-          this.errorMessage = this._helperService.getErrorMessage(error);
+          this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
         });
         
 
