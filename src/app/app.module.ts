@@ -51,7 +51,8 @@ import { MatToolbarModule,
   MatDialogModule,
   MatSnackBarModule,
   MatTableModule,
-  MatDatepickerModule } from  '@angular/material';
+  MatDatepickerModule, 
+  MatTooltipModule} from  '@angular/material';
 import { MatIconModule  } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatRadioModule } from '@angular/material/radio';
@@ -66,6 +67,7 @@ import { SaldoComponent } from './saldo/saldo.component';
 import { SaldoAbiertoComponent } from './saldo-abierto/saldo-abierto.component';
 import { SaldoItemComponent } from './saldo-item/saldo-item.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { ConceptoDialogComponent } from './concepto-dialog/concepto-dialog.component';
 registerLocaleData(localeEs, localeEs); 
 registerLocaleData(localeEn, localeEn); 
 
@@ -103,7 +105,7 @@ const routes: Routes = [
     SumaryhistoricoComponent,
     AboutComponent,
     DiarioEnterComponent,    
-    TwoDigitDecimaNumberDirective, SaldoComponent, SaldoAbiertoComponent, SaldoItemComponent, WelcomeComponent
+    TwoDigitDecimaNumberDirective, SaldoComponent, SaldoAbiertoComponent, SaldoItemComponent, WelcomeComponent, ConceptoDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -134,6 +136,7 @@ const routes: Routes = [
     MatListModule,
     MatRadioModule,
     MatChipsModule,
+    MatTooltipModule,
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
   ],
   providers: [SumaryMonthService,
@@ -159,7 +162,7 @@ const routes: Routes = [
                 useValue: window.navigator.language.split('-')[0]
               }              
             ],
-  entryComponents: [ AboutComponent, DiarioEnterComponent, SaldoAbiertoComponent, WelcomeComponent ],
+  entryComponents: [ AboutComponent, DiarioEnterComponent, SaldoAbiertoComponent, WelcomeComponent, ConceptoDialogComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

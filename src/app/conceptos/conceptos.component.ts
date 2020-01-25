@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ConceptoService } from '../services/concepto.service';
 import { IConcepto } from '../models/concepto';
-import { NgForm } from '@angular/forms';
 import { HelperService } from '../services/helper.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { ConceptoDialogComponent } from '../concepto-dialog/concepto-dialog.component';
 
 @Component({
   selector: 'app-conceptos',
@@ -17,6 +17,7 @@ export class ConceptosComponent implements OnInit {
 
   constructor(private _conceptoService: ConceptoService,
               private _helperService: HelperService,
+              public conceptoDialog: MatDialog,
               public snackBar: MatSnackBar){  }
 
   ngOnInit() {
@@ -35,6 +36,10 @@ export class ConceptosComponent implements OnInit {
               this.loading = false; 
               this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
             });
+  }
+
+  openConceptoDialog(concepto: IConcepto){    
+    this.conceptoDialog.open(ConceptoDialogComponent, { data: {concepto} });    
   }
   
   
