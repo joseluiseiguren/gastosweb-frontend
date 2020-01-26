@@ -1,3 +1,29 @@
+<mat-spinner class="loading" *ngIf="loading === true"></mat-spinner>
+
+<div *ngIf="loading === false">
+  <div class="header">
+    <mat-form-field class="dropdownFechas">
+      <mat-label>Mes</mat-label>
+      <mat-select panelClass="long-panel" [(value)]="selectedMonth">
+        <mat-option *ngFor="let mes of meses" [value]="mes.numero">
+          {{mes.nombre}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="dropdownFechas">
+      <mat-label>Año</mat-label>
+      <mat-select panelClass="long-panel" [(value)]="selectedYear">
+        <mat-option *ngFor="let anio of anios" [value]="anio">
+          {{anio}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <app-saldo [titulo]="'Saldo Mensual'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>    
+  </div>
+</div>
+<!--
 <app-error-message *ngIf="errorMessage.length != 0 && loading === false" [message]="errorMessage"></app-error-message>
 <app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>
 
@@ -21,7 +47,6 @@
   </div>
 
   <div class="conceptos">
-      <!--
       <accordion>
           <accordion-group *ngFor="let ct of conceptosTotales" 
                           #group 
@@ -48,7 +73,7 @@
                 <app-loading *ngIf="ct.dataAdic === undefined" [texto]="'Cargando...'"></app-loading>
             </div>
           </accordion-group>
-        </accordion>
-        -->
+        </accordion>        
   </div>
 </div>
+-->

@@ -103,12 +103,12 @@ export class DiarioComponent implements OnInit, OnDestroy {
 
   private showOpenSaldo(){
     let saldos: ISaldoItem[] = [];    
-    saldos.push(new ISaldoItem("" + this.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'mediumDate')), "today", this.getIngresos(), this.getEgresos()));
+    saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'mediumDate')), "today", this.getIngresos(), this.getEgresos()));
 
     this.unsubscribeSummaryDialog();
     this.summaryDialogSubscription = forkJoin(this._sumaryMonthService.getSumary(this.currentDate.value), this._sumaryAnioService.getSumary(this.currentDate.value))
         .subscribe(([mensual, anual]) => {
-          saldos.push(new ISaldoItem("" + this.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'LLLL yyyy')), "calendar_today", mensual.ingresos, mensual.egresos));          
+          saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'LLLL yyyy')), "calendar_today", mensual.ingresos, mensual.egresos));          
           saldos.push(new ISaldoItem("Año " + this.datePipe.transform(new Date(this.currentDate.value), 'yyyy'), "airplay", anual.ingresos, anual.egresos));
 
           this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
@@ -127,13 +127,5 @@ export class DiarioComponent implements OnInit, OnDestroy {
     
   }
 
-  private toCamelCase(strInput: string) : string {
-    let str = strInput.split(" ");
-
-    for (var i = 0, x = str.length; i < x; i++) {
-        str[i] = str[i][0].toUpperCase() + str[i].substr(1);
-    }
-
-    return str.join(" ");
-  }
+  
 }

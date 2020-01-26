@@ -1,3 +1,21 @@
+::ng-deep .mat-select-panel.long-panel { 
+    max-height: 600px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-evenly;
+    position: fixed;
+    width: 100%;    
+    border-bottom-style: solid;    
+}
+
+.dropdownFechas {
+    padding-top: 10px;
+    margin-bottom: -10px;
+}
+
+/*
 select {
     margin-left: 5px;
     margin-top: 0px;
@@ -14,7 +32,7 @@ select {
   }
   
   select::-ms-expand { 
-      display: none; /* remove default arrow in IE 10 and 11 */
+      display: none;
   }
   
   @media screen and (min-width:0\0) {
@@ -29,8 +47,6 @@ select {
     padding-top: 5px;
     width: 252px;
     position: fixed;
-    /*border: black;
-    border-style: solid;*/
 }
 
 .conceptos {
@@ -38,8 +54,6 @@ select {
     margin-left: 15px;
     width: 78%;
     margin-left: 270px;
-    /*border: black;
-    border-style: solid;*/
 }
 
 .concepto {
@@ -76,8 +90,6 @@ select {
         width: 100%;
         position: relative;
         display: inline-block;
-        /*border: black;
-        border-style: solid;*/
     }
 
     .content {
@@ -88,8 +100,6 @@ select {
         clear: both;
         width: 100%;
         margin-left: 5px;
-        /*border: black;
-        border-style: solid;*/
     }
 
     .clearfix {
@@ -101,3 +111,4 @@ select {
     }
     
 }
+*/
