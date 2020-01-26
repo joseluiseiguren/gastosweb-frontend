@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
@@ -19,7 +19,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   public urlAnual: string = '/dashboard/anual';
   public urlHistorico: string = '/dashboard/historico';
   public urlConceptos: string = '/dashboard/conceptos';
-  public showUserMenu: boolean = false;
+  public showUserMenu: boolean = false;  
   
   constructor(private _userService: UsersService, 
               private router: Router,
@@ -56,10 +56,6 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   about(): void {
     const dialogRef = this.aboutDialog.open(AboutComponent, {
       width: '250px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');      
-    });
+    });    
   }
 }

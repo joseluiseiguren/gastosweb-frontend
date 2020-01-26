@@ -1,1 +1,37 @@
-<p>concepto-dialog works!</p>
+<div class="spinner">
+    <mat-spinner class="spinner" *ngIf="loading" [diameter]="20"></mat-spinner>
+</div>
+
+<div class="title">
+    <h2 mat-dialog-title>{{data.concepto === undefined ? 'Nuevo Concepto' : 'Modificación de Concepto'}}</h2>
+</div>
+
+<mat-dialog-content>    
+    <form [formGroup]="form" class="full-width-form" (ngSubmit)="onSave()" novalidate>
+        <mat-form-field>
+            <input matInput 
+                    (focus)="$event.target.select()" 
+                    placeholder="Concepto" 
+                    formControlName="conceptoFormControl" 
+                    autocomplete="off">
+        </mat-form-field>
+        <div>
+            <mat-radio-group formControlName="debitoCreditoControl">
+                <mat-radio-button class="debito" value="0">Débito</mat-radio-button>
+                <mat-radio-button class="credito" value="1">Crédito</mat-radio-button>
+            </mat-radio-group>
+        </div>
+                
+        <div class="buttons-section">
+            <mat-card-actions>
+                <div class="cancel-button">
+                    <button  mat-raised-button type="button" (click)="onCancel()">Cancelar</button>
+                </div>
+                <div class="save-button">
+                    <button mat-raised-button type="submit" [disabled]="!(form.valid) || loading" color="primary">Aceptar</button>                    
+                </div>
+            </mat-card-actions>
+        </div>        
+    </form>
+    
+</mat-dialog-content>

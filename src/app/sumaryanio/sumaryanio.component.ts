@@ -1,22 +1,23 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { SumaryAnioService } from '../services/sumary-anio.service';
 import { SumaryAnio } from '../models/sumaryanio';
-import { OnChanges } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sumaryanio',
   templateUrl: './sumaryanio.component.html',
   styleUrls: ['../shared/styles/sumary.css']
 })
-export class SumaryanioComponent implements OnInit {
+export class SumaryanioComponent implements OnInit, OnDestroy {
   @Input() fecha: Date;
   @Input() sumaryAnio: SumaryAnio;
   @Input() displayTitle: Boolean = true;
   @Output() LoadingStatus = new EventEmitter();
   private sumaryAnioTemp: SumaryAnio;
   loading: Boolean;
+  private summarySubscription: Subscription;
 
   constructor(private _sumaryAnioService: SumaryAnioService,
               private _userService: UsersService,
@@ -24,6 +25,14 @@ export class SumaryanioComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribeGetSummary();
+  }
+
+  unsubscribeGetSummary(): void {
+    if (this.summarySubscription){ this.summarySubscription.unsubscribe(); }    
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -35,7 +44,9 @@ export class SumaryanioComponent implements OnInit {
 
   getData() {
     this.loading = true;
-    this._sumaryAnioService.getSumary(this.fecha).subscribe(
+    
+    this.unsubscribeGetSummary();
+    this.summarySubscription = this._sumaryAnioService.getSumary(this.fecha).subscribe(
       data => this.sumaryAnioTemp = data,
       error => {
         this.loading = false;

@@ -1,10 +1,12 @@
 import { Injectable, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { Subscription } from 'rxjs';
 
 @Injectable()
 export class ComponentBase implements OnDestroy {
     
     private mobileQuery: MediaQueryList;
+    protected subscription: Subscription;
   
     constructor(changeDetectorRef: ChangeDetectorRef, 
                 media: MediaMatcher) { 
@@ -20,8 +22,10 @@ export class ComponentBase implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        console.log("dsestroy");
         this.mobileQuery.removeListener(this._mobileQueryListener);
+        if (this.subscription){
+            this.subscription.unsubscribe();
+        }
     }
 
     

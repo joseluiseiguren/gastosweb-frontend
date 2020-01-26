@@ -1,22 +1,23 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { SumaryMonthService } from '../services/sumary-month.service';
 import { SumaryMonth } from '../models/sumarymonth';
-import { OnChanges } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sumarymes',
   templateUrl: './sumarymes.component.html',
   styleUrls: ['../shared/styles/sumary.css']
 })
-export class SumarymesComponent implements OnInit {
+export class SumarymesComponent implements OnInit, OnDestroy {
   @Input() fecha: Date;
   @Input() sumaryMonth: SumaryMonth;
   @Input() displayTitle: Boolean = true;
   @Output() LoadingStatus = new EventEmitter();
   private sumaryMonthTemp: SumaryMonth;
   loading: Boolean;
+  private summarySubscription: Subscription;
 
   constructor(private _sumaryMonthService: SumaryMonthService,
               private _userService: UsersService,
@@ -24,6 +25,14 @@ export class SumarymesComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribeGetSummary();
+  }
+
+  unsubscribeGetSummary(): void {
+    if (this.summarySubscription){ this.summarySubscription.unsubscribe(); }    
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -36,7 +45,9 @@ export class SumarymesComponent implements OnInit {
 
   getData() {
     this.loading = true;
-    this._sumaryMonthService.getSumary(this.fecha).subscribe(
+
+    this.unsubscribeGetSummary();
+    this.summarySubscription = this._sumaryMonthService.getSumary(this.fecha).subscribe(
       data => this.sumaryMonthTemp = data,
       error => {
         this.loading = false;

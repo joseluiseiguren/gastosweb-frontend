@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsersService } from '../services/users.service';
 import { IpService } from '../services/ip.service';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
     loading = false;
     location: any = {};
     loginForm: FormGroup;
+    private ipServiceSubscription: Subscription;
+    private loginSubscription: Subscription;
     
     constructor(private router: Router, 
                 private formBuilder: FormBuilder,
@@ -32,7 +35,7 @@ export class LoginComponent implements OnInit {
       this.location.platform = window.navigator.platform;
       this.location.userAgent = window.navigator.userAgent;
 
-      this._ipService.getClientIp()
+      this.ipServiceSubscription = this._ipService.getClientIp()
         .subscribe(
           data => { 
             this.location.ip = data.ip;
@@ -65,10 +68,24 @@ export class LoginComponent implements OnInit {
       });  
     }
 
+    ngOnDestroy(): void {
+      this.unsubscribeIpService();
+      this.unsubscribeLogin();
+    }
+
+    unsubscribeLogin(): void {
+      if (this.loginSubscription){ this.loginSubscription.unsubscribe(); }    
+    }
+
+    unsubscribeIpService(): void {
+      if (this.loginSubscription){ this.loginSubscription.unsubscribe(); }    
+    }
+
     login() {
       this.loading = true;
 
-      this.usersService.login(this.loginForm.value.emailFormControl, this.loginForm.value.pwdFormControl, JSON.stringify(this.location))
+      this.unsubscribeLogin();
+      this.loginSubscription = this.usersService.login(this.loginForm.value.emailFormControl, this.loginForm.value.pwdFormControl, JSON.stringify(this.location))
               .subscribe(
                   data => {
                     if (data === true) {

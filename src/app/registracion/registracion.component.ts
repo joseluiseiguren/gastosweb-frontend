@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User } from '../models/user';
 import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UsersService } from '../services/users.service';
@@ -7,18 +7,21 @@ import { IpService } from '../services/ip.service';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
 import { WelcomeComponent } from '../welcome/welcome.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-registracion',
   templateUrl: './registracion.component.html',
   styleUrls: ['./registracion.component.css']
 })
-export class RegistracionComponent implements OnInit {
+export class RegistracionComponent implements OnInit, OnDestroy {
   registerForm: FormGroup;
   startDate = new Date((new Date()).getFullYear() - 20, 0, 1);
   monedas = ['$', 'U$D', '€'];
   loading: boolean = false;
   dialogRef: MatDialogRef<WelcomeComponent>;
+  private registerSubscription: Subscription;
+  private dialogSubscription: Subscription;
 
   constructor(private formBuilder: FormBuilder,
               private usersService: UsersService,
@@ -38,6 +41,19 @@ export class RegistracionComponent implements OnInit {
       }, {validator: this.checkPasswords });          
     }
 
+    ngOnDestroy(): void {
+      this.unsubscribeRegister();
+      this.unsubscribeDialog();
+    }
+
+    unsubscribeRegister(): void {
+      if (this.registerSubscription){ this.registerSubscription.unsubscribe(); }    
+    }
+  
+    unsubscribeDialog(): void {
+      if (this.dialogSubscription){ this.dialogSubscription.unsubscribe(); }    
+    }
+
     checkPasswords(group: FormGroup) {
       let pass = group.get('passwordFormControl').value;
       let confirmPass = group.get('passwordRepeatFormControl').value;
@@ -49,13 +65,15 @@ export class RegistracionComponent implements OnInit {
       this.loading  = true;
       let user = this.createUser();      
       
-      this.usersService.register(user)
+      this.unsubscribeRegister();
+      this.registerSubscription = this.usersService.register(user)
           .subscribe(
             data => {
               this.loading  = false;
               this.dialogRef = this.welcomeDialog.open(WelcomeComponent, { data: {user} });    
 
-              this.dialogRef.afterClosed().subscribe(() => {
+              this.unsubscribeDialog();
+              this.dialogSubscription = this.dialogRef.afterClosed().subscribe(() => {
                 this.router.navigate(['/login']);
               });
             },

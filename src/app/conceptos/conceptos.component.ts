@@ -4,6 +4,7 @@ import { IConcepto } from '../models/concepto';
 import { HelperService } from '../services/helper.service';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { ConceptoDialogComponent } from '../concepto-dialog/concepto-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-conceptos',
@@ -14,6 +15,8 @@ export class ConceptosComponent implements OnInit {
   displayedColumns: string[] = ['concepto', 'tipo'];
   loading: boolean = false;
   conceptos: IConcepto[] = [];
+  private getConceptosSubscription: Subscription;
+  private conceptoDialogSubscription: Subscription;
 
   constructor(private _conceptoService: ConceptoService,
               private _helperService: HelperService,
@@ -24,9 +27,23 @@ export class ConceptosComponent implements OnInit {
     this.getConceptos();
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribeGetConceptos();
+    this.unsubscribeConceptoDialog();
+  }
+
+  unsubscribeGetConceptos(): void {
+    if (this.getConceptosSubscription){ this.getConceptosSubscription.unsubscribe(); }    
+  }
+
+  unsubscribeConceptoDialog(): void {
+    if (this.conceptoDialogSubscription){ this.getConceptosSubscription.unsubscribe(); }    
+  }
+
   getConceptos() {
     this.loading = true;
-    this._conceptoService.getConceptos()
+    this.unsubscribeGetConceptos();
+    this.getConceptosSubscription = this._conceptoService.getConceptos()
         .subscribe(
             data => { 
               this.conceptos = data;              
@@ -39,107 +56,14 @@ export class ConceptosComponent implements OnInit {
   }
 
   openConceptoDialog(concepto: IConcepto){    
-    this.conceptoDialog.open(ConceptoDialogComponent, { data: {concepto} });    
+    let dialogRef = this.conceptoDialog.open(ConceptoDialogComponent, { data: {concepto} });    
+    
+    this.unsubscribeConceptoDialog();
+    this.getConceptosSubscription = dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined){
+        this.getConceptos();
+      }
+    });
   }
   
-  
-  /*
-  conceptos: any[];
-  errorMessageGridConceptos: string = "";
-  model: IConcepto = new IConcepto();
-  pantallaActual: number; // 0-ninguna / 1 - Alta / 2 - Modificacion
-  pantallaTitulo: string;
-  operationMessage: string = "";
-  operationMessageStatus: number = 0; // 0 - OK / 1 - Error 
-  loading: boolean = false;
-  loadingGridConceptos: boolean = false;
-
-  constructor(
-          private _conceptoService: ConceptoService,
-          private _helperService: HelperService) {
-    this.errorMessageGridConceptos = "";
-    this.model.descripcion = "";
-    this.model.id = "";
-    this.model.suma = false;
-    this.pantallaActual = 0;
-    //this.getConceptos();
-  }
-
-  ngOnInit() {
-  }
-
-  changeCredDeb(value: boolean) {
-    this.model.suma = value;
-  }
-
-  getConceptos() {
-    this.loadingGridConceptos = true;
-    this.errorMessageGridConceptos = "";
-    this._conceptoService.getConceptos()
-        .subscribe(
-            data => { 
-              this.conceptos = data;              
-              this.loadingGridConceptos = false;
-            },
-            error => {
-              this.loadingGridConceptos = false; 
-              this.errorMessageGridConceptos = this._helperService.getErrorMessage(error);
-            });
-  }
-
-  cambiarPantalla(pantallaNueva: number, conceptoSeleccionado: any) {
-    this.operationMessage = "";
-    this.pantallaActual = pantallaNueva;
-    this.model.descripcion = "";
-    this.pantallaTitulo = (pantallaNueva == 1) ? "Alta de Concepto" : "Modificacion de Concepto";
-    if (conceptoSeleccionado != null) {
-      this.model.descripcion = conceptoSeleccionado.descripcion;
-      this.model.suma = conceptoSeleccionado.credito;
-      this.model.id = conceptoSeleccionado._id;
-    } 
-  }
-
-  aceptar(f: NgForm): void {
-    this.loading = true;
-    this.model.descripcion = this.model.descripcion[0].toUpperCase() + this.model.descripcion.slice(1);
-
-    // ALTA
-    if (this.pantallaActual == 1) {
-      this._conceptoService.insertConcepto(
-                                      this.model.descripcion, 
-                                      this.model.suma)
-                  .subscribe(
-                    data => {
-                      f.resetForm();
-                      this.operationMessage = "Carga Exitosa!";
-                      this.operationMessageStatus = 0;
-                      this.loading = false;
-                      this.getConceptos();
-                    },
-                    error => {
-                      this.operationMessage = this._helperService.getErrorMessage(error);
-                      this.operationMessageStatus = 1;
-                      this.loading = false;
-                    });
-    }
-    else {
-      // MODIFICACION      
-      this._conceptoService.updateConcepto(
-                            this.model.id,
-                            this.model.descripcion, 
-                            this.model.suma)
-                  .subscribe(
-                    data => {
-                      this.loading = false;
-                      this.pantallaActual = 0; // cierro el form
-                      this.getConceptos();
-                    },
-                    error => {
-                      this.operationMessage = this._helperService.getErrorMessage(error);
-                      this.operationMessageStatus = 1;
-                      this.loading = false;
-                    });
-    }
-  }
-  */
 }

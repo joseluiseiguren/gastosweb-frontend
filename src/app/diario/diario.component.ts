@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DiarioService } from '../services/diario.service';
 import { IConceptoDiario } from '../models/concepto.diario';
 import { UsersService } from '../services/users.service';
@@ -11,18 +11,20 @@ import { ISaldoItem } from '../models/saldoItem';
 import { DatePipe } from '@angular/common';
 import { SumaryMonthService } from '../services/sumary-month.service';
 import { SumaryAnioService } from '../services/sumary-anio.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-diario',
   templateUrl: './diario.component.html',
   styleUrls: ['./diario.component.css']
 })
-export class DiarioComponent implements OnInit {
+export class DiarioComponent implements OnInit, OnDestroy {
   conceptos: IConceptoDiario[];
   loading: Boolean = false;
   displayedColumns: string[] = ['descripcion', 'importe'];
   currentDate = new FormControl(new Date());  
+  private getDataSubscription: Subscription;
+  private summaryDialogSubscription: Subscription;
   
   constructor(private _conceptosDiarioService: DiarioService,
               private _userService: UsersService,
@@ -38,13 +40,28 @@ export class DiarioComponent implements OnInit {
     this.getData();    
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribeGetData();
+    this.unsubscribeSummaryDialog();
+  }
+
+  unsubscribeGetData(): void {
+    if (this.getDataSubscription){ this.getDataSubscription.unsubscribe(); }    
+  }
+
+  unsubscribeSummaryDialog(): void {
+    if (this.summaryDialogSubscription){ this.summaryDialogSubscription.unsubscribe(); }    
+  }
+
   changeDate(type: string, event: MatDatepickerInputEvent<Date>) {
     this.getData();    
   }
 
   getData() {
     this.loading = true;
-    this._conceptosDiarioService.getConceptosImportes(this.currentDate.value)
+    this.unsubscribeGetData();
+
+    this.getDataSubscription = this._conceptosDiarioService.getConceptosImportes(this.currentDate.value)
         .subscribe(
             data => { 
               this.conceptos = data;
@@ -88,7 +105,8 @@ export class DiarioComponent implements OnInit {
     let saldos: ISaldoItem[] = [];    
     saldos.push(new ISaldoItem("" + this.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'mediumDate')), "today", this.getIngresos(), this.getEgresos()));
 
-    forkJoin(this._sumaryMonthService.getSumary(this.currentDate.value), this._sumaryAnioService.getSumary(this.currentDate.value))
+    this.unsubscribeSummaryDialog();
+    this.summaryDialogSubscription = forkJoin(this._sumaryMonthService.getSumary(this.currentDate.value), this._sumaryAnioService.getSumary(this.currentDate.value))
         .subscribe(([mensual, anual]) => {
           saldos.push(new ISaldoItem("" + this.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'LLLL yyyy')), "calendar_today", mensual.ingresos, mensual.egresos));          
           saldos.push(new ISaldoItem("Año " + this.datePipe.transform(new Date(this.currentDate.value), 'yyyy'), "airplay", anual.ingresos, anual.egresos));

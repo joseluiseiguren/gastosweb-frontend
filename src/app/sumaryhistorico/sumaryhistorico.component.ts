@@ -1,18 +1,20 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { SumaryHistorico } from '../models/sumaryHistorico';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
 import { SumaryHistoricoService } from '../services/sumary-historico.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sumaryhistorico',
   templateUrl: './sumaryhistorico.component.html',
   styleUrls: ['../shared/styles/sumary.css']
 })
-export class SumaryhistoricoComponent implements OnInit {
+export class SumaryhistoricoComponent implements OnInit, OnDestroy {
   @Output() LoadingStatus = new EventEmitter();
   public sumaryHistorico: SumaryHistorico;
   loading: Boolean = false;
+  private summarySubscription: Subscription;
   
   constructor(private _sumaryHistoricoService: SumaryHistoricoService,
               private _userService: UsersService,
@@ -23,9 +25,19 @@ export class SumaryhistoricoComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribeGetSummary();
+  }
+
+  unsubscribeGetSummary(): void {
+    if (this.summarySubscription){ this.summarySubscription.unsubscribe(); }    
+  }
+
   getData() {
     this.loading = true;
-    this._sumaryHistoricoService.getSumary().subscribe(
+
+    this.unsubscribeGetSummary();
+    this.summarySubscription = this._sumaryHistoricoService.getSumary().subscribe(
       data => this.sumaryHistorico = data,
       error => {
         this.loading = false;
