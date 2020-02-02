@@ -4,85 +4,85 @@ import { HelperService } from '../services/helper.service';
 import { DatePipe } from '@angular/common';
 import { DiarioService } from '../services/diario.service';
 import { Subscription } from 'rxjs';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDatepicker } from '@angular/material';
+import { ISaldoItem } from '../models/saldoItem';
+import { SumaryAnioService } from '../services/sumary-anio.service';
+import { SaldoAbiertoComponent } from '../saldo-abierto/saldo-abierto.component';
+import { FormControl } from '@angular/forms';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { Moment } from 'moment';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'MM/YYYY',
+  },
+  display: {
+    dateInput: 'MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
 
 @Component({
   selector: 'app-mensual',
   templateUrl: './mensual.component.html',
-  styleUrls: ['./mensual.component.css']
+  styleUrls: ['./mensual.component.css'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+  ],
 })
 export class MensualComponent implements OnInit, OnDestroy {
-  meses: Meses[];
-  anios: number[] = new Array<number>();
   loading: Boolean = false;
   conceptosTotales: any[];
-  private getAniosSubscription: Subscription;
   private getDataSubscription: Subscription;
-  selectedMonth: number;
-  selectedYear: number;
+  private summaryDialogSubscription: Subscription;
+  currentDate = new FormControl();
 
   constructor(private _datePipe: DatePipe,
               private _userService: UsersService,
               private _diarioService: DiarioService,
               public snackBar: MatSnackBar,
-              private _helperService: HelperService) { 
-    this.meses = new Array<Meses>();
-    for (let _i = 0; _i < 12; _i++) {
-      this.meses.push(new Meses(this._helperService.toCamelCase(this._datePipe.transform(new Date(new Date(2000, _i, 1)), 'MMMM')), _i+1));
-    }
-  }
+              private _sumaryAnioService: SumaryAnioService,
+              public saldoAbierto: MatDialog,
+              private _helperService: HelperService) {  }
 
   ngOnInit() {
-    this.fillAniosDropDown();
-    this.selectedMonth = new Date().getMonth() + 1;
-    this.selectedYear = new Date().getFullYear();
+    this.currentDate.setValue(new Date());
     this.getData();
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeGetAnios();
     this.unsubscribeGetData();
+    this.unsubscribeSummaryDialog();
   }
 
-  unsubscribeGetAnios(): void {
-    if (this.getAniosSubscription){ this.getAniosSubscription.unsubscribe(); }    
+  unsubscribeSummaryDialog(): void {
+    if (this.summaryDialogSubscription){ this.summaryDialogSubscription.unsubscribe(); }    
   }
 
   unsubscribeGetData(): void {
     if (this.getDataSubscription){ this.getDataSubscription.unsubscribe(); }    
   }
 
-  fillAniosDropDown() {
-    this.loading = false; 
-
-    this.unsubscribeGetAnios();
-    this.getAniosSubscription = this._diarioService.getPrimerConsumo()
-        .subscribe(
-            data => {
-              let anioPrimerConsumo = Number(data.fechaMin.substring(0,4));
-              let anioUltimoConsumo = Number(data.fechaMax.substring(0,4));
-
-              for (let _i = anioUltimoConsumo; _i >= anioPrimerConsumo; _i--) {
-                this.anios.push(_i);
-              }
-            },
-            error => {
-              this.loading = false; 
-              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-            });
-  }
-
   getData() {
     this.loading = true;
-    let fecha = this.selectedYear.toString() + this.selectedMonth.toString().padStart(2, '0');
+    let fecha = this.currentDate.value.getFullYear() + (this.currentDate.value.getMonth() + 1).toString().padStart(2, '0');
 
     this.unsubscribeGetData();    
-    this.getAniosSubscription = this._diarioService.getConceptosTotalMes(fecha)
+    this.getDataSubscription = this._diarioService.getConceptosTotalMes(fecha)
         .subscribe(
             data => { 
               this.conceptosTotales = data;
               this.loading = false;
-              console.log(this.conceptosTotales);
             },
             error => {
               this.loading = false; 
@@ -90,7 +90,7 @@ export class MensualComponent implements OnInit, OnDestroy {
             });
   }
 
-  getIngresos() {
+  getIngresos() : number {
     var ingresos: number = 0;
 
     if (this.conceptosTotales.filter(x => x.saldo > 0).length > 0) {
@@ -99,10 +99,10 @@ export class MensualComponent implements OnInit, OnDestroy {
                               .reduce((sum, current) => sum + current);
     }
     
-    return Math.abs(ingresos);                              
+    return Math.abs(ingresos);
   }
 
-  getEgresos() {
+  getEgresos() : number {
     var egresos: number = 0;
 
     if (this.conceptosTotales.filter(x => x.saldo < 0).length > 0) {
@@ -113,15 +113,26 @@ export class MensualComponent implements OnInit, OnDestroy {
 
     return Math.abs(egresos);
   }
-}
 
-class Meses {
-  nombre: string;
-  numero: number;
+  private showOpenSaldo(){
+    let saldos: ISaldoItem[] = [];
+    
+    saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this._datePipe.transform(this.currentDate.value, 'LLLL yyyy')), "calendar_today", this.getIngresos(), this.getEgresos()));
+    
+    this.unsubscribeSummaryDialog();    
+    this.summaryDialogSubscription = this._sumaryAnioService.getSumary(this.currentDate.value).subscribe((anual) => {
+      saldos.push(new ISaldoItem("Año " + this._datePipe.transform(this.currentDate.value, 'yyyy'), "airplay", anual.ingresos, anual.egresos));
+      this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
+    },
+    error => {
+      this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
+    });          
+  }
 
-  constructor(nombre: string, numero: number) { 
-    this.nombre = nombre;
-    this.numero = numero;
+  chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+    this.currentDate.setValue(new Date(normalizedMonth.toString()));
+    datepicker.close();
+    this.getData();
   }
 }
 

@@ -10,10 +10,46 @@
     border-bottom-style: solid;    
 }
 
-.dropdownFechas {
-    padding-top: 10px;
-    margin-bottom: -10px;
+.datePicker {
+    width: 100px;
+    margin-left: 5px;
+    margin-top: 10px;
+    text-align: center;    
 }
+
+.tableContent {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    height: 84%;
+    top: 16%;
+    overflow-y: scroll;
+    max-block-size: -webkit-fill-available;        
+}
+
+.conceptos-table {
+    width: 60%;
+}
+
+.mat-expansion-panel-header-description {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+@media only screen and (max-width: 600px) {
+    .conceptos-table {
+        width: 100%;
+    }
+
+    .dropdownFechas {
+        padding-top: 10px;
+        margin-bottom: -10px;
+        width: 120px;
+        text-align: center;  
+    }
+}
+
 
 /*
 select {

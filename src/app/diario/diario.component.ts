@@ -116,15 +116,6 @@ export class DiarioComponent implements OnInit, OnDestroy {
         error => {
           this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
         });
-        
-
-
-    
-    
-    
-    
-
-    
   }
 
   
