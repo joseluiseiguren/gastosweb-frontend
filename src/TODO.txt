@@ -1,50 +1,24 @@
-    - log out
-    - hacer bien el login por back y validar lo que hay en el localstorage (ver si el la mejor forma de hacer el login)
-    - mostrar nombre de usuario logueado
-    - edit profile del usuario
+- diario: input number
+- user urls para navegar entre componentes
+- cambiar nombre e icono
+- en apple hay pantallas que no funcionan
+- click summary: add loading
+
 - olvido de contraseña
-    - registracion
-    - reporte mensual
-    - reporte anual
-    - reporte historico
-    - web api
 - exportacion a excel
-    - gestion de conceptos
-    - poder personalizar la moneda
-    - no harcodear urls en los services
-    - la funcion de manejo de errores en los services se repite (optimizar)
 - hay modelos que se comparten entre webapi y frontend, por ejemplo el de usuarios -> unirlos
-    - grilla de gastos agregar hover en row
-    - loguear login de usuarios
-    - web api manejo de errores
-    - poner loading en todas las comunicacion con el server
-    - probar decimales con punto y con coma
-    - revisar web api, para que el id de usuario lo tome del token
-    - si de edita la url en el browser, no resalta el item en el nav bar
-    - revisar scrolls en diario y mensual cuando esta todo expandido
-    - en los badrequest de la api, devolver un json con el mensaje de porque fallo
 - prevenir sql inyection en los forms
 - capcha en registracion
 - unit testing frontend
 - en los post validar largos de los campos
 - usar constantes para los status code del frontend
-    - el mensaje de error de cada pantalla tiene que ser un componente
 - el mensaje de error de cada pantalla que tenga un boton de retry
-    - mensual: poner un loading a nivel pantalla GENERAL, y que si falla el 1er intento de conexion al server no siga con los siguientes
 - probar en distintos browser
 - usar el componente loading y el de errores en el login
 - mejorar look and feel del loading para que sea centrado en pantalla
 - cuando hay error generico, el desplegable del usuario queda por atras
-    - popup de carga de gastos diario: poner foco en input siempre
-    - popup de carga de gastos diario: no tener que cargar los decimales obligatoriamente
 - Conceptos que no sumen ni resten: y que puedan ser cargados en multiples monedas
 - Cuando hay error, el mensaje tapa el logout
-    - No funciona el routing en prod
-    - Tener un file con la URL de webapi de test y otro de prod
-    - En celular se ve mal 
-    - hover en mensual, anual e historico
-    - version mobile, que muestre el teclado numerico en input de carga
-    - cuando esta el input de diario abierto, y expira la sesion, no te lleva directo a la pantalla de login
 - probar errores en version mobile
 - cuando esta el submenu de usuario abiero, y se hace click en otro lado que no sea el nav, no se cierra
 - conceptos: cambiar a popup el alta y modificacion
