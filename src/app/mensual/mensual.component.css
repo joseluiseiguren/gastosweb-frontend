@@ -1,3 +1,17 @@
+.loading {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+
 ::ng-deep .mat-select-panel.long-panel { 
     max-height: 600px;
 }
@@ -50,13 +64,6 @@
 @media only screen and (max-width: 600px) {
     .conceptos-table {
         width: 100%;
-    }
-
-    .dropdownFechas {
-        padding-top: 10px;
-        margin-bottom: -10px;
-        width: 120px;
-        text-align: center;  
-    }
+    }    
 }
 

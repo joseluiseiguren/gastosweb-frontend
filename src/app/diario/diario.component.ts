@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 import { SumaryMonthService } from '../services/sumary-month.service';
 import { SumaryAnioService } from '../services/sumary-anio.service';
 import { forkJoin, Subscription } from 'rxjs';
+import { CalculationService } from '../sharedServices/calculationService';
 
 @Component({
   selector: 'app-diario',
@@ -33,6 +34,7 @@ export class DiarioComponent implements OnInit, OnDestroy {
               public snackBar: MatSnackBar,
               private _sumaryMonthService: SumaryMonthService,
               private _sumaryAnioService: SumaryAnioService,
+              private calculationService: CalculationService,
               public enterDiario: MatDialog,
               public saldoAbierto: MatDialog) {  }
 
@@ -77,28 +79,12 @@ export class DiarioComponent implements OnInit, OnDestroy {
     this.enterDiario.open(DiarioEnterComponent, { data: {concepto} });    
   }
   
-  getIngresos() {
-    var ingresos: number = 0;
-
-    if (this.conceptos.filter(x => x.importe > 0).length > 0) {
-      ingresos = this.conceptos.filter(x => x.importe > 0)
-                              .map(c => c.importe)
-                              .reduce((sum, current) => sum + current);
-    }
-    
-    return Math.abs(ingresos);                              
+  getIngresos() : number {
+    return this.calculationService.getIngresos(this.convertToNumberArray(this.conceptos));
   }
 
-  getEgresos() {
-    var egresos: number = 0;
-
-    if (this.conceptos.filter(x => x.importe < 0).length > 0) {
-      egresos = this.conceptos.filter(x => x.importe < 0)
-                              .map(c => c.importe)
-                              .reduce((sum, current) => sum + current);
-    }
-
-    return Math.abs(egresos);
+  getEgresos() : number {
+    return this.calculationService.getEgresos(this.convertToNumberArray(this.conceptos));
   }
 
   private showOpenSaldo(){
@@ -116,6 +102,15 @@ export class DiarioComponent implements OnInit, OnDestroy {
         error => {
           this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
         });
+  }
+
+  private convertToNumberArray(dataIn: IConceptoDiario[]) : number[] {
+    let importes: number[] = [];
+    dataIn.forEach(function (value) {
+      importes.push(value.importe);
+    }); 
+
+    return importes;
   }
 
   

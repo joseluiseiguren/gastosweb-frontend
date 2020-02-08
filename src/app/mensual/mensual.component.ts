@@ -12,6 +12,7 @@ import { FormControl } from '@angular/forms';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Moment } from 'moment';
+import { CalculationService } from '../sharedServices/calculationService';
 
 export const MY_FORMATS = {
   parse: {
@@ -56,6 +57,7 @@ export class MensualComponent implements OnInit, OnDestroy {
               public snackBar: MatSnackBar,
               private _sumaryAnioService: SumaryAnioService,
               public saldoAbierto: MatDialog,
+              private calculationService: CalculationService,
               private _helperService: HelperService) {  }
 
   ngOnInit() {
@@ -99,27 +101,11 @@ export class MensualComponent implements OnInit, OnDestroy {
   }
 
   getIngresos() : number {
-    var ingresos: number = 0;
-
-    if (this.conceptosTotales.filter(x => x.saldo > 0).length > 0) {
-      ingresos = this.conceptosTotales.filter(x => x.saldo > 0)
-                              .map(c => c.saldo)
-                              .reduce((sum, current) => sum + current);
-    }
-    
-    return Math.abs(ingresos);
+    return this.calculationService.getIngresos(this.convertToNumberArray(this.conceptosTotales));
   }
 
   getEgresos() : number {
-    var egresos: number = 0;
-
-    if (this.conceptosTotales.filter(x => x.saldo < 0).length > 0) {
-      egresos = this.conceptosTotales.filter(x => x.saldo < 0)
-                              .map(c => c.saldo)
-                              .reduce((sum, current) => sum + current);
-    }
-
-    return Math.abs(egresos);
+    return this.calculationService.getEgresos(this.convertToNumberArray(this.conceptosTotales));
   }
 
   private showOpenSaldo(){
@@ -150,7 +136,7 @@ export class MensualComponent implements OnInit, OnDestroy {
     this.unsubscribeItemDetail();
     this.itemDetailSubscription = this._diarioService.getConceptosMovimMes(row.idConcepto, fecha)
         .subscribe(
-            data => {
+            data => { 
               this.itemDetail = data;
               this.loadingDetail = false; 
             },
@@ -158,6 +144,15 @@ export class MensualComponent implements OnInit, OnDestroy {
               this.loadingDetail = false; 
               this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
             });
+  }
+
+  private convertToNumberArray(dataIn: any[]) : number[] {
+    let importes: number[] = [];
+    dataIn.forEach(function (value) {
+      importes.push(value.saldo);
+    }); 
+
+    return importes;
   }
 }
 

@@ -1,47 +1,43 @@
-<app-error-message *ngIf="errorMessage.length != 0 && loading === false" [message]="errorMessage"></app-error-message>
-<app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>
+<mat-spinner class="loading" *ngIf="loading === true"></mat-spinner>
 
-<div *ngIf="loading === false && errorMessage.length == 0" class="content">
-  <div class="sumaryGral">
-    <div class="combos">
-      <select #selectAnio (change)="changeAnio(selectAnio.value)">
-        <option *ngFor="let anio of anios" [value]="anio" [selected]="anio == anioActual">
-            {{anio}}
-        </option>
-      </select>
-    </div>
-    <app-sumaryanio [fecha]="bsValue" [sumaryAnio]="sumAnio" (LoadingStatus)="childLoadingStatus($event)" [displayTitle]="true"> </app-sumaryanio>
+<div *ngIf="loading === false">
+
+  <div class="header">
+
+    <mat-form-field class="anioSelect">
+      <mat-label>Año</mat-label>
+      <mat-select [(value)]="anioSelected" (selectionChange)="onChangeYear($event.value)">
+        <mat-option *ngFor="let anio of anios" [value]="anio">{{anio}}</mat-option>
+      </mat-select>      
+    </mat-form-field>
+    
+    <app-saldo [titulo]="'Saldo Anual'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>        
   </div>
 
-  <div class="conceptos">
-      <!--
-      <accordion>          
-          <accordion-group *ngFor="let ct of conceptosTotales" 
-                          #group 
-                          (isOpenChange)="loadDetail($event, ct)">
-            <div accordion-heading class="clearfix">
-                <i class="glyphicon glyphicon-chevron-down"></i>
-              {{ct.descripcion}}
-              <span class="float-right pull-right" [class.importeNegativo]="ct.saldo < 0">
-                {{ct.saldo | currency:this._userService.getMoneda()}}
-              </span>
-            </div>
-            <div>
-              <table class="table" *ngIf="ct.dataAdic !== undefined">
-                  <tbody>
-                    <tr *ngFor="let data of ct.dataAdic" class="detalleConcepto">
-                      <td class="cellDetalleConcepto">{{this._helperService.convertStringMMYYYYToDate(data.mes) | date:'LLLL yyyy'}}</td>
-                      <td class="importe cellDetalleConcepto"
-                          [class.importeNegativo]="data.importe < 0">
-                          {{data.importe | currency:this._userService.getMoneda()}}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <app-loading *ngIf="ct.dataAdic === undefined" [texto]="'Cargando...'"></app-loading>
-            </div>
-          </accordion-group>
-        </accordion>
-        -->
+  <div class="tableContent">
+    <mat-accordion class="conceptos-table">
+      <mat-expansion-panel *ngFor="let ct of conceptosTotales" (opened)="loadYearDetails(ct)">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ct.descripcion}}
+          </mat-panel-title>
+          <mat-panel-description [class.importeNegativo]="ct.saldo < 0">
+            {{ct.saldo | currency:this._userService.getMoneda()}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-spinner class="loading" *ngIf="loadingDetail === true"></mat-spinner>        
+        <mat-list *ngIf="loadingDetail === false">
+          <mat-list-item *ngFor="let detail of itemDetail">
+            <div matLine>
+              <p class="itemDescription">{{this._helperService.toCamelCase(this._helperService.convertStringMMYYYYToDate(detail.mes) | date:'LLLL yyyy')}}</p>
+              <p class="itemAmount" [class.importeNegativo]="detail.importe < 0">{{detail.importe | currency:this._userService.getMoneda()}}</p>
+              </div>
+          </mat-list-item>          
+        </mat-list>
+                
+      </mat-expansion-panel>      
+    </mat-accordion>
+
   </div>
 </div>

@@ -68,6 +68,7 @@ import { SaldoAbiertoComponent } from './saldo-abierto/saldo-abierto.component';
 import { SaldoItemComponent } from './saldo-item/saldo-item.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ConceptoDialogComponent } from './concepto-dialog/concepto-dialog.component';
+import { CalculationService } from './sharedServices/calculationService';
 registerLocaleData(localeEs, localeEs); 
 registerLocaleData(localeEn, localeEn); 
 
@@ -148,6 +149,7 @@ const routes: Routes = [
               IpService,
               HelperService,
               FormatingService,
+              CalculationService,
               UrlService,
               CurrencyPipe,
               DatePipe,
