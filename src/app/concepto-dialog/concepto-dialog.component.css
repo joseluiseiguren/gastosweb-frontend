@@ -1,0 +1,55 @@
+.spinner{
+  float: right;
+  text-align: right;    
+}
+
+.cancel-button{
+  float: left;
+  text-align: left;  
+}
+
+.save-button{
+  float: right;
+  text-align: center;  
+}
+
+.buttons-section{
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 50px;
+}
+
+.debito{
+  color: red;
+}
+
+::ng-deep .debito.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element  {
+  background-color: red !important;
+}
+
+::ng-deep .debito.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: red!important;
+}
+
+::ng-deep .debito.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color:red!important;
+}
+
+.credito{
+  color: black;
+}
+
+::ng-deep .credito.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element  {
+  background-color: black !important;
+}
+
+::ng-deep .credito.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: black!important;
+}
+
+::ng-deep .credito.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color:black!important;
+}

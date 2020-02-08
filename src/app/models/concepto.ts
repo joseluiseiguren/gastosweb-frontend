@@ -1,5 +1,5 @@
 export class IConcepto {
-    id: string;
+    _id: string;
     descripcion: string;
     suma: boolean;
 }

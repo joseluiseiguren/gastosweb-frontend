@@ -51,5 +51,15 @@ export class HelperService {
         let anio = fecha.slice(0, 4);
         
         return dia + "/" + mes + "/" + anio;
+    } 
+    
+    toCamelCase(strInput: string) : string {
+      let str = strInput.split(" ");
+  
+      for (var i = 0, x = str.length; i < x; i++) {
+          str[i] = str[i][0].toUpperCase() + str[i].substr(1);
+      }
+  
+      return str.join(" ");
     }
 }

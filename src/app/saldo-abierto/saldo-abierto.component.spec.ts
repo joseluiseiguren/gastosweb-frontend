@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SumarydiaComponent } from './sumarydia.component';
+import { SaldoAbiertoComponent } from './saldo-abierto.component';
 
-describe('SumarydiaComponent', () => {
-  let component: SumarydiaComponent;
-  let fixture: ComponentFixture<SumarydiaComponent>;
+describe('SaldoAbiertoComponent', () => {
+  let component: SaldoAbiertoComponent;
+  let fixture: ComponentFixture<SaldoAbiertoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SumarydiaComponent ]
+      declarations: [ SaldoAbiertoComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SumarydiaComponent);
+    fixture = TestBed.createComponent(SaldoAbiertoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

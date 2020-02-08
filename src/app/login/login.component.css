@@ -1,110 +1,58 @@
-
-div.polaroid {
+.loginContainer {
+    padding-top: 25px;  
+    text-align: center;
+  }
+    
+  div.login {
     width: 500px;
     padding: 10px 10px 0px 10px;
     border: 1px solid #BFBFBF;
-    background-color:honeydew;
     box-shadow: 10px 10px 5px #aaaaaa;
     display: inline-block;
-}
+  }
+  
+  .full-width-form {
+    width: 100%;
+  }
+  
+  .formfield-full-width {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .mat-register {
+    color: rgb(45, 155, 206);
+  }
+  
+  .register-container{
+    float: left;
+    text-align: left;  
+  }
+  
+  .login-button-container{
+    float: right;
+    text-align: center;  
+  }
+  
+  .buttons-section{
+    padding-top: 10px;
+    padding-bottom: 50px;
+  }
+  
+  .mat-spinner {
+    float:left; 
+    margin: 5px 10px 0px 0px;
+  }
 
-.polaroidContainer {
-    text-align: center;
-}
 
-.center {
-    text-align:center;
-    margin-top: 20px;
-}
 
-.help-block {
-    text-align: left;
-}
-
-.alert {
-    text-align: left;
-}
-
-.titulo {
-    margin-bottom: 10px;
-    color: #7c795d; 
-    font-family: 'Trocchi', serif; 
-    font-size: 20px; 
-    font-weight: normal; 
-    line-height: 48px;
-    text-align: center;
-    width: auto;
-}
-
-/* enable absolute positioning */
-.inner-addon { 
-    position: relative; 
-}
-
-/* style icon */
-.inner-addon .glyphicon {
-  position: absolute;
-  padding: 10px;
-  pointer-events: none;
-}
-
-/* align icon */
-.left-addon .glyphicon  { left:  0px;}
-.right-addon .glyphicon { right: 0px;}
-
-/* add padding  */
-.left-addon input  { padding-left:  30px; }
-.right-addon input { padding-right: 30px; }
-
-.registracion {
-    margin-top: 10px;
-    margin-right: 10px;
-    text-align: right;
-    margin-bottom: 10px;
-
-}
 
 @media only screen and (max-width: 600px) {
-    div.polaroid {
-        width: 95%;
+    div.login {
+        width: 90%;
         margin-top: 5px;
         margin-bottom: 10px;
         box-shadow: none;
-        /*transform: translate(-50%, -10%);*/
-    }
-
-    .titulo {
-        font-size: 15px; 
-        width: auto;
-    }
-
-    .alert-danger {
-        font-size: 10px; 
-    }
-
-    .form-control {
-        font-size: 10px; 
-    }
-
-    .form-group {
-        margin-top: 5px; 
-    }
-
-    label {
-        font-size: 10px; 
-    }
-
-    .btn {
-        font-size: 10px; 
-    }
-
-    .alert {
-        font-size: 10px; 
-    }
-
-    .help-block {
-        font-size: 10px; 
-    }
-
-    
+    }    
 }

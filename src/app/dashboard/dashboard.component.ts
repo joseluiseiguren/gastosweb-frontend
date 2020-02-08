@@ -1,13 +1,17 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
+import { AboutComponent } from '../about/about.component';
+import { ComponentBase } from '../services/ComponentBase';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent extends ComponentBase implements OnInit {
   userName: string;
   public urlActual = '';
   public urlDiario: string = '/dashboard/diario';
@@ -15,11 +19,16 @@ export class DashboardComponent implements OnInit {
   public urlAnual: string = '/dashboard/anual';
   public urlHistorico: string = '/dashboard/historico';
   public urlConceptos: string = '/dashboard/conceptos';
-  public showUserMenu: boolean = false;
+  public showUserMenu: boolean = false;  
   
-  constructor(private _userService: UsersService, private router: Router) {
+  constructor(private _userService: UsersService, 
+              private router: Router,
+              private changeDetectorRef: ChangeDetectorRef, 
+              private media: MediaMatcher,
+              public aboutDialog: MatDialog) {
+    super(changeDetectorRef, media);
     this.userName = this._userService.getUserName();
-    this.urlActual = this.router.url;
+    this.urlActual = this.router.url;        
   }
 
   ngOnInit() {
@@ -40,6 +49,13 @@ export class DashboardComponent implements OnInit {
     this.showUserMenu = !this.showUserMenu;
   }
 
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+  }
 
-  
+  about(): void {
+    const dialogRef = this.aboutDialog.open(AboutComponent, {
+      width: '250px'
+    });    
+  }
 }

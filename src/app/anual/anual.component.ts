@@ -1,47 +1,66 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { IAppConfig } from '../app.config/app-config.interface';
-import { APP_CONFIG } from '../app.config/app-config.constants';
-import { DiarioService } from '../services/diario.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
-import { SumaryAnio } from '../models/sumaryanio';
+import { DiarioService } from '../services/diario.service';
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs';
+import { ISaldoItem } from '../models/saldoItem';
+import { DatePipe } from '@angular/common';
+import { SaldoAbiertoComponent } from '../saldo-abierto/saldo-abierto.component';
+import { CalculationService } from '../sharedServices/calculationService';
 
 @Component({
   selector: 'app-anual',
   templateUrl: './anual.component.html',
   styleUrls: ['./anual.component.css']
 })
-export class AnualComponent implements OnInit {
-  anioActual: number = new Date().getFullYear();
+export class AnualComponent implements OnInit, OnDestroy {
   anios: number[] = new Array<number>();
-  errorMessage: string = "";
-  bsValue: Date;
-  sumAnio: SumaryAnio = new SumaryAnio();
-  conceptosTotales: any[];
+  anioSelected: number = new Date().getFullYear();
   loading: Boolean = false;
+  loadingDetail: Boolean = false;
+  conceptosTotales: any[];
+  itemDetail: any[];
+  private getPrimerConsumoSubscription: Subscription;
+  private getDataSubscription: Subscription;
+  private getAnioDetailSubscription: Subscription;
 
-  constructor(@Inject( APP_CONFIG ) private _appConfig: IAppConfig,
+  constructor(private _datePipe: DatePipe,
               private _diarioService: DiarioService,
               private _userService: UsersService,
-              private _helperService: HelperService) {
-    this.getPrimerConsumo();
-    this.bsValue = new Date(this.anioActual, 0, 1);
+              public snackBar: MatSnackBar,
+              public saldoAbierto: MatDialog,
+              private calculationService: CalculationService,
+              private _helperService: HelperService) {    
   }
 
   ngOnInit() {
+    this.getData();
+    this.getPrimerConsumo();
   }
 
-  changeAnio(value: number) {
-    let x = new Date(value, this.bsValue.getMonth(), 1);
-    this.bsValue = x;
-    this.anioActual = value;
-    this.getData();
+  ngOnDestroy(): void {
+    this.unsubscribeGetPrimerConsumo();
+    this.unsubscribeGetData();
+    this.unsubscribeItemDetail();
+  }
+
+  unsubscribeGetPrimerConsumo(): void {
+    if (this.getPrimerConsumoSubscription){ this.getPrimerConsumoSubscription.unsubscribe(); }    
+  }
+
+  unsubscribeGetData(): void {
+    if (this.getDataSubscription){ this.getDataSubscription.unsubscribe(); }    
+  }
+
+  unsubscribeItemDetail(): void {
+    if (this.getAnioDetailSubscription){ this.getAnioDetailSubscription.unsubscribe(); }    
   }
 
   getPrimerConsumo() {
-    this.errorMessage = "";
-    this.loading = true;
-    this._diarioService.getPrimerConsumo()
+    this.loading = true;    
+    this.unsubscribeGetPrimerConsumo();
+    this.getPrimerConsumoSubscription = this._diarioService.getPrimerConsumo()
         .subscribe(
             data => {
               let anioPrimerConsumo = Number(data.fechaMin.substring(0,4));
@@ -51,16 +70,26 @@ export class AnualComponent implements OnInit {
                 this.anios.push(_i);
               }
               this.getData();
+              this.loading = false;
             },
             error => {
               this.loading = false; 
-              this.errorMessage = this._helperService.getErrorMessage(error);
+              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
             });
   }
 
-  getData() {
+  getIngresos() : number {
+    return this.calculationService.getIngresos(this.convertToNumberArray(this.conceptosTotales));
+  }
+
+  getEgresos() : number {
+    return this.calculationService.getEgresos(this.convertToNumberArray(this.conceptosTotales));
+  }
+
+  getData() : void {
     this.loading = true;
-    this._diarioService.getConceptosTotalAnio(this.bsValue.getFullYear())
+    this.unsubscribeGetData();
+    this.getDataSubscription = this._diarioService.getConceptosTotalAnio(this.anioSelected)
         .subscribe(
             data => { 
               this.conceptosTotales = data;
@@ -68,27 +97,45 @@ export class AnualComponent implements OnInit {
             },
             error => {
               this.loading = false; 
-              this.errorMessage = this._helperService.getErrorMessage(error);
+              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
             });
   }
 
-  loadDetail(event: boolean, ct: any) {
-    if (event == true) {
-      this._diarioService.getConceptosMovimAnio(ct.idConcepto, this.bsValue.getFullYear())
+  private showOpenSaldo(){
+    let saldos: ISaldoItem[] = [];
+    
+    saldos.push(new ISaldoItem("Año" + this._helperService.toCamelCase(this._datePipe.transform(new Date(this.anioSelected, 1, 1), 'yyyy')), "airplay", this.getIngresos(), this.getEgresos()));    
+    this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
+  }
+
+  loadYearDetails(row: any) {    
+    this.loadingDetail = true;
+    this.itemDetail = undefined;
+    this.unsubscribeItemDetail();
+    this.getAnioDetailSubscription = this._diarioService.getConceptosMovimAnio(row.idConcepto, this.anioSelected)
         .subscribe(
             data => {
-              ct.dataAdic = new Array<any>();
-              ct.dataAdic = data;
+              this.itemDetail = data;
+              this.loadingDetail = false; 
             },
             error => {
-              this.loading = false; 
-              this.errorMessage = this._helperService.getErrorMessage(error);
+              this.loadingDetail = false; 
+              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
             });
-    }
   }
 
-  childLoadingStatus(errorMessage: string):void{
-    this.errorMessage = errorMessage;
+  onChangeYear (newValue) {
+    this.getData();
   }
 
+  private convertToNumberArray(dataIn: any[]) : number[] {
+    if (dataIn !== undefined){
+      let importes: number[] = [];
+      dataIn.forEach(function (value) {
+        importes.push(value.saldo);
+      }); 
+
+      return importes;
+    }    
+  }
 }

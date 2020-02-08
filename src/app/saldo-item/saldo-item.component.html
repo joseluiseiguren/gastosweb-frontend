@@ -1,0 +1,29 @@
+<mat-card *ngFor="let item of items">
+    <mat-card-header>
+        <mat-card-title>
+            <mat-icon style="margin-right: 10px; float: left;" >{{item.icon}}</mat-icon>
+            <div class="header">{{ item.title }}</div>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-list>
+        <mat-list-item>
+            <div class="itemTitle">Ingresos</div> 
+            <div class="itemValue">{{item.ingresos | currency:this._userService.getMoneda()}}</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <div class="itemTitle">Egresos</div>
+            <div class="itemValue">{{item.egresos | currency:this._userService.getMoneda()}}</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item 
+            [class.importeNegativo]="(item.ingresos - item.egresos) < 0"
+            [class.importePositivo]="(item.ingresos - item.egresos) >= 0">
+            <div class="itemTitle">Saldo</div>
+            <div class="itemValue">
+                {{(item.ingresos - item.egresos) | currency:this._userService.getMoneda()}}
+            </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+    </mat-list>
+</mat-card>

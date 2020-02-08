@@ -1,95 +1,28 @@
-.conceptosTable {
-    margin-left: 5px;
-    padding-top: 5px;
-    width: 30%;
-    height: 100px;
-    float: left;
-    /*border: black;
-    border-style: solid;*/
+.tableContent {
+    display: flex;
+    justify-content: center;
+    max-block-size: -webkit-fill-available;        
 }
 
-.conceptosTableHeader {
-    background-color: rgb(247, 246, 242);
+.conceptos-table {
+    width: 60%;
 }
 
-.forms {
-    float: left;
-    margin-left: 15px;
-    width: 67%;
-    /*border: black;
-    border-style: solid;*/
-    padding: 15px;
-    background-color: lavender;
-    box-shadow: 10px 10px 5px white;
-    border: 1px solid black;
-    border-radius: 25px;
+.mat-header-cell {
+    font-weight: bold;
 }
 
-.addNew {
-    float: left;
-    margin-left: 15px;
-    width: 67%;
-    /*border: black;
-    border-style: solid;*/
-    padding: 15px;
+.addButton {
+    position: fixed;
+    bottom: 10px;    
+    right: 30px;
 }
 
-.formsTitulo {
-    text-align: center;
-}
-
-.table tr:hover{
-    border-color: black;
-    border-top-style: solid;
-    border-bottom-style: solid;
-}
-
-.table tr:nth-child(odd) td{
-    background-color: white;
-}
-
-.table tr:nth-child(even) td{
-    background-color: #eaf0e9;
-}
-
+  
 
 @media only screen and (max-width: 600px) {
-    
-    .conceptosTable {
-        font-size: 11px;
-        width: 97%;
-        margin-right: 5px;
-        margin-top: 15px;
-    }
-    
-    .forms {
-        box-shadow: none;
-    }
-
-    .forms h3 {
-        font-size: 14px;
-    }
-
-    .form-control {
-        font-size: 12px;
-    }
-
-    label {
-        font-size: 12px;
-    }
-
-    .btn {
-        font-size: 12px;
-    }
-
-    .addNew {
-        position: fixed;
-        top: 10px;
-        padding-left: 0px;
-        margin-left: 5px;
-    }
-
-    strong{
-        font-size: 12px;
+    .conceptos-table {
+        width: 100%;
     }
 }
+

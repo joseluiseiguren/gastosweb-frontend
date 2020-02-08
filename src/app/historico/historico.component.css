@@ -1,76 +1,61 @@
-
-
-.sumaryGral {
-    margin-left: 5px;
-    padding-top: 5px;
-    width: 252px;
+.loading {
     position: fixed;
-    /*border: black;
-    border-style: solid;*/
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 
-.conceptos {
-    float: left;
-    margin-left: 15px;
-    width: 78%;
-    margin-left: 270px;
-    /*border: black;
-    border-style: solid;*/
+.header {
+    display: flex;
+    justify-content: space-evenly;
+    position: fixed;
+    width: 100%;    
+    border-bottom-style: solid;    
 }
 
-.concepto {
-    border: black;
-    border-style: solid;
+.saldos {
+    margin-top: -10px;
+    margin-bottom: 10px;
 }
 
-.detalleConcepto {
-    font-size: 13px;
-    font-family: Helvetica, sans-serif;
+.tableContent {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    height: 84%;
+    top: 16%;
+    overflow-y: scroll;
+    max-block-size: -webkit-fill-available;        
 }
 
-.cellDetalleConcepto {
-    padding: 1px;
+.conceptos-table {
+    width: 60%;
 }
 
-.panel:hover {
-    background-color: black;
+.mat-expansion-panel-header-description {
+    display: flex;
+    justify-content: flex-end;
 }
 
+.itemDescription {
+    float: left; 
+    font-size: small;
+}
+
+.itemAmount {
+    float: right;; 
+    font-size: small;
+}
+ 
 @media only screen and (max-width: 600px) {
-    select {
-        font-size: 12px;
-        padding-top: 0px;
-    }
-
-    .sumaryGral {
-        padding-left: 0px;
-        margin-right: 5px;
+    .conceptos-table {
         width: 100%;
-        position: relative;
-        display: inline-block;
-        /*border: black;
-        border-style: solid;*/
-    }
-
-    .content {
-        padding-right: 10px;
-        
-    }
-
-    .conceptos {
-        clear: both;
-        width: 100%;
-        margin-left: 5px;
-        /*border: black;
-        border-style: solid;*/
-    }
-
-    .clearfix {
-        font-size: 12px;
-    }
-
-    .cellDetalleConcepto {
-        font-size: 10px;
-    }
-    
+    }    
 }

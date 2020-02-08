@@ -1,3 +1,37 @@
+<mat-spinner class="loading" *ngIf="loading === true"></mat-spinner>
+
+<div *ngIf="loading === false">
+    <div class="tableContent">
+
+        <table mat-table [dataSource]="conceptos" class="mat-elevation-z8 conceptos-table">
+        
+            <ng-container matColumnDef="concepto">
+            <th mat-header-cell *matHeaderCellDef>Concepto</th>
+            <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tipo">
+                <th mat-header-cell *matHeaderCellDef>Tipo</th>
+                <td mat-cell 
+                    *matCellDef="let element"
+                    [class.importeNegativo]="element.credito == false">
+                    {{element.credito == true ? 'Crédito' : 'Débito' }}
+                </td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openConceptoDialog(row)"></tr>
+            
+        </table>
+    </div>
+
+    <button mat-fab color="primary" matTooltip="Agregar Nuevo Concepto" class="addButton" (click)="openConceptoDialog()">
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
+
+
+<!--
 <app-loading *ngIf="loadingGridConceptos === true" [texto]="'Cargando...'"></app-loading>
 <app-error-message *ngIf="errorMessageGridConceptos.length != 0 && loadingGridConceptos === false" [message]="errorMessageGridConceptos"></app-error-message>
 
@@ -96,3 +130,4 @@
 
     </div>
 </div>
+-->
