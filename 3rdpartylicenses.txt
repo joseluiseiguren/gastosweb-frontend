@@ -1,3 +1,6 @@
+@angular/animations
+MIT
+
 @angular/common
 MIT
 
@@ -323,9 +326,6 @@ Apache-2.0
 
 
 undefined
-
-@angular/animations
-MIT
 
 @angular/cdk
 MIT
