@@ -1,4 +1,4 @@
-- diario: input number
+- en pc dejar el menu siempre visible
 - user urls para navegar entre componentes
 - cambiar nombre e icono
 - en apple hay pantallas que no funcionan
