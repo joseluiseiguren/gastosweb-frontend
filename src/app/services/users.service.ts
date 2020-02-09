@@ -5,6 +5,7 @@ import { User } from '../models/user';
 import { UrlService } from './url.service';
 import { map, tap } from "rxjs/operators";
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { FormGroup } from '@angular/forms';
 
 @Injectable()
 export class UsersService {
@@ -116,5 +117,16 @@ export class UsersService {
                         //.delay(3000)
                         .pipe(tap(data => JSON.stringify(data)));
     }
+
+    getAvailablesCurrencies(): string[] {
+        return ['$', 'U$D', '€'];
+    }
+
+    checkPasswords(group: FormGroup, password1ControlName: string, password2ControlName: string) {
+        let pass = group.get('passwordFormControl').value;
+        let confirmPass = group.get('passwordRepeatFormControl').value;
+  
+        return pass === confirmPass ? null : { notSame: true }     
+      }
   
 }

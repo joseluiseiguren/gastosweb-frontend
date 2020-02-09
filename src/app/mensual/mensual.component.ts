@@ -44,6 +44,7 @@ export const MY_FORMATS = {
 export class MensualComponent implements OnInit, OnDestroy {
   loading: Boolean = false;
   loadingDetail: Boolean = false;
+  loadingPopup: Boolean = false;
   conceptosTotales: any[];
   itemDetail: any[];
   private getDataSubscription: Subscription;
@@ -109,6 +110,7 @@ export class MensualComponent implements OnInit, OnDestroy {
   }
 
   private showOpenSaldo(){
+    this.loadingPopup = true;
     let saldos: ISaldoItem[] = [];
     
     saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this._datePipe.transform(this.currentDate.value, 'LLLL yyyy')), "calendar_today", this.getIngresos(), this.getEgresos()));
@@ -117,8 +119,10 @@ export class MensualComponent implements OnInit, OnDestroy {
     this.summaryDialogSubscription = this._sumaryAnioService.getSumary(this.currentDate.value).subscribe((anual) => {
       saldos.push(new ISaldoItem("Año " + this._datePipe.transform(this.currentDate.value, 'yyyy'), "airplay", anual.ingresos, anual.egresos));
       this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
+      this.loadingPopup = false;
     },
     error => {
+      this.loadingPopup = false;
       this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
     });          
   }

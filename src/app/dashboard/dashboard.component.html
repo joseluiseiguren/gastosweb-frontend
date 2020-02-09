@@ -1,7 +1,7 @@
 <div class="main-container" [class.main-is-mobile]="isMobile()">
   <mat-toolbar color="primary" class="main-toolbar">
       <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
-      <h1 class="main-app-name">Control Gasto$</h1>
+      <h1 class="main-app-name">Control Gasto$<span style="font-size: smaller;">{{actualPageTitle}}</span></h1>
       <span class="example-spacer"></span>
       <h3 class="main-app-name">{{userName}}</h3>
   </mat-toolbar>
@@ -10,23 +10,23 @@
        [style.marginTop.px]="isMobile() ? 56 : 0">
           <mat-sidenav #snav [fixedInViewport]="isMobile()" fixedTopGap="56" (click)="snav.toggle()">
           <mat-nav-list>            
-              <a mat-list-item (click)="route('dashboard/diario')">
+              <a mat-list-item (click)="route('diario')">
                 <mat-icon>today</mat-icon>Diario
               </a>
-              <a mat-list-item (click)="route('dashboard/mensual')">
+              <a mat-list-item (click)="route('mensual')">
                 <mat-icon>calendar_today</mat-icon>Mensual
               </a>
-              <a mat-list-item (click)="route('dashboard/anual')">
+              <a mat-list-item (click)="route('anual')">
                 <mat-icon>airplay</mat-icon>Anual
               </a>
-              <a mat-list-item (click)="route('dashboard/historico')">
+              <a mat-list-item (click)="route('historico')">
                 <mat-icon>blur_linear</mat-icon>Historico
               </a>
-              <a mat-list-item (click)="route('dashboard/conceptos')">
+              <a mat-list-item (click)="route('conceptos')">
                 <mat-icon>add_chart</mat-icon>Conceptos
               </a>
               <mat-divider></mat-divider>
-              <a mat-list-item (click)="route('dashboard/perfil')">
+              <a mat-list-item (click)="route('userprofile')">
                 <mat-icon>person_outline</mat-icon>Perfil
               </a>              
               <a mat-list-item (click)="logout()">

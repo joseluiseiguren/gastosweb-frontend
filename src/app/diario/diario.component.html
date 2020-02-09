@@ -1,4 +1,10 @@
-<mat-spinner class="loading" *ngIf="loading === true"></mat-spinner>
+<div class="loading" *ngIf="loading === true">
+  <mat-spinner diameter="70" strokeWidth="5"></mat-spinner>
+</div>
+
+<div class="loading" *ngIf="loadingPopup === true">
+  <mat-spinner diameter="70" strokeWidth="5"></mat-spinner>
+</div>
 
 <div *ngIf="loading === false">
   <div class="header">

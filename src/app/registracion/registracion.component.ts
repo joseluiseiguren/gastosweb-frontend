@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 export class RegistracionComponent implements OnInit, OnDestroy {
   registerForm: FormGroup;
   startDate = new Date((new Date()).getFullYear() - 20, 0, 1);
-  monedas = ['$', 'U$D', '€'];
+  monedas: string[];
   loading: boolean = false;
   dialogRef: MatDialogRef<WelcomeComponent>;
   private registerSubscription: Subscription;
@@ -38,7 +38,8 @@ export class RegistracionComponent implements OnInit, OnDestroy {
         passwordFormControl: ['', [Validators.required]],
         passwordRepeatFormControl: [''],
         monedaFormControl: ['', [Validators.required]]
-      }, {validator: this.checkPasswords });          
+      }, {validator: this.usersService.checkPasswords });
+      this.monedas = this.usersService.getAvailablesCurrencies();
     }
 
     ngOnDestroy(): void {
@@ -52,13 +53,6 @@ export class RegistracionComponent implements OnInit, OnDestroy {
   
     unsubscribeDialog(): void {
       if (this.dialogSubscription){ this.dialogSubscription.unsubscribe(); }    
-    }
-
-    checkPasswords(group: FormGroup) {
-      let pass = group.get('passwordFormControl').value;
-      let confirmPass = group.get('passwordRepeatFormControl').value;
-
-      return pass === confirmPass ? null : { notSame: true }     
     }
 
     register (){

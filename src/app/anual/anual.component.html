@@ -1,9 +1,9 @@
-<mat-spinner class="loading" *ngIf="loading === true"></mat-spinner>
+<div class="loading" *ngIf="loading === true">
+  <mat-spinner diameter="70" strokeWidth="5"></mat-spinner>
+</div>
 
 <div *ngIf="loading === false">
-
   <div class="header">
-
     <mat-form-field class="anioSelect">
       <mat-label>Año</mat-label>
       <mat-select [(value)]="anioSelected" (selectionChange)="onChangeYear($event.value)">

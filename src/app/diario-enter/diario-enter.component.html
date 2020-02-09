@@ -8,6 +8,7 @@
     <form [formGroup]="form" class="full-width-form" (ngSubmit)="onSave()" novalidate>
         <mat-form-field>
             <input matInput 
+                    type="text" pattern="\d*"
                     (focus)="$event.target.select()" 
                     class="importe" 
                     placeholder="Importe" 

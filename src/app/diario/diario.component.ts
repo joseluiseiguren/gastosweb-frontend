@@ -22,6 +22,7 @@ import { CalculationService } from '../sharedServices/calculationService';
 export class DiarioComponent implements OnInit, OnDestroy {
   conceptos: IConceptoDiario[];
   loading: Boolean = false;
+  loadingPopup: Boolean = false;
   displayedColumns: string[] = ['descripcion', 'importe'];
   currentDate = new FormControl(new Date());  
   private getDataSubscription: Subscription;
@@ -88,6 +89,7 @@ export class DiarioComponent implements OnInit, OnDestroy {
   }
 
   private showOpenSaldo(){
+    this.loadingPopup = true;
     let saldos: ISaldoItem[] = [];    
     saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'mediumDate')), "today", this.getIngresos(), this.getEgresos()));
 
@@ -97,9 +99,11 @@ export class DiarioComponent implements OnInit, OnDestroy {
           saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'LLLL yyyy')), "calendar_today", mensual.ingresos, mensual.egresos));          
           saldos.push(new ISaldoItem("Año " + this.datePipe.transform(new Date(this.currentDate.value), 'yyyy'), "airplay", anual.ingresos, anual.egresos));
 
+          this.loadingPopup = false;
           this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
         },
         error => {
+          this.loadingPopup = false;
           this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
         });
   }
