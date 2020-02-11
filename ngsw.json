@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1581440139227,
+  "timestamp": 1581440225300,
   "index": "https://joseluiseiguren.github.io/gastosweb-frontend/index.html",
   "assetGroups": [
     {
@@ -10,7 +10,7 @@
       "urls": [
         "https://joseluiseiguren.github.io/gastosweb-frontend/favicon.ico",
         "https://joseluiseiguren.github.io/gastosweb-frontend/index.html",
-        "https://joseluiseiguren.github.io/gastosweb-frontend/main.58306f5b421e4ed7eab3.js",
+        "https://joseluiseiguren.github.io/gastosweb-frontend/main.16c17688f89aeaf29c5d.js",
         "https://joseluiseiguren.github.io/gastosweb-frontend/manifest.webmanifest",
         "https://joseluiseiguren.github.io/gastosweb-frontend/polyfills.c173bb4e96e4fd7eca99.js",
         "https://joseluiseiguren.github.io/gastosweb-frontend/runtime.1d8c39bf8af8ca7126e9.js",
@@ -46,8 +46,8 @@
     "https://joseluiseiguren.github.io/gastosweb-frontend/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
     "https://joseluiseiguren.github.io/gastosweb-frontend/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
     "https://joseluiseiguren.github.io/gastosweb-frontend/favicon.ico": "400784e6414c1081f9442a48d839834d51e80c0c",
-    "https://joseluiseiguren.github.io/gastosweb-frontend/index.html": "d14a691d3b56ce985ce42373a31744472154f98e",
-    "https://joseluiseiguren.github.io/gastosweb-frontend/main.58306f5b421e4ed7eab3.js": "9845a5b4fad59bcd48a6aa7df68323e0501662b3",
+    "https://joseluiseiguren.github.io/gastosweb-frontend/index.html": "521d44f66cfa4ed3764d825fe2f034a342d257fd",
+    "https://joseluiseiguren.github.io/gastosweb-frontend/main.16c17688f89aeaf29c5d.js": "f22544b6f6b125d91d7d0a1a43fa4e3a95845e87",
     "https://joseluiseiguren.github.io/gastosweb-frontend/manifest.webmanifest": "531d6c509cd3d2797021dce5f1d515f8cd725e2a",
     "https://joseluiseiguren.github.io/gastosweb-frontend/polyfills.c173bb4e96e4fd7eca99.js": "f33238825850a8007585a1a80e02e1248268682d",
     "https://joseluiseiguren.github.io/gastosweb-frontend/runtime.1d8c39bf8af8ca7126e9.js": "b62956c2192bfe5516d6374e753773901ed50ec5",
