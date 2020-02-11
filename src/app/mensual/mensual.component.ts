@@ -13,6 +13,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Moment } from 'moment';
 import { CalculationService } from '../sharedServices/calculationService';
+import { ActivatedRoute } from '@angular/router';
 
 export const MY_FORMATS = {
   parse: {
@@ -58,11 +59,12 @@ export class MensualComponent implements OnInit, OnDestroy {
               public snackBar: MatSnackBar,
               private _sumaryAnioService: SumaryAnioService,
               public saldoAbierto: MatDialog,
+              private route: ActivatedRoute,
               private calculationService: CalculationService,
               private _helperService: HelperService) {  }
 
   ngOnInit() {
-    this.currentDate.setValue(new Date());
+    this.currentDate.setValue(this.getDateFromUrl());
     this.getData();
   }
 
@@ -113,11 +115,21 @@ export class MensualComponent implements OnInit, OnDestroy {
     this.loadingPopup = true;
     let saldos: ISaldoItem[] = [];
     
-    saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this._datePipe.transform(this.currentDate.value, 'LLLL yyyy')), "calendar_today", this.getIngresos(), this.getEgresos()));
+    saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this._datePipe.transform(this.currentDate.value, 'LLLL yyyy')), 
+                "calendar_today", 
+                this.getIngresos(), 
+                this.getEgresos(),
+                "mensual",
+                this.currentDate.value));
     
     this.unsubscribeSummaryDialog();    
     this.summaryDialogSubscription = this._sumaryAnioService.getSumary(this.currentDate.value).subscribe((anual) => {
-      saldos.push(new ISaldoItem("Año " + this._datePipe.transform(this.currentDate.value, 'yyyy'), "airplay", anual.ingresos, anual.egresos));
+      saldos.push(new ISaldoItem("Año " + this._datePipe.transform(this.currentDate.value, 'yyyy'), 
+                  "airplay", 
+                  anual.ingresos, 
+                  anual.egresos,
+                  "anual",
+                  this.currentDate.value));
       this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
       this.loadingPopup = false;
     },
@@ -158,5 +170,15 @@ export class MensualComponent implements OnInit, OnDestroy {
 
     return importes;
   }
+
+  private getDateFromUrl() :Date {
+    let dateUrl = this.route.snapshot.paramMap.get("month");  
+    if (dateUrl === 'current') {
+      return new Date();
+    } else {
+      return new Date(dateUrl);
+    }
+  }
+
 }
 

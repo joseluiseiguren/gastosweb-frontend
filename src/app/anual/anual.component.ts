@@ -8,6 +8,7 @@ import { ISaldoItem } from '../models/saldoItem';
 import { DatePipe } from '@angular/common';
 import { SaldoAbiertoComponent } from '../saldo-abierto/saldo-abierto.component';
 import { CalculationService } from '../sharedServices/calculationService';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-anual',
@@ -16,7 +17,7 @@ import { CalculationService } from '../sharedServices/calculationService';
 })
 export class AnualComponent implements OnInit, OnDestroy {
   anios: number[] = new Array<number>();
-  anioSelected: number = new Date().getFullYear();
+  anioSelected: number;
   loading: Boolean = false;
   loadingDetail: Boolean = false;
   conceptosTotales: any[];
@@ -31,7 +32,10 @@ export class AnualComponent implements OnInit, OnDestroy {
               public snackBar: MatSnackBar,
               public saldoAbierto: MatDialog,
               private calculationService: CalculationService,
-              private _helperService: HelperService) {    
+              private router: Router,
+              private route: ActivatedRoute,
+              private _helperService: HelperService) {  
+    this.anioSelected = this.getDateFromUrl().getFullYear();
   }
 
   ngOnInit() {
@@ -104,7 +108,12 @@ export class AnualComponent implements OnInit, OnDestroy {
   private showOpenSaldo(){
     let saldos: ISaldoItem[] = [];
     
-    saldos.push(new ISaldoItem("Año" + this._helperService.toCamelCase(this._datePipe.transform(new Date(this.anioSelected, 1, 1), 'yyyy')), "airplay", this.getIngresos(), this.getEgresos()));    
+    saldos.push(new ISaldoItem("Año" + this._helperService.toCamelCase(this._datePipe.transform(new Date(this.anioSelected, 1, 1), 'yyyy')), 
+                "airplay", 
+                this.getIngresos(), 
+                this.getEgresos(),
+                "anual",
+                new Date(this.anioSelected, 1, 1)));    
     this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
   }
 
@@ -128,6 +137,10 @@ export class AnualComponent implements OnInit, OnDestroy {
     this.getData();
   }
 
+  goToMonth(value) {
+    this.router.navigate(['dashboard/mensual/' + this._helperService.convertStringMMYYYYToDate(value).toISOString()]);    
+  }
+
   private convertToNumberArray(dataIn: any[]) : number[] {
     if (dataIn !== undefined){
       let importes: number[] = [];
@@ -137,5 +150,14 @@ export class AnualComponent implements OnInit, OnDestroy {
 
       return importes;
     }    
+  }
+
+  private getDateFromUrl() :Date {
+    let dateUrl = this.route.snapshot.paramMap.get("anio");  
+    if (dateUrl === 'current') {
+      return new Date();
+    } else {
+      return new Date(dateUrl);
+    }
   }
 }

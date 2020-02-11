@@ -26,7 +26,6 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd))
         .subscribe((event: NavigationEnd) => {
-          console.log(event.url);
           this.actualPageTitle = this.getPageTitle(event.url);
       });
   }
@@ -55,21 +54,31 @@ export class DashboardComponent extends ComponentBase implements OnInit {
 
   getPageTitle(url:string): string {
     let prefix = "/dashboard/";
-    switch (url){
-      case prefix + "diario":
-        return " - Diario";
-      case prefix + "mensual":
-        return " - Mensual";
-      case prefix + "anual":
-        return " - Anual";
-      case prefix + "historico":
-        return " - Histórico";
-      case prefix + "conceptos":
-        return " - Conceptos";
-      case prefix + "userprofile":
-        return " - Perfil";
-      default:
-        return "";        
+
+    if (url.startsWith(prefix + "diario")){
+      return " - Diario";
     }
+
+    if (url.startsWith(prefix + "mensual")){
+      return " - Mensual";
+    }
+
+    if (url.startsWith(prefix + "anual")){
+      return " - Anual";
+    }
+
+    if (url.startsWith(prefix + "historico")){
+      return " - Histórico";
+    }
+
+    if (url.startsWith(prefix + "conceptos")){
+      return " - Conceptos";
+    }
+
+    if (url.startsWith(prefix + "userprofile")){
+      return " - Perfil";
+    }
+
+    return "";
   }  
 }

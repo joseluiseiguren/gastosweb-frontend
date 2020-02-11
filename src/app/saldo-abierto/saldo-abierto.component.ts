@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UsersService } from '../services/users.service';
 import { ISaldoItem } from '../models/saldoItem';
@@ -9,6 +9,7 @@ import { ISaldoItem } from '../models/saldoItem';
   styleUrls: ['./saldo-abierto.component.css']
 })
 export class SaldoAbiertoComponent implements OnInit {
+  @Output() itemPushed = new EventEmitter();
   
   constructor(private _userService: UsersService,
               public dialogRef: MatDialogRef<SaldoAbiertoComponent>,
@@ -19,6 +20,10 @@ export class SaldoAbiertoComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  itemClicked(item: ISaldoItem) {
+    this.itemPushed.emit(item);
   }
 
 }

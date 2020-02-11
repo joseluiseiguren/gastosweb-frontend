@@ -30,7 +30,9 @@
         <mat-list *ngIf="loadingDetail === false">
           <mat-list-item *ngFor="let detail of itemDetail">
             <div matLine>
-              <p class="itemDescription">{{this._helperService.toCamelCase(this._helperService.convertStringMMYYYYToDate(detail.mes) | date:'LLLL yyyy')}}</p>
+              <p class="itemDescription" (click)="goToMonth(detail.mes)">
+                {{this._helperService.toCamelCase(this._helperService.convertStringMMYYYYToDate(detail.mes) | date:'LLLL yyyy')}}
+              </p>
               <p class="itemAmount" [class.importeNegativo]="detail.importe < 0">{{detail.importe | currency:this._userService.getMoneda()}}</p>
               </div>
           </mat-list-item>          

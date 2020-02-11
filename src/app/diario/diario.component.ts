@@ -13,6 +13,7 @@ import { SumaryMonthService } from '../services/sumary-month.service';
 import { SumaryAnioService } from '../services/sumary-anio.service';
 import { forkJoin, Subscription } from 'rxjs';
 import { CalculationService } from '../sharedServices/calculationService';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-diario',
@@ -24,9 +25,10 @@ export class DiarioComponent implements OnInit, OnDestroy {
   loading: Boolean = false;
   loadingPopup: Boolean = false;
   displayedColumns: string[] = ['descripcion', 'importe'];
-  currentDate = new FormControl(new Date());  
+  currentDate: FormControl;  
   private getDataSubscription: Subscription;
   private summaryDialogSubscription: Subscription;
+  private saldoItemSubscription: Subscription;
   
   constructor(private _conceptosDiarioService: DiarioService,
               private _userService: UsersService,
@@ -36,20 +38,29 @@ export class DiarioComponent implements OnInit, OnDestroy {
               private _sumaryMonthService: SumaryMonthService,
               private _sumaryAnioService: SumaryAnioService,
               private calculationService: CalculationService,
+              private route: ActivatedRoute,
+              private router: Router,
               public enterDiario: MatDialog,
-              public saldoAbierto: MatDialog) {  }
+              public saldoAbierto: MatDialog) {
+    this.currentDate = new FormControl(this.getDateFromUrl());  
+  }
 
   ngOnInit() {
-    this.getData();    
+    this.getData();
   }
 
   ngOnDestroy(): void {
     this.unsubscribeGetData();
     this.unsubscribeSummaryDialog();
+    this.unsubscribeSaldoItem();
   }
 
   unsubscribeGetData(): void {
     if (this.getDataSubscription){ this.getDataSubscription.unsubscribe(); }    
+  }
+
+  unsubscribeSaldoItem(): void {
+    if (this.saldoItemSubscription){ this.saldoItemSubscription.unsubscribe(); }    
   }
 
   unsubscribeSummaryDialog(): void {
@@ -91,16 +102,40 @@ export class DiarioComponent implements OnInit, OnDestroy {
   private showOpenSaldo(){
     this.loadingPopup = true;
     let saldos: ISaldoItem[] = [];    
-    saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'mediumDate')), "today", this.getIngresos(), this.getEgresos()));
+    saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'mediumDate')), 
+                "today", 
+                this.getIngresos(), 
+                this.getEgresos(),
+                "diario",
+                new Date(this.currentDate.value)));
 
     this.unsubscribeSummaryDialog();
     this.summaryDialogSubscription = forkJoin(this._sumaryMonthService.getSumary(this.currentDate.value), this._sumaryAnioService.getSumary(this.currentDate.value))
         .subscribe(([mensual, anual]) => {
-          saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'LLLL yyyy')), "calendar_today", mensual.ingresos, mensual.egresos));          
-          saldos.push(new ISaldoItem("Año " + this.datePipe.transform(new Date(this.currentDate.value), 'yyyy'), "airplay", anual.ingresos, anual.egresos));
+          saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value), 'LLLL yyyy')), 
+                      "calendar_today", 
+                      mensual.ingresos, 
+                      mensual.egresos,
+                      "mensual",
+                      new Date(this.currentDate.value)));          
+          saldos.push(new ISaldoItem("Año " + this.datePipe.transform(new Date(this.currentDate.value), 'yyyy'), 
+                      "airplay", 
+                      anual.ingresos, 
+                      anual.egresos,
+                      "anual",
+                      new Date(this.currentDate.value)));
 
           this.loadingPopup = false;
-          this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
+          let dialogRef = this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
+
+          this.unsubscribeSaldoItem();
+          this.saldoItemSubscription = dialogRef.componentInstance.itemPushed.subscribe((item: ISaldoItem) => {
+            if (item.concept == "diario"){
+              return;
+            }
+            this.router.navigate(['dashboard/' + item.concept + "/" + item.date.toISOString()]);    
+            dialogRef.close();
+          });
         },
         error => {
           this.loadingPopup = false;
@@ -115,6 +150,19 @@ export class DiarioComponent implements OnInit, OnDestroy {
     }); 
 
     return importes;
+  }
+
+  private getDateFromUrl() :Date {
+    let dateUrl = this.route.snapshot.paramMap.get("day");  
+    if (dateUrl === 'today') {
+      return new Date();
+    } else {
+      return new Date(dateUrl);
+    }
+  }
+
+  goToItemPushed(xx) {
+    console.log(xx);
   }
 
   

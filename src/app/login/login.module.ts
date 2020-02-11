@@ -61,48 +61,9 @@ const routes: Routes = [
     MatTableModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: []
 })
 export class LoginModule { }
-
-
-
-/*import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { LoginComponent } from './login.component';
-import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
-import { MatToolbarModule, 
-  MatCardModule, 
-  MatButtonModule, 
-  MatFormFieldModule,
-  MatInputModule } from  '@angular/material';
-import { MatIconModule  } from '@angular/material/icon';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-const routes: Routes = [    
-  { path: 'login', component: LoginComponent}
-];
-
-@NgModule({
-  imports: [
-    BrowserModule,
-    FormsModule,
-    RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule    
-  ],
-  declarations: [LoginComponent]
-})
-export class LoginModule { }
-*/
-

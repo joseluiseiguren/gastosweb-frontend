@@ -17,8 +17,7 @@ export class UserprofileComponent implements OnInit, OnDestroy {
   profileForm: FormGroup;
   monedas: string[];
   private getDataSubscription: Subscription;
-  private updateProfileSubscription: Subscription;
-  private userPwd: string;
+  private updateProfileSubscription: Subscription;  
   
   constructor(private _userService: UsersService,
               private formBuilder: FormBuilder,
@@ -61,7 +60,6 @@ export class UserprofileComponent implements OnInit, OnDestroy {
                                          nameFormControl: data.nombre, 
                                          fechaNacimientoFormControl: data.fechanacimiento, 
                                          monedaFormControl: data.moneda});
-              this.userPwd = data.password;
               this.loading = false;
             },
             error => {
@@ -90,7 +88,6 @@ export class UserprofileComponent implements OnInit, OnDestroy {
   private createUser() : User{
     let user = new User();
     user.email = this.profileForm.value.emailFormControl;
-    user.password = this.userPwd;
     user.fechanacimiento = new Date(this.profileForm.value.fechaNacimientoFormControl);
     user.moneda = this.profileForm.value.monedaFormControl;
     user.nombre = this.profileForm.value.nameFormControl;

@@ -100,7 +100,13 @@ export class HistoricoComponent implements OnInit, OnDestroy {
   private showOpenSaldo(){
     let saldos: ISaldoItem[] = [];
     
-    saldos.push(new ISaldoItem("Historico" + '', "blur_linear", this.getIngresos(), this.getEgresos()));    
+    saldos.push(new ISaldoItem("Historico" + 
+                               '', 
+                               "blur_linear", 
+                               this.getIngresos(), 
+                               this.getEgresos(),
+                               "historico",
+                               null));    
     this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
   }
 

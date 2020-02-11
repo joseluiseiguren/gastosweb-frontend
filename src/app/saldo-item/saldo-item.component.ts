@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ISaldoItem } from '../models/saldoItem';
 import { UsersService } from '../services/users.service';
 
@@ -10,10 +10,15 @@ import { UsersService } from '../services/users.service';
 export class SaldoItemComponent implements OnInit {
 
   @Input() items: ISaldoItem[];
+  @Output() itemClicked = new EventEmitter();
 
   constructor(private _userService: UsersService) { }
 
   ngOnInit() {    
+  }
+
+  onGoDetails (item: ISaldoItem) {
+    this.itemClicked.emit(item);
   }
 
 }

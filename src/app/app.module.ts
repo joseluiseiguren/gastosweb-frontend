@@ -8,7 +8,6 @@ import { MensualComponent } from './mensual/mensual.component';
 import { AnualComponent } from './anual/anual.component';
 import { HistoricoComponent } from './historico/historico.component';
 import { ConceptosComponent } from './conceptos/conceptos.component';
-import { SumarymesComponent } from './sumarymes/sumarymes.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SumaryMonthService } from './services/sumary-month.service';
 import { SumaryAnioService } from './services/sumary-anio.service';
@@ -27,9 +26,7 @@ import { RegistracionComponent } from './registracion/registracion.component';
 import { HelperService } from './services/helper.service';
 import { UrlService } from './services/url.service';
 import { ErrorMessageComponent } from './error-message/error-message.component';
-import { SumaryanioComponent } from './sumaryanio/sumaryanio.component';
 import { UserprofileComponent } from './userprofile/userprofile.component';
-import { SumaryhistoricoComponent } from './sumaryhistorico/sumaryhistorico.component';
 import { HashLocationStrategy, LocationStrategy, CurrencyPipe, registerLocaleData, DatePipe } from '@angular/common';
 import { IpService } from './services/ip.service';
 import { MatToolbarModule, 
@@ -76,15 +73,15 @@ const routes: Routes = [
   { path: 'registracion', component: RegistracionComponent},
   { path: 'dashboard', component: DashboardComponent, canActivateChild: [AuthGuard],
                           children: [
-                            { path: 'diario', component: DiarioComponent},
-                            { path: 'mensual', component: MensualComponent },
-                            { path: 'anual', component: AnualComponent },
+                            { path: 'diario/:day', component: DiarioComponent},
+                            { path: 'mensual/:month', component: MensualComponent },
+                            { path: 'anual/:anio', component: AnualComponent },
                             { path: 'historico', component: HistoricoComponent },
                             { path: 'conceptos', component: ConceptosComponent },
                             { path: 'userprofile', component: UserprofileComponent },
                             { path: '', component: DiarioComponent },
                           ]},
-  { path: '**', redirectTo: '/dashboard/diario', pathMatch: 'full'}
+  { path: '**', redirectTo: '/dashboard/diario/today', pathMatch: 'full'}
 ];  
 
 @NgModule({
@@ -95,13 +92,10 @@ const routes: Routes = [
     AnualComponent,
     HistoricoComponent,
     ConceptosComponent,
-    SumarymesComponent,
     DashboardComponent,
     RegistracionComponent,
     ErrorMessageComponent,
-    SumaryanioComponent,
     UserprofileComponent,
-    SumaryhistoricoComponent,
     AboutComponent,
     DiarioEnterComponent,    
     TwoDigitDecimaNumberDirective, SaldoComponent, SaldoAbiertoComponent, SaldoItemComponent, WelcomeComponent, ConceptoDialogComponent
@@ -136,7 +130,7 @@ const routes: Routes = [
     MatRadioModule,
     MatChipsModule,
     MatTooltipModule,
-    RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
   ],
   providers: [SumaryMonthService,
               SumaryAnioService,
