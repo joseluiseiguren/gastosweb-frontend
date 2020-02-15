@@ -1,11 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { UsersService } from '../services/users.service';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { AboutComponent } from '../about/about.component';
 import { ComponentBase } from '../services/ComponentBase';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { filter } from 'rxjs/operators';
+import { UrlConstants } from '../constants/url.constants';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,12 +35,19 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   }
 
   route(dest: string) {
-    this.router.navigate(['dashboard/' + dest]);    
+    let currentUrlSplitted = this.router.url.split('/');
+
+    if (currentUrlSplitted.length >= 3 &&
+        currentUrlSplitted[2] === dest.split('/')[0]){
+        return;
+    } else {
+      this.router.navigate([UrlConstants.DASHBOARD + '/' + dest]);
+    }
   }
 
   logout () {
     this._userService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/' + UrlConstants.LOGIN]);
   }
 
   ngOnDestroy(): void {
@@ -53,29 +61,29 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   }  
 
   getPageTitle(url:string): string {
-    let prefix = "/dashboard/";
+    let prefix = "/" + UrlConstants.DASHBOARD + "/";
 
-    if (url.startsWith(prefix + "diario")){
+    if (url.startsWith(prefix + UrlConstants.DIARIO)){
       return " - Diario";
     }
 
-    if (url.startsWith(prefix + "mensual")){
+    if (url.startsWith(prefix + UrlConstants.MENSUAL)){
       return " - Mensual";
     }
 
-    if (url.startsWith(prefix + "anual")){
+    if (url.startsWith(prefix + UrlConstants.ANUAL)){
       return " - Anual";
     }
 
-    if (url.startsWith(prefix + "historico")){
+    if (url.startsWith(prefix + UrlConstants.HISTORICO)){
       return " - Histórico";
     }
 
-    if (url.startsWith(prefix + "conceptos")){
+    if (url.startsWith(prefix + UrlConstants.CONCEPTOS)){
       return " - Conceptos";
     }
 
-    if (url.startsWith(prefix + "userprofile")){
+    if (url.startsWith(prefix + UrlConstants.USERPROFILE)){
       return " - Perfil";
     }
 

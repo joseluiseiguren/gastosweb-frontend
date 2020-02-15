@@ -14,6 +14,8 @@ import { SumaryAnioService } from '../services/sumary-anio.service';
 import { forkJoin, Subscription } from 'rxjs';
 import { CalculationService } from '../sharedServices/calculationService';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UrlConstants } from '../constants/url.constants';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-diario',
@@ -38,15 +40,18 @@ export class DiarioComponent implements OnInit, OnDestroy {
               private _sumaryMonthService: SumaryMonthService,
               private _sumaryAnioService: SumaryAnioService,
               private calculationService: CalculationService,
-              private route: ActivatedRoute,
+              private activeRoute: ActivatedRoute,
               private router: Router,
               public enterDiario: MatDialog,
               public saldoAbierto: MatDialog) {
-    this.currentDate = new FormControl(this.getDateFromUrl());  
+    this.currentDate = new FormControl(this.getDateFromUrl());
   }
 
   ngOnInit() {
-    this.getData();
+    this.activeRoute.params.subscribe(routeParams => {
+      this.currentDate = new FormControl(this.getDateFromUrl());
+      this.getData();
+    });
   }
 
   ngOnDestroy(): void {
@@ -68,6 +73,7 @@ export class DiarioComponent implements OnInit, OnDestroy {
   }
 
   changeDate(type: string, event: MatDatepickerInputEvent<Date>) {
+    this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.DIARIO + '/' + this.currentDate.value.toISOString()]);
     this.getData();    
   }
 
@@ -130,10 +136,10 @@ export class DiarioComponent implements OnInit, OnDestroy {
 
           this.unsubscribeSaldoItem();
           this.saldoItemSubscription = dialogRef.componentInstance.itemPushed.subscribe((item: ISaldoItem) => {
-            if (item.concept == "diario"){
+            if (item.concept == UrlConstants.DIARIO){
               return;
             }
-            this.router.navigate(['dashboard/' + item.concept + "/" + item.date.toISOString()]);    
+            this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + "/" + item.date.toISOString() + "/none"]);    
             dialogRef.close();
           });
         },
@@ -153,7 +159,7 @@ export class DiarioComponent implements OnInit, OnDestroy {
   }
 
   private getDateFromUrl() :Date {
-    let dateUrl = this.route.snapshot.paramMap.get("day");  
+    let dateUrl = this.activeRoute.snapshot.paramMap.get("day");  
     if (dateUrl === 'today') {
       return new Date();
     } else {
@@ -161,9 +167,6 @@ export class DiarioComponent implements OnInit, OnDestroy {
     }
   }
 
-  goToItemPushed(xx) {
-    console.log(xx);
-  }
-
+  
   
 }

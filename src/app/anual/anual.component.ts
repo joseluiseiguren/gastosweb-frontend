@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { SaldoAbiertoComponent } from '../saldo-abierto/saldo-abierto.component';
 import { CalculationService } from '../sharedServices/calculationService';
 import { Router, ActivatedRoute } from '@angular/router';
+import { UrlConstants } from '../constants/url.constants';
 
 @Component({
   selector: 'app-anual',
@@ -137,8 +138,8 @@ export class AnualComponent implements OnInit, OnDestroy {
     this.getData();
   }
 
-  goToMonth(value) {
-    this.router.navigate(['dashboard/mensual/' + this._helperService.convertStringMMYYYYToDate(value).toISOString()]);    
+  goToMonth(fecha: string, concepto: string ) {
+    this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.MENSUAL + '/' + this._helperService.convertStringMMYYYYToDate(fecha).toISOString() + '/' + concepto]);    
   }
 
   private convertToNumberArray(dataIn: any[]) : number[] {

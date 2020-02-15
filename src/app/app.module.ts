@@ -65,23 +65,24 @@ import { SaldoItemComponent } from './saldo-item/saldo-item.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ConceptoDialogComponent } from './concepto-dialog/concepto-dialog.component';
 import { CalculationService } from './sharedServices/calculationService';
+import { UrlConstants } from './constants/url.constants';
 registerLocaleData(localeEs, localeEs); 
 registerLocaleData(localeEn, localeEn); 
 
 const routes: Routes = [    
   { path: '', component: LoginComponent},
-  { path: 'registracion', component: RegistracionComponent},
-  { path: 'dashboard', component: DashboardComponent, canActivateChild: [AuthGuard],
+  { path: UrlConstants.REGISTRACION, component: RegistracionComponent},
+  { path: UrlConstants.DASHBOARD, component: DashboardComponent, canActivateChild: [AuthGuard],
                           children: [
-                            { path: 'diario/:day', component: DiarioComponent},
-                            { path: 'mensual/:month', component: MensualComponent },
-                            { path: 'anual/:anio', component: AnualComponent },
-                            { path: 'historico', component: HistoricoComponent },
-                            { path: 'conceptos', component: ConceptosComponent },
-                            { path: 'userprofile', component: UserprofileComponent },
+                            { path: UrlConstants.DIARIO + '/:day', component: DiarioComponent},
+                            { path: UrlConstants.MENSUAL + '/:month/:open', component: MensualComponent },
+                            { path: UrlConstants.ANUAL + '/:anio', component: AnualComponent },
+                            { path: UrlConstants.HISTORICO, component: HistoricoComponent },
+                            { path: UrlConstants.CONCEPTOS, component: ConceptosComponent },
+                            { path: UrlConstants.USERPROFILE, component: UserprofileComponent },
                             { path: '', component: DiarioComponent },
                           ]},
-  { path: '**', redirectTo: '/dashboard/diario/today', pathMatch: 'full'}
+  { path: '**', redirectTo: UrlConstants.DASHBOARD + '/' + UrlConstants.DIARIO + '/today', pathMatch: 'full'}
 ];  
 
 @NgModule({
@@ -130,7 +131,7 @@ const routes: Routes = [
     MatRadioModule,
     MatChipsModule,
     MatTooltipModule,
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, onSameUrlNavigation: 'reload' }),
   ],
   providers: [SumaryMonthService,
               SumaryAnioService,

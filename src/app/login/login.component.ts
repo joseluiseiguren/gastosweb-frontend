@@ -5,6 +5,7 @@ import { IpService } from '../services/ip.service';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
+import { UrlConstants } from '../constants/url.constants';
 
 @Component({
   selector: 'app-login',
@@ -116,6 +117,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     private ingresarApp () {
-      this.router.navigate(['/dashboard/diario']);
+      this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.DIARIO + '/today']);
     }
 }

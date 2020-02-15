@@ -23,7 +23,7 @@
 
   <div class="tableContent">
     <mat-accordion class="conceptos-table">
-      <mat-expansion-panel *ngFor="let ct of conceptosTotales" (opened)="loadMonthDetails(ct)">
+      <mat-expansion-panel *ngFor="let ct of conceptosTotales" [expanded]="loading === false && ct.descripcion === getOpenItem()" (opened)="loadMonthDetails(ct)">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{ct.descripcion}}

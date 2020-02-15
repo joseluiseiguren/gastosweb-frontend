@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
 import { DatePipe } from '@angular/common';
@@ -13,7 +13,9 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Moment } from 'moment';
 import { CalculationService } from '../sharedServices/calculationService';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UrlConstants } from '../constants/url.constants';
+import { Location } from '@angular/common';
 
 export const MY_FORMATS = {
   parse: {
@@ -51,6 +53,7 @@ export class MensualComponent implements OnInit, OnDestroy {
   private getDataSubscription: Subscription;
   private summaryDialogSubscription: Subscription;
   private itemDetailSubscription: Subscription;
+  private saldoItemSubscription: Subscription;
   currentDate = new FormControl();
 
   constructor(private _datePipe: DatePipe,
@@ -59,19 +62,29 @@ export class MensualComponent implements OnInit, OnDestroy {
               public snackBar: MatSnackBar,
               private _sumaryAnioService: SumaryAnioService,
               public saldoAbierto: MatDialog,
-              private route: ActivatedRoute,
+              private activeRoute: ActivatedRoute,
+              private router: Router,
+              private location: Location,
+              private changeDetector : ChangeDetectorRef,
               private calculationService: CalculationService,
               private _helperService: HelperService) {  }
 
   ngOnInit() {
-    this.currentDate.setValue(this.getDateFromUrl());
-    this.getData();
+    this.activeRoute.params.subscribe(routeParams => {
+      this.currentDate = new FormControl(this.getDateFromUrl());
+      this.getData();
+    });
+  }
+
+  ngAfterViewChecked() {
+    this.changeDetector.detectChanges();
   }
 
   ngOnDestroy(): void {
     this.unsubscribeGetData();
     this.unsubscribeSummaryDialog();
     this.unsubscribeItemDetail();
+    this.unsubscribeSaldoItem();
   }
 
   unsubscribeSummaryDialog(): void {
@@ -86,6 +99,10 @@ export class MensualComponent implements OnInit, OnDestroy {
     if (this.itemDetailSubscription){ this.itemDetailSubscription.unsubscribe(); }    
   }
 
+  unsubscribeSaldoItem(): void {
+    if (this.saldoItemSubscription){ this.saldoItemSubscription.unsubscribe(); }    
+  }
+
   getData() {
     this.loading = true;
     let fecha = this.currentDate.value.getFullYear() + (this.currentDate.value.getMonth() + 1).toString().padStart(2, '0');
@@ -94,7 +111,7 @@ export class MensualComponent implements OnInit, OnDestroy {
     this.getDataSubscription = this._diarioService.getConceptosTotalMes(fecha)
         .subscribe(
             data => { 
-              this.conceptosTotales = data;
+              this.conceptosTotales = data;              
               this.loading = false;
             },
             error => {
@@ -130,8 +147,17 @@ export class MensualComponent implements OnInit, OnDestroy {
                   anual.egresos,
                   "anual",
                   this.currentDate.value));
-      this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
+      let dialogRef = this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });    
       this.loadingPopup = false;
+
+      this.unsubscribeSaldoItem();
+      this.saldoItemSubscription = dialogRef.componentInstance.itemPushed.subscribe((item: ISaldoItem) => {
+        if (item.concept == UrlConstants.MENSUAL){
+          return;
+        }
+        this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + "/" + item.date.toISOString()]);    
+        dialogRef.close();
+      });
     },
     error => {
       this.loadingPopup = false;
@@ -141,6 +167,7 @@ export class MensualComponent implements OnInit, OnDestroy {
 
   chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
     this.currentDate.setValue(new Date(normalizedMonth.toString()));
+    this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.MENSUAL + '/' + this.currentDate.value.toISOString() + "/" + this.activeRoute.snapshot.paramMap.get("open")]);    
     datepicker.close();
     this.getData();
   }
@@ -155,11 +182,16 @@ export class MensualComponent implements OnInit, OnDestroy {
             data => { 
               this.itemDetail = data;
               this.loadingDetail = false; 
+              this.location.replaceState(UrlConstants.DASHBOARD + '/' + UrlConstants.MENSUAL + '/' + this.currentDate.value.toISOString() + "/" + row.descripcion);    
             },
             error => {
               this.loadingDetail = false; 
               this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-            });
+            });    
+  }
+
+  getOpenItem() : string {
+    return this.activeRoute.snapshot.paramMap.get("open");
   }
 
   private convertToNumberArray(dataIn: any[]) : number[] {
@@ -172,7 +204,7 @@ export class MensualComponent implements OnInit, OnDestroy {
   }
 
   private getDateFromUrl() :Date {
-    let dateUrl = this.route.snapshot.paramMap.get("month");  
+    let dateUrl = this.activeRoute.snapshot.paramMap.get("month");  
     if (dateUrl === 'current') {
       return new Date();
     } else {
