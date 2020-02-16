@@ -76,7 +76,7 @@ const routes: Routes = [
                           children: [
                             { path: UrlConstants.DIARIO + '/:day', component: DiarioComponent},
                             { path: UrlConstants.MENSUAL + '/:month/:open', component: MensualComponent },
-                            { path: UrlConstants.ANUAL + '/:anio', component: AnualComponent },
+                            { path: UrlConstants.ANUAL + '/:anio/:open', component: AnualComponent },
                             { path: UrlConstants.HISTORICO, component: HistoricoComponent },
                             { path: UrlConstants.CONCEPTOS, component: ConceptosComponent },
                             { path: UrlConstants.USERPROFILE, component: UserprofileComponent },

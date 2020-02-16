@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
 import { DiarioService } from '../services/diario.service';
@@ -34,14 +34,18 @@ export class AnualComponent implements OnInit, OnDestroy {
               public saldoAbierto: MatDialog,
               private calculationService: CalculationService,
               private router: Router,
-              private route: ActivatedRoute,
+              private changeDetector : ChangeDetectorRef,
+              private activeRoute: ActivatedRoute,
               private _helperService: HelperService) {  
-    this.anioSelected = this.getDateFromUrl().getFullYear();
+    this.anioSelected = this.getYearFromUrl();
   }
 
   ngOnInit() {
-    this.getData();
-    this.getPrimerConsumo();
+    this.getPrimerConsumo();    
+  }
+
+  ngAfterViewChecked() {
+    this.changeDetector.detectChanges();       
   }
 
   ngOnDestroy(): void {
@@ -99,6 +103,8 @@ export class AnualComponent implements OnInit, OnDestroy {
             data => { 
               this.conceptosTotales = data;
               this.loading = false;
+
+              this.scrollToItem(this.getOpenItem());               
             },
             error => {
               this.loading = false; 
@@ -127,6 +133,7 @@ export class AnualComponent implements OnInit, OnDestroy {
             data => {
               this.itemDetail = data;
               this.loadingDetail = false; 
+              this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.ANUAL + '/' + this.anioSelected + "/" + row.descripcion], {replaceUrl:false});
             },
             error => {
               this.loadingDetail = false; 
@@ -135,6 +142,7 @@ export class AnualComponent implements OnInit, OnDestroy {
   }
 
   onChangeYear (newValue) {
+    this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.ANUAL + '/' + this.anioSelected + "/" + this.getOpenItem()], {replaceUrl:false});    
     this.getData();
   }
 
@@ -153,12 +161,36 @@ export class AnualComponent implements OnInit, OnDestroy {
     }    
   }
 
-  private getDateFromUrl() :Date {
-    let dateUrl = this.route.snapshot.paramMap.get("anio");  
+  private getYearFromUrl() :number {
+    let dateUrl = this.activeRoute.snapshot.paramMap.get("anio");  
     if (dateUrl === 'current') {
-      return new Date();
+      return new Date().getFullYear();
     } else {
-      return new Date(dateUrl);
+      return Number(dateUrl);
     }
   }
+
+  getOpenItem() : string {
+    return this.activeRoute.snapshot.paramMap.get("open");
+  }
+
+  private scrollToItem(item: string) {
+    setTimeout(function (itemToScroll: string) {
+      console.log(itemToScroll);
+      if (itemToScroll === 'none'){
+        return;
+      }
+
+      let elmnt = document.getElementById('item' + itemToScroll);
+      if (elmnt === null){
+        return;
+      }
+      elmnt.scrollIntoView({block: "start", behavior: "auto"});
+      
+      let tt = document.getElementById('mainTable');
+      tt.scrollTop = tt.scrollTop - 30;
+    }, 1, item);
+  }
+
+  
 }

@@ -21,30 +21,30 @@
     <app-saldo [titulo]="'Saldo Mensual'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>    
   </div>
 
-  <div class="tableContent">
+  <div class="tableContent" id="mainTable">
     <mat-accordion class="conceptos-table">
       <mat-expansion-panel *ngFor="let ct of conceptosTotales" [expanded]="loading === false && ct.descripcion === getOpenItem()" (opened)="loadMonthDetails(ct)">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            {{ct.descripcion}}
-          </mat-panel-title>
-          <mat-panel-description [class.importeNegativo]="ct.saldo < 0">
-            {{ct.saldo | currency:this._userService.getMoneda()}}
-          </mat-panel-description>
-        </mat-expansion-panel-header>
+          <mat-expansion-panel-header>
+            <mat-panel-title id="{{'item' + ct.descripcion}}">
+              {{ct.descripcion}}
+            </mat-panel-title>
+            <mat-panel-description [class.importeNegativo]="ct.saldo < 0">
+              {{ct.saldo | currency:this._userService.getMoneda()}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>        
 
-        <mat-spinner class="loading" *ngIf="loadingDetail === true"></mat-spinner>        
-        <mat-list *ngIf="loadingDetail === false">
-          <mat-list-item *ngFor="let detail of itemDetail">
-            <div matLine>
-              <p class="itemDescription">{{detail.fecha | date:'mediumDate'}}</p>
-              <p class="itemAmount" [class.importeNegativo]="detail.importe < 0">{{detail.importe | currency:this._userService.getMoneda()}}</p>
-              </div>
-          </mat-list-item>          
-        </mat-list>
+          <mat-spinner class="loading" *ngIf="loadingDetail === true"></mat-spinner>        
+          <mat-list *ngIf="loadingDetail === false">
+            <mat-list-item *ngFor="let detail of itemDetail">
+              <div matLine>
+                <p class="itemDescription">{{detail.fecha | date:'mediumDate'}}</p>
+                <p class="itemAmount" [class.importeNegativo]="detail.importe < 0">{{detail.importe | currency:this._userService.getMoneda()}}</p>
+                </div>
+            </mat-list-item>          
+          </mat-list>      
                 
       </mat-expansion-panel>      
     </mat-accordion>
-
-  </div>
+    
+  </div>    
 </div>

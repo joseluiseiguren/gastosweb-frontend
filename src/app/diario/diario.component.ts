@@ -42,6 +42,7 @@ export class DiarioComponent implements OnInit, OnDestroy {
               private calculationService: CalculationService,
               private activeRoute: ActivatedRoute,
               private router: Router,
+              private location: Location,
               public enterDiario: MatDialog,
               public saldoAbierto: MatDialog) {
     this.currentDate = new FormControl(this.getDateFromUrl());
@@ -52,6 +53,10 @@ export class DiarioComponent implements OnInit, OnDestroy {
       this.currentDate = new FormControl(this.getDateFromUrl());
       this.getData();
     });
+  }
+
+  ngAfterViewInit(){
+    
   }
 
   ngOnDestroy(): void {
@@ -73,7 +78,6 @@ export class DiarioComponent implements OnInit, OnDestroy {
   }
 
   changeDate(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.DIARIO + '/' + this.currentDate.value.toISOString()]);
     this.getData();    
   }
 
@@ -86,6 +90,7 @@ export class DiarioComponent implements OnInit, OnDestroy {
             data => { 
               this.conceptos = data;
               this.loading = false;
+              this.location.replaceState(UrlConstants.DASHBOARD + '/' + UrlConstants.DIARIO + '/' + this.currentDate.value.toISOString());    
             },
             error => {
               this.loading = false; 
@@ -139,8 +144,15 @@ export class DiarioComponent implements OnInit, OnDestroy {
             if (item.concept == UrlConstants.DIARIO){
               return;
             }
-            this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + "/" + item.date.toISOString() + "/none"]);    
+            
             dialogRef.close();
+
+            if (item.concept === UrlConstants.ANUAL){
+              this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + "/" + item.date.getFullYear() + "/none"]);    
+            } else {
+              this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + "/" + item.date.toISOString() + "/none"]);    
+            }
+            
           });
         },
         error => {

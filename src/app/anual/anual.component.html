@@ -14,11 +14,11 @@
     <app-saldo [titulo]="'Saldo Anual'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>        
   </div>
 
-  <div class="tableContent">
+  <div class="tableContent" id="mainTable">
     <mat-accordion class="conceptos-table">
-      <mat-expansion-panel *ngFor="let ct of conceptosTotales" (opened)="loadYearDetails(ct)">
+      <mat-expansion-panel *ngFor="let ct of conceptosTotales" [expanded]="loading === false && ct.descripcion === getOpenItem()" (opened)="loadYearDetails(ct)">
         <mat-expansion-panel-header>
-          <mat-panel-title>
+          <mat-panel-title id="{{'item' + ct.descripcion}}">
             {{ct.descripcion}}
           </mat-panel-title>
           <mat-panel-description [class.importeNegativo]="ct.saldo < 0">

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit, Inject } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { HelperService } from '../services/helper.service';
 import { DatePipe } from '@angular/common';
@@ -77,7 +77,7 @@ export class MensualComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewChecked() {
-    this.changeDetector.detectChanges();
+    this.changeDetector.detectChanges();       
   }
 
   ngOnDestroy(): void {
@@ -113,6 +113,18 @@ export class MensualComponent implements OnInit, OnDestroy {
             data => { 
               this.conceptosTotales = data;              
               this.loading = false;
+
+              setTimeout(function (itemToScroll: string) {
+                if (itemToScroll === 'none'){
+                  return;
+                }
+
+                let elmnt = document.getElementById('item' + itemToScroll);
+                elmnt.scrollIntoView({block: "start", behavior: "auto"});
+                
+                let tt = document.getElementById('mainTable');
+                tt.scrollTop = tt.scrollTop - 30;
+              }, 1, this.getOpenItem());
             },
             error => {
               this.loading = false; 
@@ -155,7 +167,7 @@ export class MensualComponent implements OnInit, OnDestroy {
         if (item.concept == UrlConstants.MENSUAL){
           return;
         }
-        this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + "/" + item.date.toISOString()]);    
+        this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + "/" + item.date.getFullYear() + "/none"]);    
         dialogRef.close();
       });
     },

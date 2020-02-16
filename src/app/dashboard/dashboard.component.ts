@@ -34,7 +34,7 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   ngOnInit() {    
   }
 
-  route(dest: string) {
+  private route(dest: string) {
     let currentUrlSplitted = this.router.url.split('/');
 
     if (currentUrlSplitted.length >= 3 &&
@@ -43,6 +43,30 @@ export class DashboardComponent extends ComponentBase implements OnInit {
     } else {
       this.router.navigate([UrlConstants.DASHBOARD + '/' + dest]);
     }
+  }
+
+  routeDiario () {
+    this.route(UrlConstants.DIARIO + "/today");
+  }
+
+  routeMensual () {
+    this.route(UrlConstants.MENSUAL + "/current/none");
+  }
+
+  routeAnual () {
+    this.route(UrlConstants.ANUAL + "/current/none");
+  }
+
+  routeHistorico () {
+    this.route(UrlConstants.HISTORICO);
+  }
+
+  routeConceptos () {
+    this.route(UrlConstants.CONCEPTOS);
+  }
+
+  routeUserProfile () {
+    this.route(UrlConstants.USERPROFILE);
   }
 
   logout () {
