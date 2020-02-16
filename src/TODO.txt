@@ -1,10 +1,8 @@
 - add gasto desde pantalla de mes
 - url con caracteres especiales, pincha. Por ejemplo con caracter: (
 - poder buscar en las tablas
-- boton de back siempre
 - en pc dejar el menu siempre visible
-- user urls para navegar entre componentes
-- cambiar nombre e icono
+- traducciones
 - preguntar antes de hacer el logout
 - en apple hay pantallas que no funcionan
 - pantalla conceptos: table header mas grande

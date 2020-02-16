@@ -1,6 +1,6 @@
 {
-    "name": "Control Gastos",
-    "short_name": "Control Gastos",
+    "name": "MoneyGuard",
+    "short_name": "MoneyGuard",
     "theme_color": "#1976d2",
     "background_color": "#fafafa",
     "display": "standalone",
