@@ -1,3 +1,4 @@
+import { UrlConstants } from 'src/app/constants/url.constants';
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, CanActivateChild } from '@angular/router';
 import { UsersService } from '../services/users.service';
@@ -6,7 +7,7 @@ import { UsersService } from '../services/users.service';
 export class AuthGuard implements CanActivate, CanActivateChild {
 
   constructor(private router: Router, private userService: UsersService) { }
-  
+
   canActivate() {
     return this.userAlowed();
   }
@@ -15,14 +16,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     return this.userAlowed();
   }
 
-  private userAlowed():boolean{
+  private userAlowed(): boolean {
     if (this.userService.isSessionExpired() === false) {
       return true;
     }
 
     // not logged in so redirect to login page
     this.userService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/' + UrlConstants.LOGIN]);
     return false;
   }
 }

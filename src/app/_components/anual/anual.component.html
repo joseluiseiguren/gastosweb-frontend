@@ -1,0 +1,45 @@
+<div class="loading" *ngIf="loading">
+  <mat-spinner diameter="70" strokeWidth="5"></mat-spinner>
+</div>
+
+<div *ngIf="!loading">
+  <div class="header">
+    <mat-form-field class="anioSelect">
+      <mat-label>Año</mat-label>
+      <mat-select [(value)]="anioSelected" (selectionChange)="onChangeYear($event.value)">
+        <mat-option *ngFor="let anio of anios" [value]="anio">{{anio}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <app-saldo [titulo]="'Saldo Anual'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>
+  </div>
+
+  <div class="tableContent" id="mainTable">
+    <mat-accordion class="conceptos-table">
+      <mat-expansion-panel *ngFor="let ct of conceptosTotales" [expanded]="!loading && ct.descripcion === getOpenItem()" (opened)="loadYearDetails(ct)">
+        <mat-expansion-panel-header>
+          <mat-panel-title id="{{'item' + ct.descripcion}}">
+            {{ct.descripcion}}
+          </mat-panel-title>
+          <mat-panel-description [class.importeNegativo]="ct.saldo < 0">
+            {{ct.saldo | currency:this._userService.getMoneda()}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-spinner class="loading" *ngIf="loadingDetail"></mat-spinner>
+        <mat-list *ngIf="!loadingDetail">
+          <mat-list-item *ngFor="let detail of itemDetail">
+            <div matLine>
+              <p class="itemDescription" (click)="goToMonth(detail.mes, ct.descripcion)">
+                {{this._helperService.toCamelCase(this._helperService.convertStringMMYYYYToDate(detail.mes) | date:'LLLL yyyy')}}
+              </p>
+              <p class="itemAmount" (click)="goToMonth(detail.mes, ct.descripcion)" [class.importeNegativo]="detail.importe < 0">{{detail.importe | currency:this._userService.getMoneda()}}</p>
+              </div>
+          </mat-list-item>
+        </mat-list>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+
+  </div>
+</div>

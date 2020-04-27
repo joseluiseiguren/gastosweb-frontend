@@ -1,144 +1,96 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AppComponent } from './app.component';
-import { DiarioComponent } from './diario/diario.component';
-import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
-import { MensualComponent } from './mensual/mensual.component';
-import { AnualComponent } from './anual/anual.component';
-import { HistoricoComponent } from './historico/historico.component';
-import { ConceptosComponent } from './conceptos/conceptos.component';
+import { SharedModule } from './_modules/shared/shared.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { MatToolbarModule } from '@angular/material';
+
 import { SumaryMonthService } from './services/sumary-month.service';
 import { SumaryAnioService } from './services/sumary-anio.service';
 import { SumaryHistoricoService } from './services/sumary-historico.service';
 import { DiarioService } from './services/diario.service';
-import { LoginModule } from './login/login.module';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { LoginComponent } from './login/login.component';
-import { AuthGuard } from './guards/auth.guard';
+import { DashboardComponent } from './_components/dashboard/dashboard.component';
 import { UsersService } from './services/users.service';
+import { ConceptoService } from './services/concepto.service';
+import { HelperService } from './services/helper.service';
+import { UrlService } from './services/url.service';
+import { IpService } from './services/ip.service';
+import { FormatingService } from './sharedServices/formatingService';
+import { CalculationService } from './sharedServices/calculationService';
+
+import { AuthGuard } from './guards/auth.guard';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/AuthInterceptor';
 import { LOCALE_ID } from '@angular/core';
-import { ConceptoService } from './services/concepto.service';
-import { RegistracionComponent } from './registracion/registracion.component';
-import { HelperService } from './services/helper.service';
-import { UrlService } from './services/url.service';
-import { ErrorMessageComponent } from './error-message/error-message.component';
-import { UserprofileComponent } from './userprofile/userprofile.component';
 import { HashLocationStrategy, LocationStrategy, CurrencyPipe, registerLocaleData, DatePipe } from '@angular/common';
-import { IpService } from './services/ip.service';
-import { MatToolbarModule, 
-  MatCardModule, 
-  MatButtonModule, 
-  MatButtonToggleModule, 
-  MatBadgeModule, 
-  MatProgressSpinnerModule,
-  MatFormFieldModule,
-  MatNativeDateModule,
-  MatInputModule,
-  MatSelectModule,
-  MatSlideToggleModule,
-  MatSidenavModule,
-  MatExpansionModule,
-  MatGridListModule,
-  MatTabsModule,
-  MatDialogModule,
-  MatSnackBarModule,
-  MatTableModule,
-  MatDatepickerModule, 
-  MatTooltipModule} from  '@angular/material';
-import { MatIconModule  } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatListModule } from '@angular/material/list';
-import { AboutComponent } from './about/about.component';
-import { DiarioEnterComponent } from './diario-enter/diario-enter.component';
-import { TwoDigitDecimaNumberDirective } from './directives/TwoDigitDecimaNumberDirective';
-import { FormatingService } from './sharedServices/formatingService';
+import { UrlConstants } from './constants/url.constants';
+
+import { AppComponent } from './app.component';
+import { LoginComponent } from './_components/login/login.component';
+import { AboutComponent } from './_components/about/about.component';
+
 import localeEs from '@angular/common/locales/es';
 import localeEn from '@angular/common/locales/en';
-import { SaldoComponent } from './saldo/saldo.component';
-import { SaldoAbiertoComponent } from './saldo-abierto/saldo-abierto.component';
-import { SaldoItemComponent } from './saldo-item/saldo-item.component';
-import { WelcomeComponent } from './welcome/welcome.component';
-import { ConceptoDialogComponent } from './concepto-dialog/concepto-dialog.component';
-import { CalculationService } from './sharedServices/calculationService';
-import { UrlConstants } from './constants/url.constants';
-registerLocaleData(localeEs, localeEs); 
-registerLocaleData(localeEn, localeEn); 
+registerLocaleData(localeEs, localeEs);
+registerLocaleData(localeEn, localeEn);
 
-const routes: Routes = [    
-  { path: '', component: LoginComponent},
-  { path: UrlConstants.REGISTRACION, component: RegistracionComponent},
+const routes: Routes = [
+
+  { path: '', component: LoginComponent },
+  { path: UrlConstants.LOGIN, component: LoginComponent },
+
+  { path: UrlConstants.USERS,
+    loadChildren: () => import('./_modules/users/users.module').then(m => m.UsersModule) },
+
   { path: UrlConstants.DASHBOARD, component: DashboardComponent, canActivateChild: [AuthGuard],
                           children: [
-                            { path: UrlConstants.DIARIO + '/:day', component: DiarioComponent},
-                            { path: UrlConstants.MENSUAL + '/:month/:open', component: MensualComponent },
-                            { path: UrlConstants.ANUAL + '/:anio/:open', component: AnualComponent },
-                            { path: UrlConstants.HISTORICO, component: HistoricoComponent },
-                            { path: UrlConstants.CONCEPTOS, component: ConceptosComponent },
-                            { path: UrlConstants.USERPROFILE, component: UserprofileComponent },
-                            { path: '', component: DiarioComponent },
+
+                            { path: UrlConstants.DIARIO,
+                              loadChildren: () => import('./_modules/diario/diario.module').then(m => m.DiarioModule) },
+
+                            { path: UrlConstants.MENSUAL,
+                              loadChildren: () => import('./_modules/mensual/mensual.module').then(m => m.MensualModule) },
+
+                            { path: UrlConstants.ANUAL,
+                              loadChildren: () => import('./_modules/anual/anual.module').then(m => m.AnualModule) },
+
+                            { path: UrlConstants.HISTORICO,
+                              loadChildren: () => import('./_modules/historico/historico.module').then(m => m.HistoricoModule) },
+
+                            { path: UrlConstants.CONCEPTOS,
+                              loadChildren: () => import('./_modules/concepts/concepts.module').then(m => m.ConceptsModule) },
+
+                            { path: UrlConstants.USERS,
+                              loadChildren: () => import('./_modules/users/users.module').then(m => m.UsersModule) },
+
+                            { path: '',
+                              loadChildren: () => import('./_modules/diario/diario.module').then(m => m.DiarioModule) },
                           ]},
   { path: '**', redirectTo: UrlConstants.DASHBOARD + '/' + UrlConstants.DIARIO + '/today', pathMatch: 'full'}
-];  
+];
 
 @NgModule({
   declarations: [
     AppComponent,
-    DiarioComponent,
-    MensualComponent,
-    AnualComponent,
-    HistoricoComponent,
-    ConceptosComponent,
+    LoginComponent,
     DashboardComponent,
-    RegistracionComponent,
-    ErrorMessageComponent,
-    UserprofileComponent,
-    AboutComponent,
-    DiarioEnterComponent,    
-    TwoDigitDecimaNumberDirective, SaldoComponent, SaldoAbiertoComponent, SaldoItemComponent, WelcomeComponent, ConceptoDialogComponent
+    AboutComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    LoginModule,
     HttpClientModule,
     MatToolbarModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatButtonToggleModule,
-    MatBadgeModule,
-    MatFormFieldModule,
-    MatProgressSpinnerModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatInputModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-    MatSidenavModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatTabsModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatTableModule,
-    MatListModule,
-    MatRadioModule,
-    MatChipsModule,
-    MatTooltipModule,
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, onSameUrlNavigation: 'reload' }),
+    SharedModule,
+    BrowserAnimationsModule,
+    RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' }),
   ],
   providers: [SumaryMonthService,
               SumaryAnioService,
               SumaryHistoricoService,
-              DiarioService, 
+              DiarioService,
               UsersService,
-              ConceptoService, 
+              ConceptoService,
               IpService,
               HelperService,
               FormatingService,
@@ -152,12 +104,16 @@ const routes: Routes = [
                 useClass: AuthInterceptor,
                 multi: true,
               },
-              {provide: LocationStrategy, useClass: HashLocationStrategy},
-              { provide: LOCALE_ID,
+              {
+                provide: LocationStrategy,
+                useClass: HashLocationStrategy
+              },
+              {
+                provide: LOCALE_ID,
                 useValue: window.navigator.language.split('-')[0]
-              }              
+              }
             ],
-  entryComponents: [ AboutComponent, DiarioEnterComponent, SaldoAbiertoComponent, WelcomeComponent, ConceptoDialogComponent ],
+  entryComponents: [ AboutComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

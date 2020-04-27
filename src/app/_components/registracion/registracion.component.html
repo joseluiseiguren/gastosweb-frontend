@@ -1,0 +1,64 @@
+<div class="registerContainer">
+    <div class="register">
+      <p>
+        <mat-card-title>Registración</mat-card-title>
+      </p>
+      <form [formGroup]="registerForm" class="full-width-form" (ngSubmit)="register()" novalidate>
+        <div>
+            <mat-form-field appearance="outline" class="formfield-full-width" >
+                <mat-label>Nombre</mat-label>
+                <input matInput placeholder="Nombre" formControlName="nameFormControl">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field appearance="outline" class="formfield-full-width" >
+                <mat-label>E-Mail</mat-label>
+                <input matInput placeholder="E-Mail" formControlName="emailFormControl">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field appearance="outline" class="formfield-full-width">
+                <input matInput
+                        readonly
+                        [matDatepicker]="picker"
+                        placeholder="Fecha Nacimiento"
+                        formControlName="fechaNacimientoFormControl"
+                        (click)="picker.open()">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker [startAt]="startDate" startView="multi-year" #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field appearance="outline" class="formfield-full-width" >
+                <mat-label>Moneda</mat-label>
+                <mat-select formControlName="monedaFormControl">
+                    <mat-option *ngFor="let moneda of monedas" [value]="moneda">{{moneda}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field appearance="outline" class="formfield-full-width" >
+                <mat-label>Password</mat-label>
+                <input matInput type="password" placeholder="Password" formControlName="passwordFormControl">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field appearance="outline" class="formfield-full-width" >
+                <mat-label>Repetir Password</mat-label>
+                <input matInput type="password" placeholder="Repetir Password" formControlName="passwordRepeatFormControl">
+            </mat-form-field>
+        </div>
+        <div class="buttons-section">
+            <div class="login-container">
+                <a mat-button color="login" routerLink="/login">Ir a Login</a>
+            </div>
+            <div class="register-button-container">
+                <button mat-raised-button type="submit" color="primary" [disabled]="!registerForm.valid || loading">Registrarse
+                <mat-icon>how_to_reg</mat-icon>
+                </button>
+                <mat-spinner *ngIf="loading" [diameter]="30"></mat-spinner>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
