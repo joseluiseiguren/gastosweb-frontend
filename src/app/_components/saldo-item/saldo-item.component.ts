@@ -12,7 +12,7 @@ export class SaldoItemComponent implements OnInit {
   @Input() items: ISaldoItem[];
   @Output() itemClicked = new EventEmitter();
 
-  constructor(private _userService: UsersService) { }
+  constructor(public _userService: UsersService) { }
 
   ngOnInit() {
   }

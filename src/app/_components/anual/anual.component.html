@@ -11,18 +11,18 @@
       </mat-select>
     </mat-form-field>
 
-    <app-saldo [titulo]="'Saldo Anual'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>
+    <app-saldo [titulo]="'Saldo Anual'" [saldo]="saldoAnual" (saldoClicked)="showOpenSaldo()"></app-saldo>
   </div>
 
   <div class="tableContent" id="mainTable">
     <mat-accordion class="conceptos-table">
-      <mat-expansion-panel *ngFor="let ct of conceptosTotales" [expanded]="!loading && ct.descripcion === getOpenItem()" (opened)="loadYearDetails(ct)">
+      <mat-expansion-panel *ngFor="let ct of conceptosTotales" [expanded]="!loading && ct.descripcion === openItem" (opened)="loadYearDetails(ct)">
         <mat-expansion-panel-header>
           <mat-panel-title id="{{'item' + ct.descripcion}}">
             {{ct.descripcion}}
           </mat-panel-title>
           <mat-panel-description [class.importeNegativo]="ct.saldo < 0">
-            {{ct.saldo | currency:this._userService.getMoneda()}}
+            {{ct.saldo | currency:this._userService.userCurrency}}
           </mat-panel-description>
         </mat-expansion-panel-header>
 
@@ -31,9 +31,9 @@
           <mat-list-item *ngFor="let detail of itemDetail">
             <div matLine>
               <p class="itemDescription" (click)="goToMonth(detail.mes, ct.descripcion)">
-                {{this._helperService.toCamelCase(this._helperService.convertStringMMYYYYToDate(detail.mes) | date:'LLLL yyyy')}}
+                {{detail.MonthFormatted}}
               </p>
-              <p class="itemAmount" (click)="goToMonth(detail.mes, ct.descripcion)" [class.importeNegativo]="detail.importe < 0">{{detail.importe | currency:this._userService.getMoneda()}}</p>
+              <p class="itemAmount" (click)="goToMonth(detail.mes, ct.descripcion)" [class.importeNegativo]="detail.importe < 0">{{detail.importe | currency:this._userService.userCurrency}}</p>
               </div>
           </mat-list-item>
         </mat-list>

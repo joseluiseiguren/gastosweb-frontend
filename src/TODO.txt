@@ -1,3 +1,9 @@
+  - Lazy Loading
+- Credit doesn't work
+- Input's: not function
+- Subscriptions: add subscription and destroy
+- Use interfaces
+
 - add gasto desde pantalla de mes
 - url con caracteres especiales, pincha. Por ejemplo con caracter: (
 - poder buscar en las tablas

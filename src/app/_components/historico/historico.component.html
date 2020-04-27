@@ -4,9 +4,9 @@
 
 <div *ngIf="loading === false">
   <div class="header">
-    <app-saldo class="saldos" [titulo]="'Saldo Historico'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>        
+    <app-saldo class="saldos" [titulo]="'Saldo Historico'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>
   </div>
- 
+
   <div class="tableContent">
     <mat-accordion class="conceptos-table">
       <mat-expansion-panel *ngFor="let ct of conceptosTotales" (opened)="loadHistoricDetails(ct)">
@@ -15,21 +15,21 @@
             {{ct.descripcion}}
           </mat-panel-title>
           <mat-panel-description [class.importeNegativo]="ct.saldo < 0">
-            {{ct.saldo | currency:this._userService.getMoneda()}}
+            {{ct.saldo | currency:this._userService.userCurrency}}
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <mat-spinner class="loading" *ngIf="loadingDetail === true"></mat-spinner>        
+        <mat-spinner class="loading" *ngIf="loadingDetail === true"></mat-spinner>
         <mat-list *ngIf="loadingDetail === false">
           <mat-list-item *ngFor="let detail of itemDetail">
             <div matLine>
               <p class="itemDescription">{{detail.anio}}</p>
-              <p class="itemAmount" [class.importeNegativo]="detail.importe < 0">{{detail.importe | currency:this._userService.getMoneda()}}</p>
+              <p class="itemAmount" [class.importeNegativo]="detail.importe < 0">{{detail.importe | currency:this._userService.userCurrency}}</p>
               </div>
-          </mat-list-item>          
+          </mat-list-item>
         </mat-list>
-                
-      </mat-expansion-panel>      
-    </mat-accordion>  
+
+      </mat-expansion-panel>
+    </mat-accordion>
 </div>
 

@@ -23,7 +23,7 @@ export class HistoricoComponent implements OnInit, OnDestroy {
   private getHistoricDetailSubscription: Subscription;
 
   constructor(private _diarioService: DiarioService,
-              private _userService: UsersService,
+              public _userService: UsersService,
               private calculationService: CalculationService,
               public snackBar: MatSnackBar,
               public saldoAbierto: MatDialog,

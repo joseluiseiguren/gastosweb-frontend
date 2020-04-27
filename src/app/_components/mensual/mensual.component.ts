@@ -57,7 +57,7 @@ export class MensualComponent implements OnInit, OnDestroy {
   currentDate = new FormControl();
 
   constructor(private _datePipe: DatePipe,
-              private _userService: UsersService,
+              public _userService: UsersService,
               private _diarioService: DiarioService,
               public snackBar: MatSnackBar,
               private _sumaryAnioService: SumaryAnioService,

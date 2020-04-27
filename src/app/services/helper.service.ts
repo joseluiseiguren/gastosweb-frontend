@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class HelperService {
-  
+
     constructor() { }
 
     getErrorMessage(error: any): string {
@@ -13,7 +13,7 @@ export class HelperService {
             error.status === undefined) {
                 return message;
         }
-        
+
         switch (error.status) {
             case 0:
               message = "No se pudo conectar al servidor, intentar nuevamente";
@@ -26,21 +26,21 @@ export class HelperService {
             case 401: /* Unathorized */
               message = "Session Expirada";
               break;
-            
+
             case 500: /* internal server error */
               message = "Error Inesperado: " + error.error.errorId;
               break;
           }
-          
+
           return message;
-    } 
+    }
 
     convertStringMMYYYYToDate(fecha: string /* MMYYYY */): Date {
-        let mes = Number(fecha.substring(0,2))-1;
-        let anio = Number(fecha.substring(2,6));
-        
-        let retFecha = new Date(anio, mes, 1);
-        
+        const mes = Number(fecha.substring(0, 2)) - 1;
+        const anio = Number(fecha.substring(2, 6));
+
+        const retFecha = new Date(anio, mes, 1);
+
         return retFecha;
     }
 
@@ -49,17 +49,18 @@ export class HelperService {
         let dia = fecha.substring(8, 10);
         let mes = fecha.substring(5, 7);
         let anio = fecha.slice(0, 4);
-        
+
         return dia + "/" + mes + "/" + anio;
-    } 
-    
-    toCamelCase(strInput: string) : string {
-      let str = strInput.split(" ");
-  
-      for (var i = 0, x = str.length; i < x; i++) {
+    }
+
+    toCamelCase(strInput: string): string {
+      console.log('toCamelCase');
+      const str = strInput.split(' ');
+
+      for (let i = 0, x = str.length; i < x; i++) {
           str[i] = str[i][0].toUpperCase() + str[i].substr(1);
       }
-  
-      return str.join(" ");
+
+      return str.join(' ');
     }
 }

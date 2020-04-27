@@ -3,40 +3,42 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/user';
 import { UrlService } from './url.service';
-import { map, tap } from "rxjs/operators";
+import { map, tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { FormGroup } from '@angular/forms';
 
 @Injectable()
 export class UsersService {
-    jwtHelper: JwtHelperService = new JwtHelperService();
+    private jwtHelper = new JwtHelperService();
+    public userCurrency: string;
 
     constructor(private _http: HttpClient,
                 private _urlService: UrlService) { }
 
-    login(email:string, password:string, location:string ) : Observable<boolean> {
-        return this._http.post<any>(this._urlService.urlLogin(), 
+    login(email: string, password: string, location: string ): Observable<boolean> {
+        return this._http.post<any>(this._urlService.urlLogin(),
                 {email, password, location})
                 .pipe(map(user => {
                     // login successful if there's a jwt token in the response
                     if (user && user.token) {
                         // store user details and jwt token in local storage to keep user logged in between page refreshes
                         localStorage.setItem('alow', user.token);
+                        this.userCurrency = this.getMoneda();
                         return true;
                     }
 
                     return false;
-                }               
+                }
                 ));
     }
 
     register( usuario:User ) : Observable<void> {
 
-        let fechanacimiento = usuario.fechanacimiento.getFullYear().toString() +  
+        let fechanacimiento = usuario.fechanacimiento.getFullYear().toString() +
                 (usuario.fechanacimiento.getMonth()+1).toString().padStart(2, '0') +
                 usuario.fechanacimiento.getDate().toString().padStart(2, '0');
 
-        return this._http.post<any>(this._urlService.urlRegistracion(), 
+        return this._http.post<any>(this._urlService.urlRegistracion(),
                 {email: usuario.email,
                  password: usuario.password,
                  nombre: usuario.nombre,
@@ -46,11 +48,11 @@ export class UsersService {
 
     updateProfile( usuario:User ) : Observable<void> {
 
-        let fechanacimiento = usuario.fechanacimiento.getFullYear().toString() +  
+        let fechanacimiento = usuario.fechanacimiento.getFullYear().toString() +
                 (usuario.fechanacimiento.getMonth()+1).toString().padStart(2, '0') +
                 usuario.fechanacimiento.getDate().toString().padStart(2, '0');
 
-        return this._http.put<any>(this._urlService.urlUserUpdateProfile(), 
+        return this._http.put<any>(this._urlService.urlUserUpdateProfile(),
                 {email: usuario.email,
                  password: usuario.password,
                  nombre: usuario.nombre,
@@ -72,7 +74,7 @@ export class UsersService {
         //console.log("expira: " + this.jwtHelper.getTokenExpirationDate(token).toString());
 
         if (this.jwtHelper.isTokenExpired(token) === true) {
-            
+
             return true;
         }
 
@@ -101,9 +103,9 @@ export class UsersService {
         return userId;
     }
 
-    getMoneda() : string {
-        let token = localStorage.getItem('alow');
-        let moneda = "";
+    private getMoneda(): string {
+        const token = localStorage.getItem('alow');
+        let moneda = '';
 
         if (token !== null) {
             moneda = this.jwtHelper.decodeToken(token).moneda;
@@ -125,8 +127,8 @@ export class UsersService {
     checkPasswords(group: FormGroup, password1ControlName: string, password2ControlName: string) {
         let pass = group.get('passwordFormControl').value;
         let confirmPass = group.get('passwordRepeatFormControl').value;
-  
-        return pass === confirmPass ? null : { notSame: true }     
+
+        return pass === confirmPass ? null : { notSame: true }
       }
-  
+
 }

@@ -9,7 +9,7 @@ import { SharedModule } from './../shared/shared.module';
 import { TwoDigitDecimaNumberDirective } from 'src/app/directives/TwoDigitDecimaNumberDirective';
 
 @NgModule({
-  declarations: [DiarioComponent, DiarioEnterComponent, TwoDigitDecimaNumberDirective ],
+  declarations: [ DiarioComponent, DiarioEnterComponent, TwoDigitDecimaNumberDirective ],
   imports: [
     CommonModule,
     DiarioRoutingModule,

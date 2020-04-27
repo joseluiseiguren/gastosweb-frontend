@@ -29,8 +29,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.ingresarApp();
       }
 
-      console.log(this.registerUrl);
-
       this.location.height = window.screen.height;
       this.location.width = window.screen.width;
       this.location.appCodeName = window.navigator.appCodeName;

@@ -17,8 +17,8 @@
                       panelClass="example-month-picker">
       </mat-datepicker>
     </mat-form-field>
-    
-    <app-saldo [titulo]="'Saldo Mensual'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>    
+
+    <app-saldo [titulo]="'Saldo Mensual'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>
   </div>
 
   <div class="tableContent" id="mainTable">
@@ -29,22 +29,22 @@
               {{ct.descripcion}}
             </mat-panel-title>
             <mat-panel-description [class.importeNegativo]="ct.saldo < 0">
-              {{ct.saldo | currency:this._userService.getMoneda()}}
+              {{ct.saldo | currency:this._userService.userCurrency}}
             </mat-panel-description>
-          </mat-expansion-panel-header>        
+          </mat-expansion-panel-header>
 
-          <mat-spinner class="loading" *ngIf="loadingDetail === true"></mat-spinner>        
+          <mat-spinner class="loading" *ngIf="loadingDetail === true"></mat-spinner>
           <mat-list *ngIf="loadingDetail === false">
             <mat-list-item *ngFor="let detail of itemDetail">
               <div matLine>
                 <p class="itemDescription">{{detail.fecha | date:'mediumDate'}}</p>
-                <p class="itemAmount" [class.importeNegativo]="detail.importe < 0">{{detail.importe | currency:this._userService.getMoneda()}}</p>
+                <p class="itemAmount" [class.importeNegativo]="detail.importe < 0">{{detail.importe | currency:this._userService.userCurrency}}</p>
                 </div>
-            </mat-list-item>          
-          </mat-list>      
-                
-      </mat-expansion-panel>      
+            </mat-list-item>
+          </mat-list>
+
+      </mat-expansion-panel>
     </mat-accordion>
-    
-  </div>    
+
+  </div>
 </div>
