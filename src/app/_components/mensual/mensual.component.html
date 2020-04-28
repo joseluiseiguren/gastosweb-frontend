@@ -1,12 +1,12 @@
-<div class="loading" *ngIf="loading === true">
+<div class="loading" *ngIf="loading">
   <mat-spinner diameter="70" strokeWidth="5"></mat-spinner>
 </div>
 
-<div class="loading" *ngIf="loadingPopup === true">
+<div class="loading" *ngIf="loadingPopup">
   <mat-spinner diameter="70" strokeWidth="5"></mat-spinner>
 </div>
 
-<div *ngIf="loading === false">
+<div *ngIf="!loading">
   <div class="header">
     <mat-form-field class="datePicker">
       <input matInput readonly (click)="dp.open()" [matDatepicker]="dp" placeholder="Mes" [formControl]="currentDate">
@@ -18,12 +18,12 @@
       </mat-datepicker>
     </mat-form-field>
 
-    <app-saldo [titulo]="'Saldo Mensual'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>
+    <app-saldo [titulo]="'Saldo Mensual'" [saldo]="saldoActual" (saldoClicked)="showOpenSaldo()"></app-saldo>
   </div>
 
   <div class="tableContent" id="mainTable">
     <mat-accordion class="conceptos-table">
-      <mat-expansion-panel *ngFor="let ct of conceptosTotales" [expanded]="loading === false && ct.descripcion === getOpenItem()" (opened)="loadMonthDetails(ct)">
+      <mat-expansion-panel *ngFor="let ct of conceptosTotales" [expanded]="!loading && ct.descripcion === getOpenItem()" (opened)="loadMonthDetails(ct)">
           <mat-expansion-panel-header>
             <mat-panel-title id="{{'item' + ct.descripcion}}">
               {{ct.descripcion}}
@@ -33,8 +33,8 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <mat-spinner class="loading" *ngIf="loadingDetail === true"></mat-spinner>
-          <mat-list *ngIf="loadingDetail === false">
+          <mat-spinner class="loading" *ngIf="loadingDetail"></mat-spinner>
+          <mat-list *ngIf="!loadingDetail">
             <mat-list-item *ngFor="let detail of itemDetail">
               <div matLine>
                 <p class="itemDescription">{{detail.fecha | date:'mediumDate'}}</p>

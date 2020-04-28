@@ -28,9 +28,9 @@ export class DiarioComponent implements OnInit, OnDestroy {
   loadingPopup: Boolean = false;
   displayedColumns: string[] = ['descripcion', 'importe'];
   currentDate: FormControl;
-  private getDataSubscription: Subscription;
-  private summaryDialogSubscription: Subscription;
-  private saldoItemSubscription: Subscription;
+  saldoDiario = 0;
+
+  private _subscriptions = new Subscription();
 
   constructor(private _conceptosDiarioService: DiarioService,
               public _userService: UsersService,
@@ -56,35 +56,21 @@ export class DiarioComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeGetData();
-    this.unsubscribeSummaryDialog();
-    this.unsubscribeSaldoItem();
+    this._subscriptions.unsubscribe();
   }
 
-  unsubscribeGetData(): void {
-    if (this.getDataSubscription){ this.getDataSubscription.unsubscribe(); }
-  }
-
-  unsubscribeSaldoItem(): void {
-    if (this.saldoItemSubscription){ this.saldoItemSubscription.unsubscribe(); }
-  }
-
-  unsubscribeSummaryDialog(): void {
-    if (this.summaryDialogSubscription){ this.summaryDialogSubscription.unsubscribe(); }
-  }
-
-  changeDate(type: string, event: MatDatepickerInputEvent<Date>) {
+  changeDate(type: string, event: MatDatepickerInputEvent<Date>): void {
     this.getData();
   }
 
-  getData() {
+  getData(): void {
     this.loading = true;
-    this.unsubscribeGetData();
 
-    this.getDataSubscription = this._conceptosDiarioService.getConceptosImportes(this.currentDate.value)
+    this._subscriptions.add(this._conceptosDiarioService.getConceptosImportes(this.currentDate.value)
         .subscribe(
             data => {
               this.conceptos = data;
+              this.saldoDiario = this.getIngresos() - this.getEgresos();
               this.loading = false;
               this.location.replaceState(UrlConstants.DASHBOARD + '/' + UrlConstants.DIARIO + '/' + this.currentDate.value.toISOString());
             },
@@ -93,78 +79,99 @@ export class DiarioComponent implements OnInit, OnDestroy {
               this.snackBar.open(this._helperService.getErrorMessage(error),
                                  '',
                                  { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-            });
+            })
+    );
   }
 
-  openConcepto(concepto: IConceptoDiario){
-    this.enterDiario.open(DiarioEnterComponent, { data: {concepto} });
+  openConcepto(concepto: IConceptoDiario): void {
+    const dialogRef = this.enterDiario.open(DiarioEnterComponent, { data: {concepto} });
+
+    this._subscriptions.add(dialogRef.afterClosed()
+      .subscribe(result => {
+        this.saldoDiario = this.getIngresos() - this.getEgresos();
+      })
+    );
   }
 
-  getIngresos() : number {
+  private getIngresos(): number {
     return this.calculationService.getIngresos(this.convertToNumberArray(this.conceptos));
   }
 
-  getEgresos() : number {
+  private getEgresos(): number {
     return this.calculationService.getEgresos(this.convertToNumberArray(this.conceptos));
   }
 
-  public showOpenSaldo(){
+  public showOpenSaldo(): void {
     this.loadingPopup = true;
     const saldos: ISaldoItem[] = [];
-    saldos.push(new ISaldoItem('' + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value),
-                               'mediumDate')),
-                'today',
-                this.getIngresos(),
-                this.getEgresos(),
-                'diario',
-                new Date(this.currentDate.value)));
 
-    this.unsubscribeSummaryDialog();
-    this.summaryDialogSubscription = forkJoin(this._sumaryMonthService.getSumary(this.currentDate.value),
+    const saldoItemDiario: ISaldoItem = {
+      title: '' + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value),
+             'mediumDate')),
+      icon: 'today',
+      ingresos: this.getIngresos(),
+      egresos: this.getEgresos(),
+      concept: 'diario',
+      date: new Date(this.currentDate.value)
+    };
+
+    saldos.push(saldoItemDiario);
+
+    this._subscriptions.add(forkJoin(this._sumaryMonthService.getSumary(this.currentDate.value),
                                               this._sumaryAnioService.getSumary(this.currentDate.value))
         .subscribe(([mensual, anual]) => {
-          saldos.push(new ISaldoItem('' + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value),
-                                     'LLLL yyyy')),
-                      'calendar_today',
-                      mensual.ingresos,
-                      mensual.egresos,
-                      'mensual',
-                      new Date(this.currentDate.value)));
-          saldos.push(new ISaldoItem('Año ' + this.datePipe.transform(new Date(this.currentDate.value), 'yyyy'),
-                      'airplay',
-                      anual.ingresos,
-                      anual.egresos,
-                      'anual',
-                      new Date(this.currentDate.value)));
+
+          const saldoItemMensual: ISaldoItem = {
+            title: '' + this._helperService.toCamelCase(this.datePipe.transform(new Date(this.currentDate.value),
+                   'LLLL yyyy')),
+            icon: 'calendar_today',
+            ingresos: mensual.ingresos,
+            egresos: mensual.egresos,
+            concept: 'mensual',
+            date: new Date(this.currentDate.value)
+          };
+          saldos.push(saldoItemMensual);
+
+
+          const saldoItemAnual: ISaldoItem = {
+            title: 'Año ' + this.datePipe.transform(new Date(this.currentDate.value), 'yyyy'),
+            icon: 'airplay',
+            ingresos: anual.ingresos,
+            egresos: anual.egresos,
+            concept: 'mensual',
+            date: new Date(this.currentDate.value)
+          };
+          saldos.push(saldoItemAnual);
 
           this.loadingPopup = false;
           const dialogRef = this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });
 
-          this.unsubscribeSaldoItem();
-          this.saldoItemSubscription = dialogRef.componentInstance.itemPushed.subscribe((item: ISaldoItem) => {
-            if (item.concept === UrlConstants.DIARIO){
-              return;
-            }
+          this._subscriptions.add(dialogRef.componentInstance.itemPushed
+            .subscribe((item: ISaldoItem) => {
+              if (item.concept === UrlConstants.DIARIO) {
+                return;
+              }
 
-            dialogRef.close();
+              dialogRef.close();
 
-            if (item.concept === UrlConstants.ANUAL){
-              this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + '/' + item.date.getFullYear() + '/none']);
-            } else {
-              this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + '/' + item.date.toISOString() + '/none']);
-            }
-
-          });
+              if (item.concept === UrlConstants.ANUAL){
+                this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + '/' + item.date.getFullYear() + '/none']);
+              } else {
+                this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + '/' + item.date.toISOString() + '/none']);
+              }
+            })
+          );
         },
         error => {
           this.loadingPopup = false;
           this.snackBar.open(this._helperService.getErrorMessage(error),
                              '',
                              { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-        });
+        })
+    );
   }
 
-  private convertToNumberArray(dataIn: IConceptoDiario[]) : number[] {
+  private convertToNumberArray(dataIn: IConceptoDiario[]): number[] {
     const importes: number[] = [];
     dataIn.forEach(function (value) {
       importes.push(value.importe);

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from '../models/user';
 import { UrlService } from './url.service';
 import { map, tap } from 'rxjs/operators';
@@ -12,8 +12,12 @@ export class UsersService {
     private jwtHelper = new JwtHelperService();
     public userCurrency: string;
 
+    public userName = new BehaviorSubject<string>('');
+
     constructor(private _http: HttpClient,
-                private _urlService: UrlService) { }
+                private _urlService: UrlService) {
+      this.setUserName(this.getUserNameFromToken());
+    }
 
     login(email: string, password: string, location: string ): Observable<boolean> {
         return this._http.post<any>(this._urlService.urlLogin(),
@@ -24,6 +28,7 @@ export class UsersService {
                         // store user details and jwt token in local storage to keep user logged in between page refreshes
                         localStorage.setItem('alow', user.token);
                         this.userCurrency = this.getMoneda();
+                        this.setUserName(this.getUserNameFromToken());
                         return true;
                     }
 
@@ -32,10 +37,9 @@ export class UsersService {
                 ));
     }
 
-    register( usuario:User ) : Observable<void> {
-
-        let fechanacimiento = usuario.fechanacimiento.getFullYear().toString() +
-                (usuario.fechanacimiento.getMonth()+1).toString().padStart(2, '0') +
+    register( usuario: User ): Observable<void> {
+        const fechanacimiento = usuario.fechanacimiento.getFullYear().toString() +
+                (usuario.fechanacimiento.getMonth() + 1).toString().padStart(2, '0') +
                 usuario.fechanacimiento.getDate().toString().padStart(2, '0');
 
         return this._http.post<any>(this._urlService.urlRegistracion(),
@@ -46,10 +50,9 @@ export class UsersService {
                  moneda: usuario.moneda});
     }
 
-    updateProfile( usuario:User ) : Observable<void> {
-
-        let fechanacimiento = usuario.fechanacimiento.getFullYear().toString() +
-                (usuario.fechanacimiento.getMonth()+1).toString().padStart(2, '0') +
+    updateProfile(usuario: User): Observable<void> {
+        const fechanacimiento = usuario.fechanacimiento.getFullYear().toString() +
+                (usuario.fechanacimiento.getMonth() + 1).toString().padStart(2, '0') +
                 usuario.fechanacimiento.getDate().toString().padStart(2, '0');
 
         return this._http.put<any>(this._urlService.urlUserUpdateProfile(),
@@ -66,24 +69,21 @@ export class UsersService {
     }
 
     isSessionExpired(): boolean {
-        let token = localStorage.getItem('alow');
+        const token = localStorage.getItem('alow');
         if (token === null) {
             return true;
         }
 
-        //console.log("expira: " + this.jwtHelper.getTokenExpirationDate(token).toString());
-
         if (this.jwtHelper.isTokenExpired(token) === true) {
-
             return true;
         }
 
         return false;
     }
 
-    getUserName() : string {
-        let token = localStorage.getItem('alow');
-        let userName = "";
+    private getUserNameFromToken(): string {
+        const token = localStorage.getItem('alow');
+        let userName = '';
 
         if (token !== null) {
             userName = this.jwtHelper.decodeToken(token).user;
@@ -92,8 +92,12 @@ export class UsersService {
         return userName;
     }
 
-    getUserId() : number {
-        let token = localStorage.getItem('alow');
+    setUserName(userName: string): void {
+      this.userName.next(userName);
+    }
+
+    getUserId(): number {
+        const token = localStorage.getItem('alow');
         let userId = 0;
 
         if (token !== null) {
@@ -116,7 +120,6 @@ export class UsersService {
 
     getProfile(): Observable<User> {
         return this._http.get<User>(this._urlService.urlGetUserProfile(this.getUserId()))
-                        //.delay(3000)
                         .pipe(tap(data => JSON.stringify(data)));
     }
 
@@ -124,11 +127,11 @@ export class UsersService {
         return ['$', 'U$D', '€'];
     }
 
-    checkPasswords(group: FormGroup, password1ControlName: string, password2ControlName: string) {
-        let pass = group.get('passwordFormControl').value;
-        let confirmPass = group.get('passwordRepeatFormControl').value;
+    checkPasswords(group: FormGroup) {
+        const pass = group.get('passwordFormControl').value;
+        const confirmPass = group.get('passwordRepeatFormControl').value;
 
-        return pass === confirmPass ? null : { notSame: true }
+        return pass === confirmPass ? null : { notSame: true };
       }
 
 }

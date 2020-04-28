@@ -13,12 +13,11 @@ import { Subscription } from 'rxjs';
 })
 export class ConceptoDialogComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  loading: boolean = false;
-  private newConceptoSubscription: Subscription;
-  private modifyConceptoSubscription: Subscription;
+  loading = false;
+  private _subscriptions = new Subscription();
 
   constructor(private fb: FormBuilder,
-              public snackBar: MatSnackBar,
+              private snackBar: MatSnackBar,
               private _conceptoService: ConceptoService,
               private _helperService: HelperService,
               public dialogRef: MatDialogRef<ConceptoDialogComponent>,
@@ -32,66 +31,54 @@ export class ConceptoDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeNewConcepto();
-    this.unsubscribeModifyConcepto();
-  }
-
-  unsubscribeNewConcepto(): void {
-    if (this.newConceptoSubscription){ this.newConceptoSubscription.unsubscribe(); }
-  }
-
-  unsubscribeModifyConcepto(): void {
-    if (this.modifyConceptoSubscription){ this.modifyConceptoSubscription.unsubscribe(); }
+    this._subscriptions.unsubscribe();
   }
 
   onCancel(): void {
     this.dialogRef.close();
   }
 
-  private uppercaseFirstLetter (data: string) : string
-  {
-      return data.charAt(0).toUpperCase() + data.slice(1);
-  }
-
   onSave(): void {
     this.loading = true;
-    this.form.value.conceptoFormControl = this.uppercaseFirstLetter(this.form.value.conceptoFormControl);
+    this.form.value.conceptoFormControl = this._helperService.toCamelCase(this.form.value.conceptoFormControl);
 
-    //Alta
+    // Alta
     if (this.data.concepto === undefined){
       this.newConcepto();
     } else {
-      //Modificacion
+      // Modificacion
       this.modifyConcepto();
     }
   }
 
   private newConcepto(): void {
-    this.unsubscribeNewConcepto();
-    this.newConceptoSubscription = this._conceptoService.insertConcepto(this.form.value.conceptoFormControl.toString(), this.form.value.debitoCreditoControl)
+    this._subscriptions.add(this._conceptoService.insertConcepto(this.form.value.conceptoFormControl.toString(),
+                            this.form.value.debitoCreditoControl)
         .subscribe(
           () => {
-            this.snackBar.open('Alta Exitosa', '', { duration: 2000, direction: 'ltr', verticalPosition: 'bottom' });
+            this._helperService.showSnackBarInformation(this.snackBar, 'Alta Exitosa');
             this.dialogRef.close(true);
           },
           error => {
             this.loading = false;
-            this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-        });
+            this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
+        })
+    );
   }
 
   private modifyConcepto(): void {
-    this.unsubscribeModifyConcepto();
-    this.modifyConceptoSubscription = this._conceptoService.updateConcepto(this.data.concepto._id, this.form.value.conceptoFormControl.toString(), this.form.value.debitoCreditoControl)
+    this._subscriptions.add(this._conceptoService.updateConcepto(this.data.concepto._id, this.form.value.conceptoFormControl.toString(),
+                            this.form.value.debitoCreditoControl)
         .subscribe(
           () => {
             this.loading = false;
-            this.snackBar.open('Modificación Exitosa', '', { duration: 2000, direction: 'ltr', verticalPosition: 'bottom' });
+            this._helperService.showSnackBarInformation(this.snackBar, 'Modificación Exitosa');
             this.dialogRef.close(true);
           },
           error => {
             this.loading = false;
-            this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-        });
+            this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
+        })
+    );
   }
 }

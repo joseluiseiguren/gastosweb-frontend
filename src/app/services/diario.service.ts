@@ -8,27 +8,27 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class DiarioService {
-  
+
   constructor(private _http: HttpClient,
               private _urlService: UrlService) { }
 
   getConceptosImportes(fecha: Date): Observable<IConceptoDiario[]> {
     let url = this._urlService.urlGetConceptosImportes(
-                                      fecha.getFullYear().toString() + 
-                                      (fecha.getMonth()+1).toString().padStart(2, '0') + 
+                                      fecha.getFullYear().toString() +
+                                      (fecha.getMonth()+1).toString().padStart(2, '0') +
                                       fecha.getDate().toString().padStart(2, '0'));
-    
+
     return this._http.get<IConceptoDiario[]>(url)
                     //.delay(3000)
                     .pipe(tap(data => JSON.stringify(data)));
   }
 
   setConceptoImporte(fecha:Date, importe:number, idConcepto:number) : Observable<void> {
-    return this._http.post<any>(this._urlService.urlSetConceptoImporte(), 
-            {fecha: fecha.getFullYear().toString() + 
-                    (fecha.getMonth()+1).toString().padStart(2, '0') + 
-                    fecha.getDate().toString().padStart(2, '0'), 
-              importe: importe, 
+    return this._http.post<any>(this._urlService.urlSetConceptoImporte(),
+            {fecha: fecha.getFullYear().toString() +
+                    (fecha.getMonth()+1).toString().padStart(2, '0') +
+                    fecha.getDate().toString().padStart(2, '0'),
+              importe: importe,
               idConcepto: idConcepto});
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConceptoService } from '../../services/concepto.service';
 import { IConcepto } from '../../models/concepto';
 import { HelperService } from '../../services/helper.service';
@@ -11,39 +11,28 @@ import { Subscription } from 'rxjs';
   templateUrl: './conceptos.component.html',
   styleUrls: ['./conceptos.component.css']
 })
-export class ConceptosComponent implements OnInit {
+export class ConceptosComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['concepto', 'tipo'];
-  loading: boolean = false;
+  loading = false;
   conceptos: IConcepto[] = [];
-  private getConceptosSubscription: Subscription;
-  private conceptoDialogSubscription: Subscription;
+  private _subscriptions = new Subscription();
 
   constructor(private _conceptoService: ConceptoService,
               private _helperService: HelperService,
               public conceptoDialog: MatDialog,
-              public snackBar: MatSnackBar){  }
+              public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.getConceptos();
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeGetConceptos();
-    this.unsubscribeConceptoDialog();
-  }
-
-  unsubscribeGetConceptos(): void {
-    if (this.getConceptosSubscription){ this.getConceptosSubscription.unsubscribe(); }
-  }
-
-  unsubscribeConceptoDialog(): void {
-    if (this.conceptoDialogSubscription){ this.getConceptosSubscription.unsubscribe(); }
+    this._subscriptions.unsubscribe();
   }
 
   getConceptos() {
     this.loading = true;
-    this.unsubscribeGetConceptos();
-    this.getConceptosSubscription = this._conceptoService.getConceptos()
+    this._subscriptions.add(this._conceptoService.getConceptos()
         .subscribe(
             data => {
               this.conceptos = data;
@@ -51,19 +40,21 @@ export class ConceptosComponent implements OnInit {
             },
             error => {
               this.loading = false;
-              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-            });
+              this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
+            })
+    );
   }
 
   openConceptoDialog(concepto: IConcepto){
-    let dialogRef = this.conceptoDialog.open(ConceptoDialogComponent, { data: {concepto} });
+    const dialogRef = this.conceptoDialog.open(ConceptoDialogComponent, { data: {concepto} });
 
-    this.unsubscribeConceptoDialog();
-    this.getConceptosSubscription = dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined){
-        this.getConceptos();
-      }
-    });
+    this._subscriptions.add(dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result !== undefined) {
+          this.getConceptos();
+        }
+      })
+    );
   }
 
 }

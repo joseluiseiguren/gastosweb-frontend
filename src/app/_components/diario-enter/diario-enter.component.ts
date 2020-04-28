@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 export class DiarioEnterComponent implements OnInit, OnDestroy {
   form: FormGroup;
   loading = false;
-  private saveConceptosubscription: Subscription;
+  private _subscriptions = new Subscription();
 
   constructor(private fb: FormBuilder,
               private formating: FormatingService,
@@ -33,11 +33,7 @@ export class DiarioEnterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeSaveConcepto();
-  }
-
-  unsubscribeSaveConcepto(): void {
-    if (this.saveConceptosubscription) { this.saveConceptosubscription.unsubscribe(); }
+    this._subscriptions.unsubscribe();
   }
 
   onCancel(): void {
@@ -46,29 +42,26 @@ export class DiarioEnterComponent implements OnInit, OnDestroy {
 
   onSave(): void {
     this.loading = true;
-    this.unsubscribeSaveConcepto();
 
     const newImporte = parseFloat(this.form.value.importeFormControl.toString().replace(',', '.'));
-    this.saveConceptosubscription = this._conceptosDiarioService.setConceptoImporte(
+    this._subscriptions.add(this._conceptosDiarioService.setConceptoImporte(
         new Date(this.data.concepto.fecha),
-        (this.form.value.debitoCreditoControl === 1) ? newImporte : newImporte * -1,
+        (this.form.value.debitoCreditoControl === '1') ? newImporte : newImporte * -1,
         this.data.concepto.idconcepto)
             .subscribe(
               () => {
-                this.data.concepto.importe = (this.form.value.debitoCreditoControl === 1 || this.form.value.importeFormControl === 0)
+                this.data.concepto.importe = (this.form.value.debitoCreditoControl === '1' || this.form.value.importeFormControl === 0)
                                               ? newImporte
                                               : newImporte * -1;
                 this.data.concepto.credito = this.form.value.debitoCreditoControl;
                 this.dialogRef.close(this.data.concepto);
               },
-              error =>
-              {
+              error => {
                 this.loading = false;
-                this.snackBar.open(this._helperService.getErrorMessage(error),
-                                   '',
-                                   { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
+                this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
               }
-            );
+            )
+    );
   }
 
   private isCredito(): boolean {

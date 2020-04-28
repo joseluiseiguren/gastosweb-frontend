@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { UsersService } from '../../services/users.service';
 import { HelperService } from '../../services/helper.service';
 import { DatePipe } from '@angular/common';
@@ -44,16 +44,16 @@ export const MY_FORMATS = {
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ],
 })
-export class MensualComponent implements OnInit, OnDestroy {
-  loading: Boolean = false;
-  loadingDetail: Boolean = false;
-  loadingPopup: Boolean = false;
+export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
+  loading = false;
+  loadingDetail = false;
+  loadingPopup = false;
   conceptosTotales: any[];
   itemDetail: any[];
-  private getDataSubscription: Subscription;
-  private summaryDialogSubscription: Subscription;
-  private itemDetailSubscription: Subscription;
-  private saldoItemSubscription: Subscription;
+  saldoActual = 0;
+
+  private _subscriptions = new Subscription();
+
   currentDate = new FormControl();
 
   constructor(private _datePipe: DatePipe,
@@ -65,7 +65,7 @@ export class MensualComponent implements OnInit, OnDestroy {
               private activeRoute: ActivatedRoute,
               private router: Router,
               private location: Location,
-              private changeDetector : ChangeDetectorRef,
+              private changeDetector: ChangeDetectorRef,
               private calculationService: CalculationService,
               private _helperService: HelperService) {  }
 
@@ -81,133 +81,127 @@ export class MensualComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeGetData();
-    this.unsubscribeSummaryDialog();
-    this.unsubscribeItemDetail();
-    this.unsubscribeSaldoItem();
-  }
-
-  unsubscribeSummaryDialog(): void {
-    if (this.summaryDialogSubscription){ this.summaryDialogSubscription.unsubscribe(); }
-  }
-
-  unsubscribeGetData(): void {
-    if (this.getDataSubscription){ this.getDataSubscription.unsubscribe(); }
-  }
-
-  unsubscribeItemDetail(): void {
-    if (this.itemDetailSubscription){ this.itemDetailSubscription.unsubscribe(); }
-  }
-
-  unsubscribeSaldoItem(): void {
-    if (this.saldoItemSubscription){ this.saldoItemSubscription.unsubscribe(); }
+    this._subscriptions.unsubscribe();
   }
 
   getData() {
     this.loading = true;
-    let fecha = this.currentDate.value.getFullYear() + (this.currentDate.value.getMonth() + 1).toString().padStart(2, '0');
+    const fecha = this.currentDate.value.getFullYear() + (this.currentDate.value.getMonth() + 1).toString().padStart(2, '0');
 
-    this.unsubscribeGetData();
-    this.getDataSubscription = this._diarioService.getConceptosTotalMes(fecha)
+    this._subscriptions.add(this._diarioService.getConceptosTotalMes(fecha)
         .subscribe(
             data => {
               this.conceptosTotales = data;
+              this.saldoActual = this.getIngresos() - this.getEgresos();
               this.loading = false;
 
               setTimeout(function (itemToScroll: string) {
-                if (itemToScroll === 'none'){
+                if (itemToScroll === 'none') {
                   return;
                 }
 
-                let elmnt = document.getElementById('item' + itemToScroll);
-                elmnt.scrollIntoView({block: "start", behavior: "auto"});
+                const elmnt = document.getElementById('item' + itemToScroll);
+                elmnt.scrollIntoView({block: 'start', behavior: 'auto'});
 
-                let tt = document.getElementById('mainTable');
+                const tt = document.getElementById('mainTable');
                 tt.scrollTop = tt.scrollTop - 30;
               }, 1, this.getOpenItem());
             },
             error => {
               this.loading = false;
-              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-            });
+              this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
+            })
+    );
   }
 
-  getIngresos() : number {
+  private getIngresos(): number {
     return this.calculationService.getIngresos(this.convertToNumberArray(this.conceptosTotales));
   }
 
-  getEgresos() : number {
+  private getEgresos(): number {
     return this.calculationService.getEgresos(this.convertToNumberArray(this.conceptosTotales));
   }
 
-  private showOpenSaldo(){
+  showOpenSaldo(): void {
     this.loadingPopup = true;
-    let saldos: ISaldoItem[] = [];
+    const saldos: ISaldoItem[] = [];
 
-    saldos.push(new ISaldoItem("" + this._helperService.toCamelCase(this._datePipe.transform(this.currentDate.value, 'LLLL yyyy')),
-                "calendar_today",
-                this.getIngresos(),
-                this.getEgresos(),
-                "mensual",
-                this.currentDate.value));
+    const saldoItemMensual: ISaldoItem = {
+      title: '' + this._helperService.toCamelCase(this._datePipe.transform(this.currentDate.value, 'LLLL yyyy')),
+      icon: 'calendar_today',
+      ingresos: this.getIngresos(),
+      egresos: this.getEgresos(),
+      concept: 'mensual',
+      date: this.currentDate.value
+    };
+    saldos.push(saldoItemMensual);
 
-    this.unsubscribeSummaryDialog();
-    this.summaryDialogSubscription = this._sumaryAnioService.getSumary(this.currentDate.value).subscribe((anual) => {
-      saldos.push(new ISaldoItem("Año " + this._datePipe.transform(this.currentDate.value, 'yyyy'),
-                  "airplay",
-                  anual.ingresos,
-                  anual.egresos,
-                  "anual",
-                  this.currentDate.value));
-      let dialogRef = this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });
+    this._subscriptions.add(this._sumaryAnioService.getSumary(this.currentDate.value).subscribe((anual) => {
+      const saldoItemAnual: ISaldoItem = {
+        title: 'Año ' + this._datePipe.transform(this.currentDate.value, 'yyyy'),
+        icon: 'airplay',
+        ingresos: anual.ingresos,
+        egresos: anual.egresos,
+        concept: 'anual',
+        date: this.currentDate.value
+      };
+      saldos.push(saldoItemAnual);
+
+      const dialogRef = this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });
       this.loadingPopup = false;
 
-      this.unsubscribeSaldoItem();
-      this.saldoItemSubscription = dialogRef.componentInstance.itemPushed.subscribe((item: ISaldoItem) => {
-        if (item.concept == UrlConstants.MENSUAL){
-          return;
-        }
-        this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + "/" + item.date.getFullYear() + "/none"]);
-        dialogRef.close();
-      });
+      this._subscriptions.add(dialogRef.componentInstance.itemPushed
+        .subscribe((item: ISaldoItem) => {
+          if (item.concept === UrlConstants.MENSUAL) {
+            return;
+          }
+          this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + '/' + item.date.getFullYear() + '/none']);
+          dialogRef.close();
+        })
+      );
     },
     error => {
       this.loadingPopup = false;
-      this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-    });
+      this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
+    })
+    );
   }
 
-  chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+  chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>): void {
     this.currentDate.setValue(new Date(normalizedMonth.toString()));
-    this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.MENSUAL + '/' + this.currentDate.value.toISOString() + "/" + this.activeRoute.snapshot.paramMap.get("open")]);
+
+    const dateIsoString = this.currentDate.value.toISOString();
+    const activeRouteOpen = this.activeRoute.snapshot.paramMap.get('open');
+    this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.MENSUAL + '/' + dateIsoString + '/' + activeRouteOpen]);
     datepicker.close();
     this.getData();
   }
 
-  loadMonthDetails(row: any) {
+  loadMonthDetails(row: any): void {
     this.loadingDetail = true;
     this.itemDetail = undefined;
-    let fecha = this.currentDate.value.getFullYear() + (this.currentDate.value.getMonth() + 1).toString().padStart(2, '0');
-    this.unsubscribeItemDetail();
-    this.itemDetailSubscription = this._diarioService.getConceptosMovimMes(row.idConcepto, fecha)
+    const fecha = this.currentDate.value.getFullYear() + (this.currentDate.value.getMonth() + 1).toString().padStart(2, '0');
+    this._subscriptions.add(this._diarioService.getConceptosMovimMes(row.idConcepto, fecha)
         .subscribe(
             data => {
               this.itemDetail = data;
               this.loadingDetail = false;
-              this.location.replaceState(UrlConstants.DASHBOARD + '/' + UrlConstants.MENSUAL + '/' + this.currentDate.value.toISOString() + "/" + row.descripcion);
+              const dateIsoString = this.currentDate.value.toISOString();
+              this.location.replaceState(UrlConstants.DASHBOARD + '/' + UrlConstants.MENSUAL + '/' + dateIsoString + '/' + row.descripcion);
             },
             error => {
               this.loadingDetail = false;
-              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-            });
+              this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
+            })
+    );
   }
 
-  getOpenItem() : string {
-    return this.activeRoute.snapshot.paramMap.get("open");
+  getOpenItem(): string {
+    return this.activeRoute.snapshot.paramMap.get('open');
   }
 
-  private convertToNumberArray(dataIn: any[]) : number[] {
-    let importes: number[] = [];
+  private convertToNumberArray(dataIn: any[]): number[] {
+    const importes: number[] = [];
     dataIn.forEach(function (value) {
       importes.push(value.saldo);
     });
@@ -215,8 +209,8 @@ export class MensualComponent implements OnInit, OnDestroy {
     return importes;
   }
 
-  private getDateFromUrl() :Date {
-    let dateUrl = this.activeRoute.snapshot.paramMap.get("month");
+  private getDateFromUrl(): Date {
+    const dateUrl = this.activeRoute.snapshot.paramMap.get('month');
     if (dateUrl === 'current') {
       return new Date();
     } else {

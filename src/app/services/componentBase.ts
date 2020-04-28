@@ -4,15 +4,15 @@ import { Subscription } from 'rxjs';
 
 @Injectable()
 export class ComponentBase implements OnDestroy {
-    
+
     private mobileQuery: MediaQueryList;
     protected subscription: Subscription;
-  
-    constructor(changeDetectorRef: ChangeDetectorRef, 
-                media: MediaMatcher) { 
+
+    constructor(changeDetectorRef: ChangeDetectorRef,
+                media: MediaMatcher) {
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-        this.mobileQuery.addListener(this._mobileQueryListener);                    
+        this.mobileQuery.addListener(this._mobileQueryListener);
     }
 
     private _mobileQueryListener: () => void;
@@ -27,6 +27,4 @@ export class ComponentBase implements OnDestroy {
             this.subscription.unsubscribe();
         }
     }
-
-    
 }

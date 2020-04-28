@@ -1,14 +1,16 @@
   - Lazy Loading
-- Credit doesn't work
+  - Credit doesn't work
 - Input's: not function
-- Subscriptions: add subscription and destroy
-- Use interfaces
+  - Subscriptions: add subscription and destroy
+  - Use interfaces
+- Improve lists management
+- Migrate angular 9
 
 - add gasto desde pantalla de mes
 - url con caracteres especiales, pincha. Por ejemplo con caracter: (
 - poder buscar en las tablas
 - en pc dejar el menu siempre visible
-- traducciones
+- traducciones I18N
 - preguntar antes de hacer el logout
 - en apple hay pantallas que no funcionan
 - pantalla conceptos: table header mas grande

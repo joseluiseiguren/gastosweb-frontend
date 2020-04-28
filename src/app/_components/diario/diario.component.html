@@ -19,7 +19,7 @@
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker [startAt]="currentDate" #picker></mat-datepicker>
     </mat-form-field>
-    <app-saldo [titulo]="'Saldo Diario'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>
+    <app-saldo [titulo]="'Saldo Diario'" [saldo]="saldoDiario" (saldoClicked)="showOpenSaldo()"></app-saldo>
   </div>
 
   <div class="tableContent">

@@ -1,36 +1,36 @@
-<div class="loading" *ngIf="loading === true">
+<div class="loading" *ngIf="loading">
     <mat-spinner diameter="70" strokeWidth="5"></mat-spinner>
 </div>
- 
-<div *ngIf="loading === false" class="registerContainer">
+
+<div *ngIf="!loading" class="registerContainer">
     <div class="register">
       <p>
-        <mat-card-title>Perfil de Usuario</mat-card-title>        
+        <mat-card-title>Perfil de Usuario</mat-card-title>
       </p>
       <form [formGroup]="profileForm" class="full-width-form" (ngSubmit)="changeProfile()" novalidate>
         <div>
             <mat-form-field appearance="outline" class="formfield-full-width" >
                 <mat-label>Nombre</mat-label>
                 <input matInput placeholder="Nombre" formControlName="nameFormControl" >
-            </mat-form-field>          
+            </mat-form-field>
         </div>
         <div>
             <mat-form-field appearance="outline" class="formfield-full-width" >
                 <mat-label>E-Mail</mat-label>
-                <input matInput placeholder="E-Mail" formControlName="emailFormControl">            
-            </mat-form-field>          
+                <input matInput placeholder="E-Mail" formControlName="emailFormControl">
+            </mat-form-field>
         </div>
         <div>
             <mat-form-field appearance="outline" class="formfield-full-width">
-                <input matInput 
-                        readonly 
-                        [matDatepicker]="picker" 
-                        placeholder="Fecha Nacimiento" 
+                <input matInput
+                        readonly
+                        [matDatepicker]="picker"
+                        placeholder="Fecha Nacimiento"
                         formControlName="fechaNacimientoFormControl"
                         (click)="picker.open()">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>      
-            </mat-form-field>          
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
         </div>
         <div>
             <mat-form-field appearance="outline" class="formfield-full-width" >
@@ -38,148 +38,16 @@
                 <mat-select formControlName="monedaFormControl">
                     <mat-option *ngFor="let moneda of monedas" [value]="moneda">{{moneda}}</mat-option>
                 </mat-select>
-            </mat-form-field>          
+            </mat-form-field>
         </div>
         <div class="buttons-section">
             <div class="register-button-container">
                 <button mat-raised-button type="submit" color="primary" [disabled]="!profileForm.valid || profileForm.pristine || loadingAceptar">Aceptar
-                <mat-icon>how_to_reg</mat-icon>              
-                </button>          
+                <mat-icon>how_to_reg</mat-icon>
+                </button>
                 <mat-spinner *ngIf="loadingAceptar" [diameter]="30"></mat-spinner>
-            </div>        
-        </div>      
-      </form>    
-    </div>   
-  </div>
-
-<!--
-<app-error-message *ngIf="errorMessage.length != 0 && loading === false" [message]="errorMessage"></app-error-message>
-<app-loading *ngIf="loading === true" [texto]="'Cargando...'"></app-loading>
-
-<div class="polaroidContainer">
-    <div class="polaroid" *ngIf="loading === false && errorMessage.length == 0" >
-    <p class="titulo">Edicion de Perfil de Usuario</p>
-        <form (ngSubmit)="aceptar(registerForm)" 
-            #registerForm="ngForm" 
-            novalidate>
-
-        <div class="row">
-            <div class="col-xs-6 form-group">
-                <div class="inner-addon left-addon">
-                <label for="email">Email</label>
-                <input type="text" 
-                        id="email"
-                        class="form-control" 
-                        required
-                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                        autofocus
-                        [(ngModel)]="model.email" 
-                        name="email"
-                        placeholder="Email"
-                        #email="ngModel"/>
-                <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
-                        Email Invalido
-                </div>
-                </div>
-            </div>
-            <div class="col-xs-6 form-group">
-                <div class="inner-addon left-addon">
-                    <label for="nombre">Nombre</label>
-                    <input type="text"
-                        id="nombre" 
-                        class="form-control" 
-                        required
-                        [(ngModel)]="model.nombre" 
-                        name="nombre"
-                        placeholder="Nombre"
-                        #nombre="ngModel"/>
-                    <div [hidden]="nombre.valid || nombre.pristine" class="alert alert-danger">
-                        Nombre Invalido
-                    </div>
-                </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-xs-6 form-group">
-                <div class="inner-addon left-addon">
-                    <label for="fechanacim">Fecha Nacimiento</label>
-                    <input type="text" 
-                        id="fechanacim"
-                        class="form-control" 
-                        required
-                        pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"
-                        [(ngModel)]="fechaNacim" 
-                        name="fechanacimiento"
-                        placeholder="Fecha Nacimiento (DD/MM/YYYY)"
-                        #fechanacim="ngModel"/>
-                    <div [hidden]="fechanacim.valid || fechanacim.pristine" class="alert alert-danger">
-                        Fecha de Nacimiento Invalida
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-6 form-group">
-                <div class="inner-addon left-addon">
-                    <label for="moneda">Moneda</label>
-                    <select class="form-control" id="moneda" [(ngModel)]="model.moneda" name="monedas">
-                    <option *ngFor="let moneda of monedas" [value]="moneda">{{moneda}}</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6 form-group">
-                <div class="inner-addon left-addon">
-                    <label for="password">Password</label>
-                    <input type="password" 
-                        id="password"
-                        class="form-control" 
-                        [(ngModel)]="model.password" 
-                        name="password"
-                        placeholder="Password"
-                        #password="ngModel"/>
-                    <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
-                        Pasword Invalido
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-6 form-group">
-                <div class="inner-addon left-addon">
-                    <label for="passwordRep">Repetir Password</label>
-                    <input type="password" 
-                        id="passwordRep"
-                        class="form-control" 
-                        [(ngModel)]="passwordCheck" 
-                        name="repetirpassword"
-                        placeholder="Repetir Password"
-                        #repeetirpassword="ngModel"/>
-                    <div [hidden]="repeetirpassword.valid || repeetirpassword.pristine" class="alert alert-danger">
-                        Pasword Invalido
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group center">
-            <button type="submit"
-                    [disabled]="loadingAceptar" 
-                    class="btn btn-success"
-                    [disabled]="!registerForm.form.valid || registerForm.form.pristine">
-                <span class="glyphicon glyphicon-ok"></span>
-                Aceptar
-            </button>
-            <app-loading *ngIf="loadingAceptar === true" [texto]="''"></app-loading>
-        </div>
-        </form>
-
-        <div class="col-lg-12 col-sm-12 col-xs-12 alert alert-success" 
-            *ngIf="operationMessageStatus == 0 && operationMessage.length > 0 && loadingAceptar === false && registerForm.form.pristine">
-        <strong>{{operationMessage}}</strong>
-        </div>
-
-        <app-error-message *ngIf="operationMessageStatus == 1 && operationMessage.length > 0 && loadingAceptar === false" [message]="operationMessage"></app-error-message>
-
+      </form>
     </div>
-</div>
--->
+  </div>

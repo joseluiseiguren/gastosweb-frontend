@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsersService } from '../../services/users.service';
 import { HelperService } from '../../services/helper.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatSnackBar, throwToolbarMixedModesError } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { User } from '../../models/user';
 import { Subscription } from 'rxjs';
 
@@ -12,12 +12,11 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./userprofile.component.css']
 })
 export class UserprofileComponent implements OnInit, OnDestroy {
-  loading: boolean = false;
-  loadingAceptar: boolean = false;
+  loading = false;
+  loadingAceptar = false;
   profileForm: FormGroup;
   monedas: string[];
-  private getDataSubscription: Subscription;
-  private updateProfileSubscription: Subscription;
+  private _subscriptions = new Subscription();
 
   constructor(private _userService: UsersService,
               private formBuilder: FormBuilder,
@@ -37,23 +36,13 @@ export class UserprofileComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeGetData();
-    this.unsubscribeUpdateProfile();
+    this._subscriptions.unsubscribe();
   }
 
-  unsubscribeGetData() {
-    if (this.getDataSubscription){ this.getDataSubscription.unsubscribe(); }
-  }
-
-  unsubscribeUpdateProfile() {
-    if (this.updateProfileSubscription){ this.updateProfileSubscription.unsubscribe(); }
-  }
-
-  getData() {
+  getData(): void {
     this.loading = true;
 
-    this.unsubscribeGetData();
-    this.getDataSubscription = this._userService.getProfile()
+    this._subscriptions.add(this._userService.getProfile()
         .subscribe(
             data => {
               this.profileForm.setValue({emailFormControl: data.email,
@@ -64,119 +53,42 @@ export class UserprofileComponent implements OnInit, OnDestroy {
             },
             error => {
               this.loading = false;
-              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-            });
+              this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
+            })
+    );
   }
 
-  changeProfile(){
+  changeProfile(): void {
     this.loadingAceptar  = true;
 
-    this.unsubscribeUpdateProfile();
-    this.updateProfileSubscription = this._userService.updateProfile(this.createUser())
+    const userProfile = this.createUser();
+    this._subscriptions.add(this._userService.updateProfile(userProfile)
           .subscribe(
             data => {
-              this.snackBar.open("Modificacion Exitosa", '', { duration: 2000, panelClass: ['success-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
+              this._userService.setUserName(userProfile.nombre);
+              this._helperService.showSnackBarSuccess(this.snackBar, 'Modificacion Exitosa');
               this.loadingAceptar  = false;
               this.profileForm.markAsPristine();
             },
             error => {
               this.loadingAceptar  = false;
-              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-            });
+              this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
+            })
+    );
   }
 
-  private createUser() : User{
-    let user = new User();
-    user.email = this.profileForm.value.emailFormControl;
-    user.fechanacimiento = new Date(this.profileForm.value.fechaNacimientoFormControl);
-    user.moneda = this.profileForm.value.monedaFormControl;
-    user.nombre = this.profileForm.value.nameFormControl;
+  private createUser(): User {
+    const user: User = {
+      email: this.profileForm.value.emailFormControl,
+      fechanacimiento: new Date(this.profileForm.value.fechaNacimientoFormControl),
+      moneda: this.profileForm.value.monedaFormControl,
+      nombre: this.profileForm.value.nameFormControl,
+      fechaalta: null,
+      id: null,
+      idestado: null,
+      password: null
+    };
 
     return user;
   }
 }
-
-
-
-/*import { Component, OnInit } from '@angular/core';
-import { User } from '../models/user';
-import { UsersService } from '../services/users.service';
-import { HelperService } from '../services/helper.service';
-import { NgForm } from '@angular/forms';
-
-@Component({
-  selector: 'app-userprofile',
-  templateUrl: './userprofile.component.html',
-  styleUrls: ['./userprofile.component.css']
-})
-export class UserprofileComponent implements OnInit {
-  model: User = new User();
-  operationMessage: string = "";
-  operationMessageStatus: number = 2; // 0 - OK / 1 - Error
-  errorMessage: string = "";
-  loading: boolean = false;
-  loadingAceptar: boolean = false;
-  passwordCheck: string;
-  fechaNacim: string;
-  monedas = ['$', 'U$D', '€'];
-
-  constructor(private _userService: UsersService,
-              private _helperService: HelperService) {
-    this.getData();
-  }
-
-  ngOnInit() {
-  }
-
-  getData() {
-    this.loading = true;
-    this.errorMessage = "";
-    this._userService.getProfile()
-        .subscribe(
-            data => {
-              data.password = "";
-              this.passwordCheck = "";
-              this.model = data;
-              this.fechaNacim = this._helperService.convertStringYYYMMDDToStringDDMMYYYY(this.model.fechanacimiento.toString());
-              this.loading = false;
-            },
-            error => {
-              this.loading = false;
-              this.errorMessage = this._helperService.getErrorMessage(error);
-            });
-  }
-
-  aceptar(form: NgForm){
-    this.loadingAceptar  = true;
-
-    if (this.passwordCheck != this.model.password) {
-      this.operationMessageStatus = 1;
-      this.operationMessage = "Los Password no coinciden";
-      this.loadingAceptar  = false;
-      return;
-    }
-
-    this.model.fechanacimiento = new Date(
-      Number(this.fechaNacim.slice(6,10)),
-      Number(this.fechaNacim.slice(3,5))-1,
-      Number(this.fechaNacim.slice(0,2)),
-      0, 0, 0, 0);
-
-    this._userService.updateProfile(this.model)
-          .subscribe(
-            data => {
-              this.operationMessageStatus = 0;
-              this.operationMessage = "Modificacion Exitosa";
-              form.resetForm();
-              this.loadingAceptar  = false;
-              this.getData();
-            },
-            error => {
-              this.operationMessageStatus = 1;
-              this.loadingAceptar  = false;
-              this.operationMessage = this._helperService.getErrorMessage(error)
-            });
-  }
-
-}
-*/

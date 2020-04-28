@@ -20,30 +20,32 @@ export class TwoDigitDecimaNumberDirective {
       return;
     }
 
-    let keyPressed = event.key;
-    
-    let current: string = this.el.nativeElement.value;
-    const position = this.el.nativeElement.selectionStart;
-    let next: string = [current.slice(0, position), keyPressed == 'Decimal' ? this.whatDecimalSeparator() : keyPressed, current.slice(position)].join('');    
+    const keyPressed = event.key;
 
-    if (this.whatDecimalSeparator() == ','){
+    const current: string = this.el.nativeElement.value;
+    const position = this.el.nativeElement.selectionStart;
+    const next: string = [current.slice(0, position),
+                          keyPressed === 'Decimal' ? this.whatDecimalSeparator() : keyPressed, current.slice(position)]
+                          .join('');
+
+    if (this.whatDecimalSeparator() === ',') {
       if (next && !String(next).match(this.regexEs)) {
-        if (keyPressed == '.' && this.el.nativeElement.value.indexOf(',') == -1){
+        if (keyPressed === '.' && this.el.nativeElement.value.indexOf(',') === -1) {
           this.validateFields(event);
-        } else{
+        } else {
           event.preventDefault();
           return;
-        }        
+        }
       }
-    } else{
+    } else {
       if (next && !String(next).match(this.regexEn)) {
         event.preventDefault();
         return;
       }
-    }    
+    }
   }
 
-  private validateFields(event) {
+  private validateFields(event: any): void {
     setTimeout(() => {
 
       this.el.nativeElement.value = this.el.nativeElement.value.replace('.', ',');
@@ -53,8 +55,8 @@ export class TwoDigitDecimaNumberDirective {
   }
 
   private whatDecimalSeparator(): string {
-    let n = 1.1;
-    let x = n.toLocaleString(this.locale).substring(1, 2);
+    const n = 1.1;
+    const x = n.toLocaleString(this.locale).substring(1, 2);
     return x;
   }
 }

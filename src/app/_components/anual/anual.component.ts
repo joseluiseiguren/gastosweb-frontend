@@ -41,11 +41,11 @@ export class AnualComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.anioSelected = this.getYearFromUrl();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getPrimerConsumo();
   }
 
-  ngAfterViewChecked() {
+  ngAfterViewChecked(): void {
     this.changeDetector.detectChanges();
   }
 
@@ -53,7 +53,7 @@ export class AnualComponent implements OnInit, OnDestroy, AfterViewChecked {
     this._subscriptions.unsubscribe();
   }
 
-  getPrimerConsumo() {
+  getPrimerConsumo(): void {
     this.loading = true;
     this._subscriptions.add(this._diarioService.getPrimerConsumo()
       .subscribe(
@@ -69,25 +69,29 @@ export class AnualComponent implements OnInit, OnDestroy, AfterViewChecked {
         },
         error => {
           this.loading = false;
-          this.showSnackBarError(error);
+          this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
         }
       )
     );
   }
 
-  showOpenSaldo() {
+  showOpenSaldo(): void {
     const saldos: ISaldoItem[] = [];
 
-    saldos.push(new ISaldoItem('Año' + this._helperService.toCamelCase(this._datePipe.transform(new Date(this.anioSelected, 1, 1), 'yyyy')),
-                'airplay',
-                this.getIngresos(),
-                this.getEgresos(),
-                'anual',
-                new Date(this.anioSelected, 1, 1)));
+    const saldoItem: ISaldoItem = {
+      title: 'Año' + this._helperService.toCamelCase(this._datePipe.transform(new Date(this.anioSelected, 1, 1), 'yyyy')),
+      icon: 'airplay',
+      ingresos: this.getIngresos(),
+      egresos: this.getEgresos(),
+      concept: 'anual',
+      date: new Date(this.anioSelected, 1, 1)
+    };
+
+    saldos.push(saldoItem);
     this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });
   }
 
-  loadYearDetails(row: any) {
+  loadYearDetails(row: any): void {
     this.loadingDetail = true;
 
     this.openItem = row.descripcion;
@@ -108,7 +112,7 @@ export class AnualComponent implements OnInit, OnDestroy, AfterViewChecked {
           },
           error => {
             this.loadingDetail = false;
-            this.showSnackBarError(error);
+            this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
           }
       )
     );
@@ -166,12 +170,6 @@ export class AnualComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
-  private showSnackBarError(errorMessage: string): void {
-    this.snackBar.open(this._helperService.getErrorMessage(errorMessage),
-                       '',
-                       { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-  }
-
   private getIngresos(): number {
     return this.calculationService.getIngresos(this.convertToNumberArray(this.conceptosTotales));
   }
@@ -194,7 +192,7 @@ export class AnualComponent implements OnInit, OnDestroy, AfterViewChecked {
             },
             error => {
               this.loading = false;
-              this.showSnackBarError(error);
+              this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
             }
           )
     );

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable()
 export class HelperService {
@@ -6,8 +7,7 @@ export class HelperService {
     constructor() { }
 
     getErrorMessage(error: any): string {
-
-        let message: string = "";
+        let message = '';
 
         if (error === undefined ||
             error.status === undefined) {
@@ -16,7 +16,7 @@ export class HelperService {
 
         switch (error.status) {
             case 0:
-              message = "No se pudo conectar al servidor, intentar nuevamente";
+              message = 'No se pudo conectar al servidor, intentar nuevamente';
               break;
 
             case 400: /* bad request */
@@ -24,11 +24,11 @@ export class HelperService {
               break;
 
             case 401: /* Unathorized */
-              message = "Session Expirada";
+              message = 'Session Expirada';
               break;
 
             case 500: /* internal server error */
-              message = "Error Inesperado: " + error.error.errorId;
+              message = 'Error Inesperado: ' + error.error.errorId;
               break;
           }
 
@@ -46,15 +46,14 @@ export class HelperService {
 
     /* La fecha de entrada es 1980-05-13T00:00:00.000Z y la de salida 13/05/1980*/
     convertStringYYYMMDDToStringDDMMYYYY(fecha: string): string {
-        let dia = fecha.substring(8, 10);
-        let mes = fecha.substring(5, 7);
-        let anio = fecha.slice(0, 4);
+        const dia = fecha.substring(8, 10);
+        const mes = fecha.substring(5, 7);
+        const anio = fecha.slice(0, 4);
 
-        return dia + "/" + mes + "/" + anio;
+        return dia + '/' + mes + '/' + anio;
     }
 
     toCamelCase(strInput: string): string {
-      console.log('toCamelCase');
       const str = strInput.split(' ');
 
       for (let i = 0, x = str.length; i < x; i++) {
@@ -62,5 +61,21 @@ export class HelperService {
       }
 
       return str.join(' ');
+    }
+
+    showSnackBarError(snackBar: MatSnackBar, errorMessage: string): void {
+      snackBar.open(errorMessage,
+                    '',
+                    { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
+    }
+
+    showSnackBarInformation(snackBar: MatSnackBar, message: string): void {
+      snackBar.open(message, '', { duration: 2000, direction: 'ltr', verticalPosition: 'bottom' });
+    }
+
+    showSnackBarSuccess(snackBar: MatSnackBar, message: string): void {
+      snackBar.open(message,
+                    '',
+                    { duration: 2000, panelClass: ['success-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
     }
 }

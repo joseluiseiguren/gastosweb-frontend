@@ -1,28 +1,30 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { UsersService } from '../../services/users.service';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { AboutComponent } from '../about/about.component';
 import { ComponentBase } from '../../services/ComponentBase';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { filter } from 'rxjs/operators';
 import { UrlConstants } from '../../constants/url.constants';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent extends ComponentBase implements OnInit {
+export class DashboardComponent extends ComponentBase implements OnInit, OnDestroy {
   userName: string;
   actualPageTitle: string;
+  private _subscriptions = new Subscription();
+
   constructor(private _userService: UsersService,
               private router: Router,
               private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher,
               public aboutDialog: MatDialog) {
     super(changeDetectorRef, media);
-    this.userName = this._userService.getUserName();
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd))
@@ -32,13 +34,18 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   }
 
   ngOnInit() {
+    this._subscriptions.add(this._userService.userName
+      .subscribe((username) => {
+        this.userName = username;
+      })
+    );
   }
 
   private route(dest: string) {
-    let currentUrlSplitted = this.router.url.split('/');
+    const currentUrlSplitted = this.router.url.split('/');
 
     if (currentUrlSplitted.length >= 3 &&
-        currentUrlSplitted[2] === dest.split('/')[0]){
+        currentUrlSplitted[2] === dest.split('/')[0]) {
         return;
     } else {
       this.router.navigate([UrlConstants.DASHBOARD + '/' + dest]);
@@ -46,15 +53,15 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   }
 
   routeDiario () {
-    this.route(UrlConstants.DIARIO + "/today");
+    this.route(UrlConstants.DIARIO + '/today');
   }
 
   routeMensual () {
-    this.route(UrlConstants.MENSUAL + "/current/none");
+    this.route(UrlConstants.MENSUAL + '/current/none');
   }
 
   routeAnual () {
-    this.route(UrlConstants.ANUAL + "/current/none");
+    this.route(UrlConstants.ANUAL + '/current/none');
   }
 
   routeHistorico () {
@@ -75,42 +82,43 @@ export class DashboardComponent extends ComponentBase implements OnInit {
   }
 
   ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
     super.ngOnDestroy();
   }
 
   about(): void {
-    const dialogRef = this.aboutDialog.open(AboutComponent, {
+    this.aboutDialog.open(AboutComponent, {
       width: '250px'
     });
   }
 
-  getPageTitle(url:string): string {
-    let prefix = "/" + UrlConstants.DASHBOARD + "/";
+  getPageTitle(url: string): string {
+    const prefix = '/' + UrlConstants.DASHBOARD + '/';
 
-    if (url.startsWith(prefix + UrlConstants.DIARIO)){
-      return " - Diario";
+    if (url.startsWith(prefix + UrlConstants.DIARIO)) {
+      return ' - Diario';
     }
 
-    if (url.startsWith(prefix + UrlConstants.MENSUAL)){
-      return " - Mensual";
+    if (url.startsWith(prefix + UrlConstants.MENSUAL)) {
+      return ' - Mensual';
     }
 
-    if (url.startsWith(prefix + UrlConstants.ANUAL)){
-      return " - Anual";
+    if (url.startsWith(prefix + UrlConstants.ANUAL)) {
+      return ' - Anual';
     }
 
-    if (url.startsWith(prefix + UrlConstants.HISTORICO)){
-      return " - Histórico";
+    if (url.startsWith(prefix + UrlConstants.HISTORICO)) {
+      return ' - Histórico';
     }
 
-    if (url.startsWith(prefix + UrlConstants.CONCEPTOS)){
-      return " - Conceptos";
+    if (url.startsWith(prefix + UrlConstants.CONCEPTOS)) {
+      return ' - Conceptos';
     }
 
-    if (url.startsWith(prefix + UrlConstants.USERPROFILE)){
-      return " - Perfil";
+    if (url.startsWith(prefix + UrlConstants.USERPROFILE)) {
+      return ' - Perfil';
     }
 
-    return "";
+    return '';
   }
 }

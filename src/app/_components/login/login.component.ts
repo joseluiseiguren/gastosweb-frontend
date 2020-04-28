@@ -1,3 +1,4 @@
+import { HelperService } from './../../services/helper.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsersService } from '../../services/users.service';
@@ -16,13 +17,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     loading = false;
     location: any = {};
     loginForm: FormGroup;
-    private ipServiceSubscription: Subscription;
-    private loginSubscription: Subscription;
+    private _subscriptions = new Subscription();
     public registerUrl = '/' + UrlConstants.USERS + '/' + UrlConstants.REGISTRACION;
 
     constructor(private router: Router,
                 private formBuilder: FormBuilder,
                 private usersService: UsersService,
+                private _helperService: HelperService,
                 public snackBar: MatSnackBar,
                 private _ipService: IpService) {
       if (this.usersService.isSessionExpired() === false) {
@@ -37,7 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.location.platform = window.navigator.platform;
       this.location.userAgent = window.navigator.userAgent;
 
-      this.ipServiceSubscription = this._ipService.getClientIp()
+      this._subscriptions.add(this._ipService.getClientIp()
         .subscribe(
           data => {
             this.location.ip = data.ip;
@@ -60,7 +61,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           },
           error => {
             console.log(error);
-      });
+        })
+      );
     }
 
     ngOnInit() {
@@ -71,52 +73,40 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-      this.unsubscribeIpService();
-      this.unsubscribeLogin();
-    }
-
-    unsubscribeLogin(): void {
-      if (this.loginSubscription) { this.loginSubscription.unsubscribe(); }
-    }
-
-    unsubscribeIpService(): void {
-      if (this.loginSubscription) { this.loginSubscription.unsubscribe(); }
+      this._subscriptions.unsubscribe();
     }
 
     login() {
       this.loading = true;
 
-      this.unsubscribeLogin();
-      this.loginSubscription = this.usersService.login(this.loginForm.value.emailFormControl, this.loginForm.value.pwdFormControl, JSON.stringify(this.location))
-              .subscribe(
-                  data => {
-                    if (data === true) {
-                      this.loading = false;
-                      this.ingresarApp();
-                    } else {
-                      this.snackBar.open('Acceso Denegado',
-                                         '',
-                                         { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-                      this.loading = false;
-                    }
-                  },
-                  error => {
-                    let errorMessage: string;
-                    if (error.status === 401) {
-                      errorMessage = 'Acceso Denegado';
-                    } else {
-                      errorMessage = 'Error inesperado: ';
-                      if (error.error.errorId !== undefined) {
-                        errorMessage += error.error.errorId;
-                      }
-                    }
+      this._subscriptions.add(this.usersService.login(this.loginForm.value.emailFormControl, this.loginForm.value.pwdFormControl,
+                              JSON.stringify(this.location))
+        .subscribe(
+            data => {
+              if (data === true) {
+                this.loading = false;
+                this.ingresarApp();
+              } else {
+                this._helperService.showSnackBarError(this.snackBar, 'Acceso Denegado');
+                this.loading = false;
+              }
+            },
+            error => {
+              let errorMessage: string;
+              if (error.status === 401) {
+                errorMessage = 'Acceso Denegado';
+              } else {
+                errorMessage = 'Error inesperado: ';
+                if (error.error.errorId !== undefined) {
+                  errorMessage += error.error.errorId;
+                }
+              }
 
-                    this.loading = false;
-                    this.snackBar.open(errorMessage,
-                                       '',
-                                       { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
+              this.loading = false;
+              this._helperService.showSnackBarError(this.snackBar, errorMessage);
 
-                  });
+            })
+      );
     }
 
     private ingresarApp () {

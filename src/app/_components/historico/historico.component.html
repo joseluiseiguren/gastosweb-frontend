@@ -1,10 +1,10 @@
-<div class="loading" *ngIf="loading === true">
+<div class="loading" *ngIf="loading">
   <mat-spinner diameter="70" strokeWidth="5"></mat-spinner>
 </div>
 
-<div *ngIf="loading === false">
+<div *ngIf="!loading">
   <div class="header">
-    <app-saldo class="saldos" [titulo]="'Saldo Historico'" [saldo]="getIngresos() - getEgresos()" (saldoClicked)="showOpenSaldo()"></app-saldo>
+    <app-saldo class="saldos" [titulo]="'Saldo Historico'" [saldo]="saldoActual" (saldoClicked)="showOpenSaldo()"></app-saldo>
   </div>
 
   <div class="tableContent">
@@ -19,8 +19,8 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <mat-spinner class="loading" *ngIf="loadingDetail === true"></mat-spinner>
-        <mat-list *ngIf="loadingDetail === false">
+        <mat-spinner class="loading" *ngIf="loadingDetail"></mat-spinner>
+        <mat-list *ngIf="!loadingDetail">
           <mat-list-item *ngFor="let detail of itemDetail">
             <div matLine>
               <p class="itemDescription">{{detail.anio}}</p>

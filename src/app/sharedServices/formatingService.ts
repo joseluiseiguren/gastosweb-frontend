@@ -7,23 +7,23 @@ export class FormatingService {
 
   public FormatNumber(data: number, alwaysPositive: boolean, thousandsSeparator: boolean = true): string {
     let numberFormatted =  formatNumber(data, this.locale, '1.2-2');
-    if (alwaysPositive){
+    if (alwaysPositive) {
       numberFormatted = numberFormatted.replace('-', '');
     }
     if (!thousandsSeparator){
-      while(numberFormatted.indexOf(this.thusandsSeparator()) != -1){
-        numberFormatted = numberFormatted.replace(this.thusandsSeparator() == '.' ? '.' : ',', '');         
+      while(numberFormatted.indexOf(this.thusandsSeparator()) !== -1) {
+        numberFormatted = numberFormatted.replace(this.thusandsSeparator() === '.' ? '.' : ',', '');
       }
     }
-    
-    return numberFormatted
+
+    return numberFormatted;
   }
 
   private thusandsSeparator(): string {
-    let n = 1.1;
-    let x = n.toLocaleString(this.locale).substring(1, 2);
-    if (x == ','){
-      return '.'
+    const n = 1.1;
+    const x = n.toLocaleString(this.locale).substring(1, 2);
+    if (x === ',') {
+      return '.';
     }
     return ',';
   }

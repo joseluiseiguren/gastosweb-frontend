@@ -1,4 +1,4 @@
-export class SumaryMonth {
+export interface SumaryMonth {
     ingresos: number;
     egresos: number;
 }

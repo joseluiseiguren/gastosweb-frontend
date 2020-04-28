@@ -14,13 +14,12 @@ import { SaldoAbiertoComponent } from '../saldo-abierto/saldo-abierto.component'
   styleUrls: ['./historico.component.css']
 })
 export class HistoricoComponent implements OnInit, OnDestroy {
-  errorMessage: string = "";
   conceptosTotales: any[];
   itemDetail: any[];
-  loading: Boolean = false;
-  loadingDetail: Boolean = false;
-  private getDataSubscription: Subscription;
-  private getHistoricDetailSubscription: Subscription;
+  loading = false;
+  loadingDetail = false;
+  saldoActual = 0;
+  private _subscriptions = new Subscription();
 
   constructor(private _diarioService: DiarioService,
               public _userService: UsersService,
@@ -35,44 +34,36 @@ export class HistoricoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeGetData();
-    this.unsubscribeGetHistoricDetail();
+    this._subscriptions.unsubscribe();
   }
 
-  unsubscribeGetData(): void {
-    if (this.getDataSubscription){ this.getDataSubscription.unsubscribe(); }
-  }
-
-  unsubscribeGetHistoricDetail(): void {
-    if (this.getHistoricDetailSubscription){ this.getHistoricDetailSubscription.unsubscribe(); }
-  }
-
-  getIngresos() : number {
+  private getIngresos(): number {
     return this.calculationService.getIngresos(this.convertToNumberArray(this.conceptosTotales));
   }
 
-  getEgresos() : number {
+  private getEgresos(): number {
     return this.calculationService.getEgresos(this.convertToNumberArray(this.conceptosTotales));
   }
 
-  getData() {
+  getData(): void {
     this.loading = true;
-    this.unsubscribeGetData();
-    this.getDataSubscription = this._diarioService.getConceptosTotalHistorico()
+    this._subscriptions.add(this._diarioService.getConceptosTotalHistorico()
         .subscribe(
             data => {
               this.conceptosTotales = data;
+              this.saldoActual = this.getIngresos() - this.getEgresos();
               this.loading = false;
             },
             error => {
               this.loading = false;
-              this.errorMessage = this._helperService.getErrorMessage(error);
-            });
+              this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
+            })
+    );
   }
 
-  private convertToNumberArray(dataIn: any[]) : number[] {
-    if (dataIn !== undefined){
-      let importes: number[] = [];
+  private convertToNumberArray(dataIn: any[]): number[] {
+    if (dataIn !== undefined) {
+      const importes: number[] = [];
       dataIn.forEach(function (value) {
         importes.push(value.saldo);
       });
@@ -81,11 +72,10 @@ export class HistoricoComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadHistoricDetails(row: any) {
+  loadHistoricDetails(row: any): void {
     this.loadingDetail = true;
     this.itemDetail = undefined;
-    this.unsubscribeGetHistoricDetail();
-    this.getHistoricDetailSubscription = this._diarioService.getConceptosMovimHistorico(row.idConcepto)
+    this._subscriptions.add(this._diarioService.getConceptosMovimHistorico(row.idConcepto)
         .subscribe(
             data => {
               this.itemDetail = data;
@@ -93,20 +83,24 @@ export class HistoricoComponent implements OnInit, OnDestroy {
             },
             error => {
               this.loadingDetail = false;
-              this.snackBar.open(this._helperService.getErrorMessage(error), '', { duration: 2000, panelClass: ['error-snackbar'], direction: 'ltr', verticalPosition: 'bottom' });
-            });
+              this._helperService.showSnackBarError(this.snackBar, this._helperService.getErrorMessage(error));
+            })
+    );
   }
 
-  private showOpenSaldo(){
-    let saldos: ISaldoItem[] = [];
+  showOpenSaldo() {
+    const saldos: ISaldoItem[] = [];
 
-    saldos.push(new ISaldoItem("Historico" +
-                               '',
-                               "blur_linear",
-                               this.getIngresos(),
-                               this.getEgresos(),
-                               "historico",
-                               null));
+    const saldoItemHistorico: ISaldoItem = {
+      title: 'Historico',
+      icon: 'blur_linear',
+      ingresos: this.getIngresos(),
+      egresos: this.getEgresos(),
+      concept: 'historico',
+      date: null
+    };
+    saldos.push(saldoItemHistorico);
+
     this.saldoAbierto.open(SaldoAbiertoComponent, { width: '500px', data: {saldos} });
   }
 
