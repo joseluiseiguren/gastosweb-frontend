@@ -13,9 +13,9 @@ export class DiarioService {
               private _urlService: UrlService) { }
 
   getConceptosImportes(fecha: Date): Observable<IConceptoDiario[]> {
-    let url = this._urlService.urlGetConceptosImportes(
+    const url = this._urlService.urlGetConceptosImportes(
                                       fecha.getFullYear().toString() +
-                                      (fecha.getMonth()+1).toString().padStart(2, '0') +
+                                      (fecha.getMonth() + 1).toString().padStart(2, '0') +
                                       fecha.getDate().toString().padStart(2, '0'));
 
     return this._http.get<IConceptoDiario[]>(url)

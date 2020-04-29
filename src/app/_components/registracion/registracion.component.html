@@ -50,7 +50,7 @@
         </div>
         <div class="buttons-section">
             <div class="login-container">
-                <a mat-button color="login" routerLink="/login">Ir a Login</a>
+                <a mat-button color="login" [routerLink]="loginUrl">Ir a Login</a>
             </div>
             <div class="register-button-container">
                 <button mat-raised-button type="submit" color="primary" [disabled]="!registerForm.valid || loading">Registrarse

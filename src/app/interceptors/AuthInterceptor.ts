@@ -27,7 +27,7 @@ export class AuthInterceptor implements HttpInterceptor {
           if (err.status === 401) {
             // not logged in so redirect to login page
             this._userService.logout();
-            this._router.navigate(['/' + UrlConstants.LOGIN]);
+            this._router.navigate([UrlConstants.LOGIN]);
           }
         }
       }));

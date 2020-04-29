@@ -7,6 +7,7 @@ import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { UrlConstants } from '../../constants/url.constants';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     constructor(private router: Router,
                 private formBuilder: FormBuilder,
                 private usersService: UsersService,
+                private _datePipe: DatePipe,
                 private _helperService: HelperService,
                 public snackBar: MatSnackBar,
                 private _ipService: IpService) {
@@ -110,6 +112,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     private ingresarApp () {
-      this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.DIARIO + '/today']);
+      const today = this._datePipe.transform(new Date(), 'yyyy-MM-dd');
+      this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.DIARIO, today]);
     }
 }

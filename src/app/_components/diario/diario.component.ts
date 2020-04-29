@@ -44,15 +44,18 @@ export class DiarioComponent implements OnInit, OnDestroy {
               private router: Router,
               private location: Location,
               public enterDiario: MatDialog,
-              public saldoAbierto: MatDialog) {
-    this.currentDate = new FormControl(this.getDateFromUrl());
-  }
+              public saldoAbierto: MatDialog) {}
 
   ngOnInit() {
-    this.activeRoute.params.subscribe(routeParams => {
-      this.currentDate = new FormControl(this.getDateFromUrl());
-      this.getData();
-    });
+    this._subscriptions.add(this.activeRoute.params
+      .subscribe(routeParams => {
+        const controlDate = this.getDateFromUrl();
+        controlDate.setMonth(controlDate.getMonth() - 1);
+        this.currentDate = new FormControl(controlDate);
+
+        this.getData();
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -60,7 +63,8 @@ export class DiarioComponent implements OnInit, OnDestroy {
   }
 
   changeDate(type: string, event: MatDatepickerInputEvent<Date>): void {
-    this.getData();
+    const newDate = this.datePipe.transform(event.value, 'yyyy-MM-dd');
+    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.DIARIO, newDate]);
   }
 
   getData(): void {
@@ -72,7 +76,6 @@ export class DiarioComponent implements OnInit, OnDestroy {
               this.conceptos = data;
               this.saldoDiario = this.getIngresos() - this.getEgresos();
               this.loading = false;
-              this.location.replaceState(UrlConstants.DASHBOARD + '/' + UrlConstants.DIARIO + '/' + this.currentDate.value.toISOString());
             },
             error => {
               this.loading = false;
@@ -154,10 +157,10 @@ export class DiarioComponent implements OnInit, OnDestroy {
 
               dialogRef.close();
 
-              if (item.concept === UrlConstants.ANUAL){
-                this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + '/' + item.date.getFullYear() + '/none']);
+              if (item.concept === UrlConstants.ANUAL) {
+                this.router.navigate([UrlConstants.DASHBOARD, item.concept, item.date.getFullYear(), 'none']);
               } else {
-                this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + '/' + item.date.toISOString() + '/none']);
+                this.router.navigate([UrlConstants.DASHBOARD, item.concept, item.date.toISOString(), 'none']);
               }
             })
           );
@@ -181,12 +184,8 @@ export class DiarioComponent implements OnInit, OnDestroy {
   }
 
   private getDateFromUrl(): Date {
-    const dateUrl = this.activeRoute.snapshot.paramMap.get('day');
-    if (dateUrl === 'today') {
-      return new Date();
-    } else {
-      return new Date(dateUrl);
-    }
+    const dateUrl = this.activeRoute.snapshot.paramMap.get('day').split('-');
+    return new Date(Number(dateUrl[0]), Number(dateUrl[1]), Number(dateUrl[2]));
   }
 
 

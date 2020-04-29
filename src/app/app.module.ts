@@ -67,7 +67,7 @@ const routes: Routes = [
                             { path: '',
                               loadChildren: () => import('./_modules/diario/diario.module').then(m => m.DiarioModule) },
                           ]},
-  { path: '**', redirectTo: UrlConstants.DASHBOARD + '/' + UrlConstants.DIARIO + '/today', pathMatch: 'full'}
+  { path: '**', redirectTo: UrlConstants.DASHBOARD}
 ];
 
 @NgModule({

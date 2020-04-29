@@ -8,7 +8,6 @@ import { MatSnackBar, MatDialog, MatDatepicker } from '@angular/material';
 import { ISaldoItem } from '../../models/saldoItem';
 import { SumaryAnioService } from '../../services/sumary-anio.service';
 import { SaldoAbiertoComponent } from '../saldo-abierto/saldo-abierto.component';
-import { FormControl } from '@angular/forms';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Moment } from 'moment';
@@ -16,6 +15,7 @@ import { CalculationService } from '../../sharedServices/calculationService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlConstants } from '../../constants/url.constants';
 import { Location } from '@angular/common';
+import { FormControl } from '@angular/forms';
 
 export const MY_FORMATS = {
   parse: {
@@ -28,7 +28,6 @@ export const MY_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
-
 
 @Component({
   selector: 'app-mensual',
@@ -51,10 +50,10 @@ export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
   conceptosTotales: any[];
   itemDetail: any[];
   saldoActual = 0;
+  currentDate = new FormControl();
+  private previousMonth = '';
 
   private _subscriptions = new Subscription();
-
-  currentDate = new FormControl();
 
   constructor(private _datePipe: DatePipe,
               public _userService: UsersService,
@@ -64,16 +63,23 @@ export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
               public saldoAbierto: MatDialog,
               private activeRoute: ActivatedRoute,
               private router: Router,
-              private location: Location,
               private changeDetector: ChangeDetectorRef,
               private calculationService: CalculationService,
               private _helperService: HelperService) {  }
 
   ngOnInit() {
-    this.activeRoute.params.subscribe(routeParams => {
-      this.currentDate = new FormControl(this.getDateFromUrl());
-      this.getData();
-    });
+    this._subscriptions.add(this.activeRoute.params
+      .subscribe(routeParams => {
+        const controlDate = this.getDateFromUrl();
+        controlDate.setMonth(controlDate.getMonth() - 1);
+        this.currentDate = new FormControl(controlDate);
+
+        if (this.previousMonth !== this.getMonthStringFromUrl(false)) {
+          this.previousMonth = this.getMonthStringFromUrl(false);
+          this.getData();
+        }
+      })
+    );
   }
 
   ngAfterViewChecked() {
@@ -86,7 +92,7 @@ export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   getData() {
     this.loading = true;
-    const fecha = this.currentDate.value.getFullYear() + (this.currentDate.value.getMonth() + 1).toString().padStart(2, '0');
+    const fecha = this.getMonthStringFromUrl(true);
 
     this._subscriptions.add(this._diarioService.getConceptosTotalMes(fecha)
         .subscribe(
@@ -127,23 +133,23 @@ export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
     const saldos: ISaldoItem[] = [];
 
     const saldoItemMensual: ISaldoItem = {
-      title: '' + this._helperService.toCamelCase(this._datePipe.transform(this.currentDate.value, 'LLLL yyyy')),
+      title: '' + this._helperService.toCamelCase(this._datePipe.transform(this.getDateFromUrl(), 'LLLL yyyy')),
       icon: 'calendar_today',
       ingresos: this.getIngresos(),
       egresos: this.getEgresos(),
       concept: 'mensual',
-      date: this.currentDate.value
+      date: this.getDateFromUrl()
     };
     saldos.push(saldoItemMensual);
 
-    this._subscriptions.add(this._sumaryAnioService.getSumary(this.currentDate.value).subscribe((anual) => {
+    this._subscriptions.add(this._sumaryAnioService.getSumary(this.getDateFromUrl()).subscribe((anual) => {
       const saldoItemAnual: ISaldoItem = {
-        title: 'Año ' + this._datePipe.transform(this.currentDate.value, 'yyyy'),
+        title: 'Año ' + this._datePipe.transform(this.getDateFromUrl(), 'yyyy'),
         icon: 'airplay',
         ingresos: anual.ingresos,
         egresos: anual.egresos,
         concept: 'anual',
-        date: this.currentDate.value
+        date: this.getDateFromUrl()
       };
       saldos.push(saldoItemAnual);
 
@@ -155,7 +161,7 @@ export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
           if (item.concept === UrlConstants.MENSUAL) {
             return;
           }
-          this.router.navigate([UrlConstants.DASHBOARD + '/' + item.concept + '/' + item.date.getFullYear() + '/none']);
+          this.router.navigate([UrlConstants.DASHBOARD, item.concept, item.date.getFullYear(), 'none']);
           dialogRef.close();
         })
       );
@@ -168,26 +174,25 @@ export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>): void {
-    this.currentDate.setValue(new Date(normalizedMonth.toString()));
+    const newMonth = this._datePipe.transform(normalizedMonth, 'yyyy-MM');
 
-    const dateIsoString = this.currentDate.value.toISOString();
-    const activeRouteOpen = this.activeRoute.snapshot.paramMap.get('open');
-    this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.MENSUAL + '/' + dateIsoString + '/' + activeRouteOpen]);
+    const activeRouteOpen = this.getOpenItem();
+    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.MENSUAL, newMonth, activeRouteOpen]);
     datepicker.close();
-    this.getData();
   }
 
   loadMonthDetails(row: any): void {
     this.loadingDetail = true;
     this.itemDetail = undefined;
-    const fecha = this.currentDate.value.getFullYear() + (this.currentDate.value.getMonth() + 1).toString().padStart(2, '0');
+    const fecha = this.getMonthStringFromUrl(true);
     this._subscriptions.add(this._diarioService.getConceptosMovimMes(row.idConcepto, fecha)
         .subscribe(
             data => {
               this.itemDetail = data;
               this.loadingDetail = false;
-              const dateIsoString = this.currentDate.value.toISOString();
-              this.location.replaceState(UrlConstants.DASHBOARD + '/' + UrlConstants.MENSUAL + '/' + dateIsoString + '/' + row.descripcion);
+              const activeRouteMonth = this.getMonthStringFromUrl(false);
+              this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.MENSUAL, activeRouteMonth, row.descripcion],
+                                    {replaceUrl: false});
             },
             error => {
               this.loadingDetail = false;
@@ -211,12 +216,18 @@ export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private getDateFromUrl(): Date {
     const dateUrl = this.activeRoute.snapshot.paramMap.get('month');
-    if (dateUrl === 'current') {
-      return new Date();
-    } else {
-      return new Date(dateUrl);
-    }
+
+    const year = dateUrl.split('-')[0];
+    const month = dateUrl.split('-')[1];
+    return new Date(Number(year), Number(month), 1);
   }
 
+  private getMonthStringFromUrl(removeSeparator: boolean): string {
+    if (removeSeparator) {
+      return this.activeRoute.snapshot.paramMap.get('month').replace('-', '');
+    } else {
+      return this.activeRoute.snapshot.paramMap.get('month');
+    }
+  }
 }
 

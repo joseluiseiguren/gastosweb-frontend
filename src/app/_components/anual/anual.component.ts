@@ -107,7 +107,7 @@ export class AnualComponent implements OnInit, OnDestroy, AfterViewChecked {
             });
 
             this.loadingDetail = false;
-            this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.ANUAL + '/' + this.anioSelected + '/' + this.openItem],
+            this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.ANUAL, this.anioSelected, this.openItem],
                                   {replaceUrl: false});
           },
           error => {
@@ -119,14 +119,14 @@ export class AnualComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   onChangeYear(): void {
-    this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.ANUAL + '/' + this.anioSelected + '/' + this.openItem],
+    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.ANUAL, this.anioSelected, this.openItem],
                          {replaceUrl: false});
     this.getData();
   }
 
   goToMonth(fecha: string, concepto: string ): void {
     const fechaIso = this._helperService.convertStringMMYYYYToDate(fecha).toISOString();
-    this.router.navigate([UrlConstants.DASHBOARD + '/' + UrlConstants.MENSUAL + '/' + fechaIso + '/' + concepto]);
+    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.MENSUAL, fechaIso, concepto]);
   }
 
   getOpenItem(): string {
@@ -163,11 +163,7 @@ export class AnualComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private getYearFromUrl(): number {
     const dateUrl = this.activeRoute.snapshot.paramMap.get('anio');
-    if (dateUrl === 'current') {
-      return new Date().getFullYear();
-    } else {
-      return Number(dateUrl);
-    }
+    return Number(dateUrl);
   }
 
   private getIngresos(): number {

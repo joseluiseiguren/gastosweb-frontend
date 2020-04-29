@@ -8,6 +8,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { filter } from 'rxjs/operators';
 import { UrlConstants } from '../../constants/url.constants';
 import { Subscription } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,7 @@ export class DashboardComponent extends ComponentBase implements OnInit, OnDestr
 
   constructor(private _userService: UsersService,
               private router: Router,
+              private _datePipe: DatePipe,
               private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher,
               public aboutDialog: MatDialog) {
@@ -41,44 +43,35 @@ export class DashboardComponent extends ComponentBase implements OnInit, OnDestr
     );
   }
 
-  private route(dest: string) {
-    const currentUrlSplitted = this.router.url.split('/');
-
-    if (currentUrlSplitted.length >= 3 &&
-        currentUrlSplitted[2] === dest.split('/')[0]) {
-        return;
-    } else {
-      this.router.navigate([UrlConstants.DASHBOARD + '/' + dest]);
-    }
-  }
-
   routeDiario () {
-    this.route(UrlConstants.DIARIO + '/today');
+    const today = this._datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.DIARIO, today]);
   }
 
   routeMensual () {
-    this.route(UrlConstants.MENSUAL + '/current/none');
+    const month = this._datePipe.transform(new Date(), 'yyyy-MM');
+    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.MENSUAL, month, 'none']);
   }
 
   routeAnual () {
-    this.route(UrlConstants.ANUAL + '/current/none');
+    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.ANUAL, new Date().getFullYear(), 'none']);
   }
 
   routeHistorico () {
-    this.route(UrlConstants.HISTORICO);
+    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.HISTORICO]);
   }
 
   routeConceptos () {
-    this.route(UrlConstants.CONCEPTOS);
+    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.CONCEPTOS]);
   }
 
   routeUserProfile () {
-    this.route(UrlConstants.USERS + '/' + UrlConstants.USERPROFILE);
+    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.USERS, UrlConstants.USERPROFILE]);
   }
 
   logout () {
     this._userService.logout();
-    this.router.navigate(['/' + UrlConstants.LOGIN]);
+    this.router.navigate([UrlConstants.LOGIN]);
   }
 
   ngOnDestroy(): void {

@@ -5,6 +5,7 @@
   - Use interfaces
 - Improve lists management
 - Migrate angular 9
+- Use string for url routes, instead of dates (diario, mensual)
 
 - add gasto desde pantalla de mes
 - url con caracteres especiales, pincha. Por ejemplo con caracter: (

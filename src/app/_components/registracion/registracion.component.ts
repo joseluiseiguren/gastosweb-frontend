@@ -19,6 +19,7 @@ export class RegistracionComponent implements OnInit, OnDestroy {
   startDate = new Date((new Date()).getFullYear() - 20, 0, 1);
   monedas: string[];
   loading = false;
+  loginUrl = UrlConstants.LOGIN;
   dialogRef: MatDialogRef<WelcomeComponent>;
   private _subscriptions = new Subscription();
 
@@ -58,7 +59,7 @@ export class RegistracionComponent implements OnInit, OnDestroy {
 
               this._subscriptions.add(this.dialogRef.afterClosed()
                 .subscribe(() => {
-                  this.router.navigate(['/' + UrlConstants.LOGIN]);
+                  this.router.navigate([UrlConstants.LOGIN]);
                 })
               );
             },
