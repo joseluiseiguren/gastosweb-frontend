@@ -14,7 +14,6 @@ import { Moment } from 'moment';
 import { CalculationService } from '../../sharedServices/calculationService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlConstants } from '../../constants/url.constants';
-import { Location } from '@angular/common';
 import { FormControl } from '@angular/forms';
 
 export const MY_FORMATS = {

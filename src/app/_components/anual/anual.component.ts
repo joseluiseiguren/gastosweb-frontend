@@ -125,8 +125,8 @@ export class AnualComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   goToMonth(fecha: string, concepto: string ): void {
-    const fechaIso = this._helperService.convertStringMMYYYYToDate(fecha).toISOString();
-    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.MENSUAL, fechaIso, concepto]);
+    const fechaFormated = this.convertMMYYYYToYYYYMM(fecha);
+    this.router.navigate([UrlConstants.DASHBOARD, UrlConstants.MENSUAL, fechaFormated, concepto]);
   }
 
   getOpenItem(): string {
@@ -192,5 +192,9 @@ export class AnualComponent implements OnInit, OnDestroy, AfterViewChecked {
             }
           )
     );
+  }
+
+  private convertMMYYYYToYYYYMM(fecha: string): string {
+    return fecha.substring(2, 8) + '-' + fecha.substring(0, 2);
   }
 }

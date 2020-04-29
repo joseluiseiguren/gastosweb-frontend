@@ -29,3 +29,4 @@
 - probar en distintos browser
 - cuando hay error generico, el desplegable del usuario queda por atras
 - Conceptos que no sumen ni resten: y que puedan ser cargados en multiples monedas
+- Github CD/CI

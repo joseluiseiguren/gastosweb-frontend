@@ -19,23 +19,20 @@ export class DiarioService {
                                       fecha.getDate().toString().padStart(2, '0'));
 
     return this._http.get<IConceptoDiario[]>(url)
-                    //.delay(3000)
                     .pipe(tap(data => JSON.stringify(data)));
   }
 
-  setConceptoImporte(fecha:Date, importe:number, idConcepto:number) : Observable<void> {
+  setConceptoImporte(fecha: Date, importe: number, idConcepto: number): Observable<void> {
     return this._http.post<any>(this._urlService.urlSetConceptoImporte(),
             {fecha: fecha.getFullYear().toString() +
-                    (fecha.getMonth()+1).toString().padStart(2, '0') +
+                    (fecha.getMonth() + 1).toString().padStart(2, '0') +
                     fecha.getDate().toString().padStart(2, '0'),
               importe: importe,
               idConcepto: idConcepto});
   }
 
   getPrimerConsumo(): Observable<any> {
-    return this._http.get<Date>(this._urlService.urlGetPrimerConsumo())
-                  //.delay(3000)
-                  .pipe(tap(data => JSON.stringify(data)));
+    return this._http.get<Date>(this._urlService.urlGetPrimerConsumo());
   }
 
   getConceptosTotalMes(fecha: string /*YYYYMM*/): Observable<any[]> {
