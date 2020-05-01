@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IConceptoDiario } from '../models/concepto.diario';
-import { UsersService } from './users.service';
 import { UrlService } from './url.service';
 import { tap } from 'rxjs/operators';
 
@@ -22,13 +21,14 @@ export class DiarioService {
                     .pipe(tap(data => JSON.stringify(data)));
   }
 
-  setConceptoImporte(fecha: Date, importe: number, idConcepto: number): Observable<void> {
+  setConceptoImporte(fecha: Date, importe: number, idConcepto: number, tags: string[]): Observable<void> {
     return this._http.post<any>(this._urlService.urlSetConceptoImporte(),
             {fecha: fecha.getFullYear().toString() +
                     (fecha.getMonth() + 1).toString().padStart(2, '0') +
                     fecha.getDate().toString().padStart(2, '0'),
               importe: importe,
-              idConcepto: idConcepto});
+              idConcepto: idConcepto,
+              movimientoTags: tags});
   }
 
   getPrimerConsumo(): Observable<any> {

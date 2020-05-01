@@ -4,7 +4,9 @@
 
 <div *ngIf="!loading">
   <div class="header">
-    <app-saldo class="saldos" [titulo]="'Saldo Historico'" [saldo]="saldoActual" (saldoClicked)="showOpenSaldo()"></app-saldo>
+    <div class="column saldos">
+      <app-saldo class="saldos" [titulo]="'Saldo Historico'" [saldo]="saldoActual" (saldoClicked)="showOpenSaldo()"></app-saldo>
+    </div>
   </div>
 
   <div class="tableContent">

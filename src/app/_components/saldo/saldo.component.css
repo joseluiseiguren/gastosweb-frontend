@@ -1,9 +1,3 @@
-.saldos { 
-    margin-top: 20px;
-    margin-right: 20px;
-    float: right;        
-}
-
 .saldoNegativo{
     color: red;
 }

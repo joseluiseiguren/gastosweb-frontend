@@ -1,15 +1,15 @@
 .cancel-button{
     float: left;
-    text-align: left;  
+    text-align: left;
   }
 
   .save-button{
     float: right;
-    text-align: center;  
+    text-align: center;
   }
 
   .buttons-section{
-    padding-top: 30px;
+    padding-top: 10px;
     padding-bottom: 40px;
   }
 
@@ -23,13 +23,13 @@
 
   .title{
     float: left;
-    text-align: left;  
+    text-align: left;
     width: 90%;
   }
 
   .spinner{
     float: right;
-    text-align: right;    
+    text-align: right;
   }
 
 .debito{
@@ -62,4 +62,9 @@
 
 ::ng-deep .credito.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
   border-color:black!important;
+}
+
+.tags-chip-list {
+  width: 100%;
+  padding-top: 20px;
 }

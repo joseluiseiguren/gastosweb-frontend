@@ -1,11 +1,12 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatChipInputEvent } from '@angular/material';
 import { IConceptoDiario } from '../../models/concepto.diario';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { FormatingService } from '../../sharedServices/formatingService';
 import { DiarioService } from '../../services/diario.service';
 import { HelperService } from '../../services/helper.service';
 import { Subscription } from 'rxjs';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-diario-enter',
@@ -16,6 +17,8 @@ export class DiarioEnterComponent implements OnInit, OnDestroy {
   form: FormGroup;
   loading = false;
   private _subscriptions = new Subscription();
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  tags: string[] = [];
 
   constructor(private fb: FormBuilder,
               private formating: FormatingService,
@@ -30,6 +33,7 @@ export class DiarioEnterComponent implements OnInit, OnDestroy {
       importeFormControl: [this.formating.FormatNumber(this.data.concepto.importe, true, false), [Validators.required]],
       debitoCreditoControl: this.isCredito().toString() === 'true' ? '1' : '0'
     });
+    this.tags = this.data.concepto.tags;
   }
 
   ngOnDestroy(): void {
@@ -47,7 +51,8 @@ export class DiarioEnterComponent implements OnInit, OnDestroy {
     this._subscriptions.add(this._conceptosDiarioService.setConceptoImporte(
         new Date(this.data.concepto.fecha),
         (this.form.value.debitoCreditoControl === '1') ? newImporte : newImporte * -1,
-        this.data.concepto.idconcepto)
+        this.data.concepto.idconcepto,
+        this.tags)
             .subscribe(
               () => {
                 this.data.concepto.importe = (this.form.value.debitoCreditoControl === '1' || this.form.value.importeFormControl === 0)
@@ -73,6 +78,29 @@ export class DiarioEnterComponent implements OnInit, OnDestroy {
       } else {
         return false;
       }
+    }
+  }
+
+  removeTag(tag: string): void {
+    const index = this.tags.indexOf(tag);
+
+    if (index >= 0) {
+      this.tags.splice(index, 1);
+    }
+  }
+
+  addTag(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if (this.tags.filter(x => x.toLowerCase() === value.toLowerCase()).length <= 0) {
+      if ((value || '').trim()) {
+        this.tags.push(value);
+      }
+    }
+
+    if (input) {
+      input.value = '';
     }
   }
 }

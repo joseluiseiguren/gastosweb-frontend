@@ -15,6 +15,8 @@ import { CalculationService } from '../../sharedServices/calculationService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlConstants } from '../../constants/url.constants';
 import { FormControl } from '@angular/forms';
+import { ComponentBase } from 'src/app/services/ComponentBase';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 export const MY_FORMATS = {
   parse: {
@@ -42,7 +44,7 @@ export const MY_FORMATS = {
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ],
 })
-export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class MensualComponent extends ComponentBase implements OnInit, OnDestroy, AfterViewChecked {
   loading = false;
   loadingDetail = false;
   loadingPopup = false;
@@ -51,10 +53,13 @@ export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
   saldoActual = 0;
   currentDate = new FormControl();
   private previousMonth = '';
+  totalFilters = 0;
 
   private _subscriptions = new Subscription();
 
-  constructor(private _datePipe: DatePipe,
+  constructor(changeDetectorRef: ChangeDetectorRef,
+              private media: MediaMatcher,
+              private _datePipe: DatePipe,
               public _userService: UsersService,
               private _diarioService: DiarioService,
               public snackBar: MatSnackBar,
@@ -64,13 +69,15 @@ export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
               private router: Router,
               private changeDetector: ChangeDetectorRef,
               private calculationService: CalculationService,
-              private _helperService: HelperService) {  }
+              private _helperService: HelperService) {
+    super(changeDetectorRef, media);
+  }
 
   ngOnInit() {
     this._subscriptions.add(this.activeRoute.params
       .subscribe(routeParams => {
         const controlDate = this.getDateFromUrl();
-        controlDate.setMonth(controlDate.getMonth() - 1);
+        controlDate.setMonth(controlDate.getMonth());
         this.currentDate = new FormControl(controlDate);
 
         if (this.previousMonth !== this.getMonthStringFromUrl(false)) {
@@ -218,7 +225,7 @@ export class MensualComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     const year = dateUrl.split('-')[0];
     const month = dateUrl.split('-')[1];
-    return new Date(Number(year), Number(month), 1);
+    return new Date(Number(year), Number(month) - 1, 1);
   }
 
   private getMonthStringFromUrl(removeSeparator: boolean): string {

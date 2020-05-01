@@ -75,7 +75,8 @@ import { SaldoItemComponent } from '../../_components/saldo-item/saldo-item.comp
     MatTooltipModule,
     MatRadioModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    MatChipsModule
   ],
   entryComponents: [ SaldoAbiertoComponent ],
 })

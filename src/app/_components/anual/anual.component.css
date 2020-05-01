@@ -1,9 +1,18 @@
 .header {
-    display: flex;
-    justify-content: space-evenly;
-    position: fixed;
-    width: 100%;    
-    border-bottom-style: solid;    
+  display: table;
+  margin: 0 auto;
+  clear: both;
+  width: 60%;
+  text-align: center;
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+.saldos {
+  margin-top: 15px;
 }
 
 .anioSelect {
@@ -20,7 +29,7 @@
     height: 84%;
     top: 16%;
     overflow-y: scroll;
-    max-block-size: -webkit-fill-available;        
+    max-block-size: -webkit-fill-available;
 }
 
 .conceptos-table {
@@ -33,17 +42,21 @@
 }
 
 .itemDescription {
-    float: left; 
+    float: left;
     font-size: small;
 }
 
 .itemAmount {
-    float: right;; 
+    float: right;;
     font-size: small;
 }
- 
+
 @media only screen and (max-width: 600px) {
     .conceptos-table {
         width: 100%;
-    }    
+    }
+
+    .header {
+      width: 100%;
+    }
 }

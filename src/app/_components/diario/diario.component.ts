@@ -87,7 +87,7 @@ export class DiarioComponent implements OnInit, OnDestroy {
   }
 
   openConcepto(concepto: IConceptoDiario): void {
-    const dialogRef = this.enterDiario.open(DiarioEnterComponent, { data: {concepto} });
+    const dialogRef = this.enterDiario.open(DiarioEnterComponent, { data: {concepto}, width: '300px', });
 
     this._subscriptions.add(dialogRef.afterClosed()
       .subscribe(result => {

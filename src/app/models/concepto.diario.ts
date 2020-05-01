@@ -4,5 +4,6 @@ export interface IConceptoDiario {
     credito: number;
     fecha: Date;
     importe: number;
+    tags: string[];
 }
 

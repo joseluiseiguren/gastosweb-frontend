@@ -4,14 +4,18 @@
 
 <div *ngIf="!loading">
   <div class="header">
-    <mat-form-field class="anioSelect">
-      <mat-label>Año</mat-label>
-      <mat-select [(value)]="anioSelected" (selectionChange)="onChangeYear($event.value)">
-        <mat-option *ngFor="let anio of anios" [value]="anio">{{anio}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="column">
+      <mat-form-field class="anioSelect">
+        <mat-label>Año</mat-label>
+        <mat-select [(value)]="anioSelected" (selectionChange)="onChangeYear($event.value)">
+          <mat-option *ngFor="let anio of anios" [value]="anio">{{anio}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-    <app-saldo [titulo]="'Saldo Anual'" [saldo]="saldoAnual" (saldoClicked)="showOpenSaldo()"></app-saldo>
+    <div class="column saldos">
+      <app-saldo [titulo]="'Saldo Anual'" [saldo]="saldoAnual" (saldoClicked)="showOpenSaldo()"></app-saldo>
+    </div>
   </div>
 
   <div class="tableContent" id="mainTable">

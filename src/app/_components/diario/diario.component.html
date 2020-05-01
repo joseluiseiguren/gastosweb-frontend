@@ -8,18 +8,23 @@
 
 <div *ngIf="!loading">
   <div class="header">
-    <mat-form-field class="datePicker">
-      <input matInput
-             readonly
-             [matDatepicker]="picker"
-             placeholder="Fecha Consumos"
-             [formControl]="currentDate"
-             (click)="picker.open()"
-             (dateChange)="changeDate('change', $event)">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker [startAt]="currentDate" #picker></mat-datepicker>
-    </mat-form-field>
-    <app-saldo [titulo]="'Saldo Diario'" [saldo]="saldoDiario" (saldoClicked)="showOpenSaldo()"></app-saldo>
+    <div class="column">
+      <mat-form-field class="datePicker">
+        <input matInput
+              readonly
+              [matDatepicker]="picker"
+              placeholder="Fecha Consumos"
+              [formControl]="currentDate"
+              (click)="picker.open()"
+              (dateChange)="changeDate('change', $event)">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker [startAt]="currentDate" #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="column saldos">
+      <app-saldo [titulo]="'Saldo Diario'" [saldo]="saldoDiario" (saldoClicked)="showOpenSaldo()"></app-saldo>
+    </div>
   </div>
 
   <div class="tableContent">
