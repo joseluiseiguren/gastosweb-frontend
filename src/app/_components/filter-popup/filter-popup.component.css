@@ -1,0 +1,20 @@
+.title{
+  float: left;
+  text-align: left;
+  width: 90%;
+}
+
+.buttons-section{
+  padding-top: 10px;
+  padding-bottom: 40px;
+}
+
+.cancel-button{
+  float: left;
+  text-align: left;
+}
+
+.save-button{
+  float: right;
+  text-align: center;
+}

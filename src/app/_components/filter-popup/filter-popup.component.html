@@ -1,0 +1,56 @@
+<div class="title">
+  <h2 mat-dialog-title>Filtrar Búsqueda</h2>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="frm" class="full-width-form" (ngSubmit)="onSave()" novalidate>
+    <mat-form-field class="example-full-width">
+      <mat-chip-list #chipList aria-label="Fruit selection">
+        <mat-chip
+          *ngFor="let conceptoFiltered of allConceptosFiltered"
+          (removed)="removeConceptoFiltered(conceptoFiltered)">
+          {{conceptoFiltered.descripcion}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+          placeholder="Conceptos"
+          #conceptosInput
+          (ngModelChange)="onChangeConcepto($event)"
+          formControlName="conceptosFormControl"
+          [matAutocomplete]="auto"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="addConceptoFiltered($event)">
+      </mat-chip-list>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngFor="let concepto of allConceptos" [value]="concepto.id">
+          {{concepto.descripcion}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <!--<input type="text"
+             placeholder="Conceptos"
+             aria-label="Number"
+             matInput
+             formControlName="conceptosFormControl"
+             (ngModelChange)="onChangeConcepto($event)"
+             [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let option of allConceptos" [value]="option.id">
+          {{option.descripcion}}
+        </mat-option>
+      </mat-autocomplete>-->
+    </mat-form-field>
+  </form>
+
+<div class="buttons-section">
+  <mat-card-actions>
+      <div class="cancel-button">
+          <button  mat-raised-button type="button" (click)="onCancel()">Cancelar</button>
+      </div>
+      <div class="save-button">
+          <button mat-raised-button type="submit" color="primary">Aceptar</button>
+      </div>
+  </mat-card-actions>
+</div>
+</mat-dialog-content>

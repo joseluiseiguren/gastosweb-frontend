@@ -21,6 +21,7 @@ import { MatProgressSpinnerModule,
          MatSnackBarModule,
          MatDatepickerModule,
          MatTooltipModule,
+         MatAutocompleteModule,
          MatRadioModule } from '@angular/material';
 import { MatIconModule  } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -37,6 +38,7 @@ import { SaldoItemComponent } from '../../_components/saldo-item/saldo-item.comp
     MatChipsModule,
     MatDialogModule,
     MatCardModule,
+    MatAutocompleteModule,
     MatListModule,
     MatIconModule,
     MatTableModule,
@@ -76,7 +78,8 @@ import { SaldoItemComponent } from '../../_components/saldo-item/saldo-item.comp
     MatRadioModule,
     MatIconModule,
     MatListModule,
-    MatChipsModule
+    MatChipsModule,
+    MatAutocompleteModule
   ],
   entryComponents: [ SaldoAbiertoComponent ],
 })

@@ -75,7 +75,7 @@ const routes: Routes = [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    AboutComponent
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
