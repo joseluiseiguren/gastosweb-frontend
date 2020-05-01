@@ -85,6 +85,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
+@angular/material/autocomplete
+
 @angular/material/button
 
 @angular/material/card
@@ -114,8 +116,6 @@ THE SOFTWARE.
 @angular/material/select
 
 @angular/material/sidenav
-
-@angular/material/slide-toggle
 
 @angular/material/snack-bar
 
