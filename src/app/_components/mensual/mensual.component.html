@@ -25,13 +25,13 @@
     </div>
 
     <div class="column filters">
-      <app-filter></app-filter>
+      <app-filter (filtersChanged)="applyFilters($event)"></app-filter>
     </div>
   </div>
 
   <div class="tableContent" id="mainTable">
     <mat-accordion class="conceptos-table">
-      <mat-expansion-panel *ngFor="let ct of conceptosTotales" [expanded]="!loading && ct.descripcion === getOpenItem()" (opened)="loadMonthDetails(ct)">
+      <mat-expansion-panel *ngFor="let ct of conceptosFiltered" [expanded]="!loading && ct.descripcion === getOpenItem()" (opened)="loadMonthDetails(ct)">
           <mat-expansion-panel-header>
             <mat-panel-title id="{{'item' + ct.descripcion}}">
               {{ct.descripcion}}

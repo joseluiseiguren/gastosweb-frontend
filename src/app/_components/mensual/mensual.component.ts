@@ -17,6 +17,7 @@ import { UrlConstants } from '../../constants/url.constants';
 import { FormControl } from '@angular/forms';
 import { ComponentBase } from 'src/app/services/ComponentBase';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { IMensualFilter } from 'src/app/models/mensual.filter';
 
 export const MY_FORMATS = {
   parse: {
@@ -48,7 +49,8 @@ export class MensualComponent extends ComponentBase implements OnInit, OnDestroy
   loading = false;
   loadingDetail = false;
   loadingPopup = false;
-  conceptosTotales: any[];
+  private _conceptosTotales: any[];
+  conceptosFiltered: any[];
   itemDetail: any[];
   saldoActual = 0;
   currentDate = new FormControl();
@@ -103,7 +105,8 @@ export class MensualComponent extends ComponentBase implements OnInit, OnDestroy
     this._subscriptions.add(this._diarioService.getConceptosTotalMes(fecha)
         .subscribe(
             data => {
-              this.conceptosTotales = data;
+              this._conceptosTotales = data;
+              this.conceptosFiltered = Object.assign([], this._conceptosTotales);
               this.saldoActual = this.getIngresos() - this.getEgresos();
               this.loading = false;
 
@@ -127,11 +130,11 @@ export class MensualComponent extends ComponentBase implements OnInit, OnDestroy
   }
 
   private getIngresos(): number {
-    return this.calculationService.getIngresos(this.convertToNumberArray(this.conceptosTotales));
+    return this.calculationService.getIngresos(this.convertToNumberArray(this._conceptosTotales));
   }
 
   private getEgresos(): number {
-    return this.calculationService.getEgresos(this.convertToNumberArray(this.conceptosTotales));
+    return this.calculationService.getEgresos(this.convertToNumberArray(this._conceptosTotales));
   }
 
   showOpenSaldo(): void {
@@ -233,6 +236,14 @@ export class MensualComponent extends ComponentBase implements OnInit, OnDestroy
       return this.activeRoute.snapshot.paramMap.get('month').replace('-', '');
     } else {
       return this.activeRoute.snapshot.paramMap.get('month');
+    }
+  }
+
+  public applyFilters(filters: IMensualFilter) {
+    if (filters.conceptos.length > 0) {
+      this.conceptosFiltered = this._conceptosTotales.filter(x => filters.conceptos.find(p => p._id === x.idConcepto) );
+    } else {
+      this.conceptosFiltered = this._conceptosTotales.filter(x => true);
     }
   }
 }

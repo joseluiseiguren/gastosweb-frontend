@@ -1,11 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatDialogRef, MatSnackBar, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
+import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
+import { MatDialogRef, MatSnackBar, MatChipInputEvent, MatAutocompleteSelectedEvent, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConceptoService } from 'src/app/services/concepto.service';
 import { Subscription } from 'rxjs';
 import { HelperService } from 'src/app/services/helper.service';
 import { IConcepto } from 'src/app/models/concepto';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import { IMensualFilter } from 'src/app/models/mensual.filter';
 
 @Component({
   selector: 'app-filter-popup',
@@ -17,7 +18,7 @@ export class FilterPopupComponent implements OnInit {
   loading = false;
   private _allConceptos: IConcepto[] = [];
   public allConceptos: IConcepto[] = [];
-  public allConceptosFiltered: IConcepto[] = [];
+  public allConceptosFiltered: IMensualFilter;
   frm: FormGroup;
   private _subscriptions = new Subscription();
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -28,7 +29,10 @@ export class FilterPopupComponent implements OnInit {
               private _conceptoService: ConceptoService,
               private _helperService: HelperService,
               public snackBar: MatSnackBar,
-              public dialogRef: MatDialogRef<FilterPopupComponent>) { }
+              public dialogRef: MatDialogRef<FilterPopupComponent>,
+              @Inject(MAT_DIALOG_DATA) allFilters: IMensualFilter) {
+    this.allConceptosFiltered = allFilters;
+  }
 
   ngOnInit() {
     this.frm = this.fb.group({
@@ -67,14 +71,14 @@ export class FilterPopupComponent implements OnInit {
   }
 
   onSave(): void {
-    this.dialogRef.close();
+    this.dialogRef.close( this.allConceptosFiltered );
   }
 
   removeConceptoFiltered(concepto: IConcepto): void {
-    const index = this.allConceptosFiltered.map(e => e.descripcion.toLowerCase()).indexOf(concepto.descripcion.toLowerCase());
+    const index = this.allConceptosFiltered.conceptos.map(e => e.descripcion.toLowerCase()).indexOf(concepto.descripcion.toLowerCase());
 
     if (index >= 0) {
-      this.allConceptosFiltered.splice(index, 1);
+      this.allConceptosFiltered.conceptos.splice(index, 1);
     }
   }
 
@@ -88,7 +92,7 @@ export class FilterPopupComponent implements OnInit {
 
     if ((value || '').trim()) {
       const concepto = this._allConceptos.filter(x => x.descripcion.toLowerCase() === value.toLowerCase())[0];
-      this.allConceptosFiltered.push(concepto);
+      this.allConceptosFiltered.conceptos.push(concepto);
     }
 
     if (input) {
@@ -104,12 +108,12 @@ export class FilterPopupComponent implements OnInit {
 
     const concepto = this._allConceptos.filter(x => x.descripcion.toLowerCase().trim() === event.option.viewValue.toLowerCase().trim())[0];
 
-    this.allConceptosFiltered.push(concepto);
+    this.allConceptosFiltered.conceptos.push(concepto);
     this.conceptosInput.nativeElement.value = '';
   }
 
   private existConceptoFilter(concepto: string): boolean {
-     return this.allConceptosFiltered.filter(x => x.descripcion.toLowerCase() === concepto.toLowerCase()).length > 0;
+     return this.allConceptosFiltered.conceptos.filter(x => x.descripcion.toLowerCase() === concepto.toLowerCase()).length > 0;
   }
 
   private existConcepto(concepto: string): boolean {
