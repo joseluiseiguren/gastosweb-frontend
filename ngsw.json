@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1588347132169,
+  "timestamp": 1588416777994,
   "index": "https://joseluiseiguren.github.io/gastosweb-frontend/index.html",
   "assetGroups": [
     {
@@ -11,16 +11,16 @@
         "https://joseluiseiguren.github.io/gastosweb-frontend/10.4ce4df9e3e528cfe24d2.js",
         "https://joseluiseiguren.github.io/gastosweb-frontend/2.82df4e6626b4a01e0879.js",
         "https://joseluiseiguren.github.io/gastosweb-frontend/3.22b2f971acc0284d394a.js",
-        "https://joseluiseiguren.github.io/gastosweb-frontend/7.596b3e54a2061108b9ae.js",
+        "https://joseluiseiguren.github.io/gastosweb-frontend/7.8323a1b191da5e170611.js",
         "https://joseluiseiguren.github.io/gastosweb-frontend/8.ea8806fbf92f7cd319ba.js",
         "https://joseluiseiguren.github.io/gastosweb-frontend/9.1e1cce51e26fa6320b86.js",
         "https://joseluiseiguren.github.io/gastosweb-frontend/common.c84eda80aecdd4c77148.js",
         "https://joseluiseiguren.github.io/gastosweb-frontend/favicon.ico",
         "https://joseluiseiguren.github.io/gastosweb-frontend/index.html",
-        "https://joseluiseiguren.github.io/gastosweb-frontend/main.7a523c0bcc05454f588d.js",
+        "https://joseluiseiguren.github.io/gastosweb-frontend/main.e873073739900e9d0466.js",
         "https://joseluiseiguren.github.io/gastosweb-frontend/manifest.webmanifest",
         "https://joseluiseiguren.github.io/gastosweb-frontend/polyfills.cc8fc4a16fcab0a5bdcc.js",
-        "https://joseluiseiguren.github.io/gastosweb-frontend/runtime.114f11db8d78db0120ca.js",
+        "https://joseluiseiguren.github.io/gastosweb-frontend/runtime.2d51ad645f37235818b1.js",
         "https://joseluiseiguren.github.io/gastosweb-frontend/styles.a5ec4d5dac50b835b909.css"
       ],
       "patterns": []
@@ -51,7 +51,7 @@
     "https://joseluiseiguren.github.io/gastosweb-frontend/10.4ce4df9e3e528cfe24d2.js": "ed11ff8011947685e1fafae309c2497f675bd73e",
     "https://joseluiseiguren.github.io/gastosweb-frontend/2.82df4e6626b4a01e0879.js": "d0c0f4de517e70a6b0858c5b4c2267c9f311c20d",
     "https://joseluiseiguren.github.io/gastosweb-frontend/3.22b2f971acc0284d394a.js": "3dcee762df04f627b92cd4944b43ce36f5f630e9",
-    "https://joseluiseiguren.github.io/gastosweb-frontend/7.596b3e54a2061108b9ae.js": "f25ad3f54f16568fd729dcb3bdfeda209507a25d",
+    "https://joseluiseiguren.github.io/gastosweb-frontend/7.8323a1b191da5e170611.js": "af7dcd5d7daaa9fe0972bc2bd469d6af87519a19",
     "https://joseluiseiguren.github.io/gastosweb-frontend/8.ea8806fbf92f7cd319ba.js": "d8cafe085c45c7449a1df7b311ab9ae45b9130e3",
     "https://joseluiseiguren.github.io/gastosweb-frontend/9.1e1cce51e26fa6320b86.js": "56c7c3b2654c3afd8aea91178e0e19331afe3dde",
     "https://joseluiseiguren.github.io/gastosweb-frontend/assets/icons/icon-128x128.png": "3d71a9f6d091891ddd56ecf92f8089a7b968a1c2",
@@ -68,11 +68,11 @@
     "https://joseluiseiguren.github.io/gastosweb-frontend/assets/icons/icon-96x96.png": "6adbcd28362abd8ce5a81299a061ca5e2b8107f1",
     "https://joseluiseiguren.github.io/gastosweb-frontend/common.c84eda80aecdd4c77148.js": "8f9df256b791e250f1e453597f434c51ae0aa240",
     "https://joseluiseiguren.github.io/gastosweb-frontend/favicon.ico": "c4a755307a2cf0b8bc561da4e9a9ad28d1543ea3",
-    "https://joseluiseiguren.github.io/gastosweb-frontend/index.html": "1cdef24e2e95341c2b2f12548cd9312b30bc4c65",
-    "https://joseluiseiguren.github.io/gastosweb-frontend/main.7a523c0bcc05454f588d.js": "96ca9b1fc846811e08293be39b2ee686b2ca7b59",
+    "https://joseluiseiguren.github.io/gastosweb-frontend/index.html": "31b5b30cc211771efe34b8114f4345702306bf06",
+    "https://joseluiseiguren.github.io/gastosweb-frontend/main.e873073739900e9d0466.js": "1b2ba0e78440f99931a47c88d6a496c10b116a80",
     "https://joseluiseiguren.github.io/gastosweb-frontend/manifest.webmanifest": "692b23c8573404d092498ffb4ae84c0532f40b6b",
     "https://joseluiseiguren.github.io/gastosweb-frontend/polyfills.cc8fc4a16fcab0a5bdcc.js": "cbdc80b1eb1f57d1798cc19a3d9c78316e93aa59",
-    "https://joseluiseiguren.github.io/gastosweb-frontend/runtime.114f11db8d78db0120ca.js": "1105a64ead43139341025875c68fbc4cb8602090",
+    "https://joseluiseiguren.github.io/gastosweb-frontend/runtime.2d51ad645f37235818b1.js": "398ca9921dff0fb4e1980f9cef915dd681e1b878",
     "https://joseluiseiguren.github.io/gastosweb-frontend/styles.a5ec4d5dac50b835b909.css": "156b339d8bdb6cef814ee0f5e4560e1b74139eca"
   },
   "navigationUrls": [
