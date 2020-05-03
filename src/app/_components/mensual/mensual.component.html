@@ -6,7 +6,7 @@
   <mat-spinner diameter="70" strokeWidth="5"></mat-spinner>
 </div>
 
-<div *ngIf="!loading">
+<div>
   <div class="header">
     <div class="column">
       <mat-form-field class="datePicker">
@@ -25,11 +25,11 @@
     </div>
 
     <div class="column filters">
-      <app-filter (filtersChanged)="applyFilters($event)"></app-filter>
+      <app-filter (filtersChanged)="onfiltersChanged($event)"></app-filter>
     </div>
   </div>
 
-  <div class="tableContent" id="mainTable">
+  <div class="tableContent" id="mainTable"  *ngIf="!loading">
     <mat-accordion class="conceptos-table">
       <mat-expansion-panel *ngFor="let ct of conceptosFiltered" [expanded]="!loading && ct.descripcion === getOpenItem()" (opened)="loadMonthDetails(ct)">
           <mat-expansion-panel-header>

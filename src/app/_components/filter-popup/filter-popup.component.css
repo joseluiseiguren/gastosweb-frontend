@@ -1,9 +1,3 @@
-.title{
-  float: left;
-  text-align: left;
-  width: 90%;
-}
-
 .buttons-section{
   padding-top: 10px;
   padding-bottom: 40px;
@@ -17,4 +11,37 @@
 .save-button{
   float: right;
   text-align: center;
+}
+
+.chipsclass {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom-style: inset;
+}
+
+.header {
+  display: table;
+  margin: 0 auto;
+  clear: both;
+  width: 100%;
+  text-align: center;
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+.columnTitle {
+  text-align: left;
+}
+
+.columnDeleteFilters {
+  text-align: right;
+}
+
+@media only screen and (max-width: 600px) {
+  .title {
+    font-size: 3.75vw;
+  }
 }

@@ -1,42 +1,46 @@
-<div class="title">
-  <h2 mat-dialog-title>Filtrar Búsqueda</h2>
+<div class="header">
+  <div class="column columnTitle">
+    <h2 mat-dialog-title class="title">Filtrar Búsqueda</h2>
+  </div>
+  <div class="column columnDeleteFilters">
+    <button mat-raised-button type="button" (click)="onDeleteFilters()" color="warn" [disabled]="allConceptosFiltered.conceptos.length === 0">Eliminar Filtros</button>
+  </div>
 </div>
 
 <mat-dialog-content>
-  <form [formGroup]="frm" class="full-width-form" (ngSubmit)="onSave()" novalidate>
-    <mat-form-field class="example-full-width">
-      <mat-chip-list #chipList aria-label="Fruit selection">
-        <mat-chip
-          *ngFor="let conceptoFiltered of allConceptosFiltered.conceptos"
-          (removed)="removeConceptoFiltered(conceptoFiltered)">
-          {{conceptoFiltered.descripcion}}
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-        <input
-          placeholder="Conceptos"
-          #conceptosInput
-          (ngModelChange)="onChangeConcepto($event)"
-          formControlName="conceptosFormControl"
-          [matAutocomplete]="auto"
-          [matChipInputFor]="chipList"
-          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          (matChipInputTokenEnd)="addConceptoFiltered($event)">
-      </mat-chip-list>
-      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-        <mat-option *ngFor="let concepto of allConceptos" [value]="concepto._id">
-          {{concepto.descripcion}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-  </form>
+  <input
+      placeholder="Conceptos"
+      #trigger="matAutocompleteTrigger"
+      #conceptosInput
+      [(ngModel)]="filterInput"
+      (ngModelChange)="onChangeConcepto($event)"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="onAddConceptoFiltered($event)">
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option *ngFor="let concepto of allConceptos" [value]="concepto._id">
+      {{concepto.descripcion}}
+    </mat-option>
+  </mat-autocomplete>
+  <div class="chipsclass">
+    <mat-chip-list #chipList>
+      <mat-chip
+        *ngFor="let conceptoFiltered of allConceptosFiltered.conceptos"
+        (removed)="removeConceptoFiltered(conceptoFiltered)">
+        {{conceptoFiltered.descripcion}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+  </div>
 
 <div class="buttons-section">
   <mat-card-actions>
       <div class="cancel-button">
-          <button  mat-raised-button type="button" (click)="onCancel()">Cancelar</button>
+        <button mat-raised-button type="button" (click)="onCancel()">Cancelar</button>
       </div>
       <div class="save-button">
-          <button mat-raised-button type="submit" (click)="onSave()" color="primary">Aceptar</button>
+        <button mat-raised-button type="button" (click)="onSave()" color="primary">Aceptar</button>
       </div>
   </mat-card-actions>
 </div>

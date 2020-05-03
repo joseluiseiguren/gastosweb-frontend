@@ -18,6 +18,7 @@ import { FormControl } from '@angular/forms';
 import { ComponentBase } from 'src/app/services/ComponentBase';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { IMensualFilter } from 'src/app/models/mensual.filter';
+import { Location } from '@angular/common';
 
 export const MY_FORMATS = {
   parse: {
@@ -45,7 +46,7 @@ export const MY_FORMATS = {
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ],
 })
-export class MensualComponent extends ComponentBase implements OnInit, OnDestroy, AfterViewChecked {
+export class MensualComponent extends ComponentBase implements OnInit, OnDestroy {
   loading = false;
   loadingDetail = false;
   loadingPopup = false;
@@ -55,11 +56,12 @@ export class MensualComponent extends ComponentBase implements OnInit, OnDestroy
   saldoActual = 0;
   currentDate = new FormControl();
   private previousMonth = '';
-  totalFilters = 0;
+  private filters: IMensualFilter;
 
   private _subscriptions = new Subscription();
 
   constructor(changeDetectorRef: ChangeDetectorRef,
+              private location: Location,
               private media: MediaMatcher,
               private _datePipe: DatePipe,
               public _userService: UsersService,
@@ -90,10 +92,6 @@ export class MensualComponent extends ComponentBase implements OnInit, OnDestroy
     );
   }
 
-  ngAfterViewChecked() {
-    this.changeDetector.detectChanges();
-  }
-
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
@@ -106,7 +104,7 @@ export class MensualComponent extends ComponentBase implements OnInit, OnDestroy
         .subscribe(
             data => {
               this._conceptosTotales = data;
-              this.conceptosFiltered = Object.assign([], this._conceptosTotales);
+              this.applyFilters();
               this.saldoActual = this.getIngresos() - this.getEgresos();
               this.loading = false;
 
@@ -130,11 +128,11 @@ export class MensualComponent extends ComponentBase implements OnInit, OnDestroy
   }
 
   private getIngresos(): number {
-    return this.calculationService.getIngresos(this.convertToNumberArray(this._conceptosTotales));
+    return this.calculationService.getIngresos(this.convertToNumberArray(this.conceptosFiltered));
   }
 
   private getEgresos(): number {
-    return this.calculationService.getEgresos(this.convertToNumberArray(this._conceptosTotales));
+    return this.calculationService.getEgresos(this.convertToNumberArray(this.conceptosFiltered));
   }
 
   showOpenSaldo(): void {
@@ -239,9 +237,15 @@ export class MensualComponent extends ComponentBase implements OnInit, OnDestroy
     }
   }
 
-  public applyFilters(filters: IMensualFilter) {
-    if (filters.conceptos.length > 0) {
-      this.conceptosFiltered = this._conceptosTotales.filter(x => filters.conceptos.find(p => p._id === x.idConcepto) );
+  public onfiltersChanged(filters: IMensualFilter) {
+    this.filters = filters;
+    this.applyFilters();
+    this.saldoActual = this.getIngresos() - this.getEgresos();
+  }
+
+  private applyFilters() {
+    if (this.filters !== undefined && this.filters.conceptos.length > 0) {
+      this.conceptosFiltered = this._conceptosTotales.filter(x => this.filters.conceptos.find(p => p._id === x.idConcepto) );
     } else {
       this.conceptosFiltered = this._conceptosTotales.filter(x => true);
     }

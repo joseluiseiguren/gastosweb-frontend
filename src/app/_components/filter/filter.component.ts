@@ -29,7 +29,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig<IMensualFilter>();
     const data: IMensualFilter = {conceptos: Object.assign([], this.filters.conceptos), tags: Object.assign([], this.filters.tags)};
     dialogConfig.data = data;
-    dialogConfig.width = '300px';
+    dialogConfig.width = '500px';
     const dialogRef = this.filterPopup.open(FilterPopupComponent, dialogConfig);
 
     this._subscriptions.add(dialogRef.afterClosed()

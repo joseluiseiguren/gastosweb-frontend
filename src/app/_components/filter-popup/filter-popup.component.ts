@@ -1,6 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
-import { MatDialogRef, MatSnackBar, MatChipInputEvent, MatAutocompleteSelectedEvent, MAT_DIALOG_DATA } from '@angular/material';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
+import { MatDialogRef,
+         MatSnackBar,
+         MatChipInputEvent,
+         MatAutocompleteSelectedEvent,
+         MAT_DIALOG_DATA,
+         MatAutocompleteTrigger } from '@angular/material';
 import { ConceptoService } from 'src/app/services/concepto.service';
 import { Subscription } from 'rxjs';
 import { HelperService } from 'src/app/services/helper.service';
@@ -19,14 +23,14 @@ export class FilterPopupComponent implements OnInit {
   private _allConceptos: IConcepto[] = [];
   public allConceptos: IConcepto[] = [];
   public allConceptosFiltered: IMensualFilter;
-  frm: FormGroup;
   private _subscriptions = new Subscription();
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  filterInput: string;
 
-  @ViewChild('conceptosInput', { static: false }) conceptosInput: ElementRef<HTMLInputElement>;
+  @ViewChild('trigger', {static: false}) autocomplete: MatAutocompleteTrigger;
+  @ViewChild('cancelButton', {static: false}) cancelButton: ElementRef;
 
-  constructor(private fb: FormBuilder,
-              private _conceptoService: ConceptoService,
+  constructor(private _conceptoService: ConceptoService,
               private _helperService: HelperService,
               public snackBar: MatSnackBar,
               public dialogRef: MatDialogRef<FilterPopupComponent>,
@@ -35,10 +39,6 @@ export class FilterPopupComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.frm = this.fb.group({
-      conceptosFormControl: ['', [Validators.required]]
-    });
-
     this.getConceptos();
   }
 
@@ -82,42 +82,33 @@ export class FilterPopupComponent implements OnInit {
     }
   }
 
-  addConceptoFiltered(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
+  onAddConceptoFiltered(event: MatChipInputEvent): void {
+    this.addConceptoFiltered(this.filterInput);
+  }
 
-    if (this.existConceptoFilter(value) || !this.existConcepto(value)) {
-      return;
+  private addConceptoFiltered(conceptoToAdd: string): void {
+    if ((conceptoToAdd || '').trim()) {
+      const concep = this._allConceptos.filter(x => x.descripcion.toLowerCase().startsWith(conceptoToAdd.toLowerCase()));
+      if (concep.length > 0) {
+        if (!this.existConceptoFilter(concep[0].descripcion)) {
+          this.allConceptosFiltered.conceptos.push(concep[0]);
+        }
+      }
     }
 
-    if ((value || '').trim()) {
-      const concepto = this._allConceptos.filter(x => x.descripcion.toLowerCase() === value.toLowerCase())[0];
-      this.allConceptosFiltered.conceptos.push(concepto);
-    }
-
-    if (input) {
-      input.value = '';
-    }
+    this.filterInput = '';
+    this.autocomplete.closePanel();
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-
-    if (this.existConceptoFilter(event.option.viewValue.toLowerCase())) {
-      return;
-    }
-
-    const concepto = this._allConceptos.filter(x => x.descripcion.toLowerCase().trim() === event.option.viewValue.toLowerCase().trim())[0];
-
-    this.allConceptosFiltered.conceptos.push(concepto);
-    this.conceptosInput.nativeElement.value = '';
+    this.addConceptoFiltered(event.option.viewValue.toLowerCase());
   }
 
   private existConceptoFilter(concepto: string): boolean {
      return this.allConceptosFiltered.conceptos.filter(x => x.descripcion.toLowerCase() === concepto.toLowerCase()).length > 0;
   }
 
-  private existConcepto(concepto: string): boolean {
-    return this._allConceptos.filter(x => x.descripcion.toLowerCase() === concepto.toLowerCase()).length > 0;
- }
-
+  onDeleteFilters() {
+    this.allConceptosFiltered.conceptos = [];
+  }
 }
